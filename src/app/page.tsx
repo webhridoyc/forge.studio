@@ -30,6 +30,7 @@ import {
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Link from "next/link"
 
 export default function Home() {
   const { toast } = useToast()
@@ -275,8 +276,8 @@ export default function Home() {
                       <span className="text-[10px] font-bold text-muted-foreground">{new Date(snippet.createdAt?.toDate()).toLocaleDateString()}</span>
                     </div>
                     <h4 className="font-bold truncate text-base">{snippet.fileName}</h4>
-                    <Button variant="outline" className="w-full rounded-2xl text-[10px] font-black uppercase tracking-widest h-12">
-                      View Details
+                    <Button asChild variant="outline" className="w-full rounded-2xl text-[10px] font-black uppercase tracking-widest h-12">
+                      <Link href="/cloud-sync">View Details</Link>
                     </Button>
                   </div>
                 ))}
