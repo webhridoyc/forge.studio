@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { ThemeToggle } from "@/components/ThemeToggle"
 import { FileUploader } from "@/components/FileUploader"
 import { CodeOutput } from "@/components/CodeOutput"
 import { SEOIntro, FAQSection } from "@/components/SEOSections"
@@ -37,14 +36,12 @@ export default function Home() {
   const [targetFormat] = React.useState<OutputFormat>('original')
   const [currentYear, setCurrentYear] = React.useState<number | null>(null)
   
-  // Usage Tracking
   const [usage, setUsage] = React.useState(0)
   const LIMIT = user ? 10 : 3
 
   React.useEffect(() => {
     setCurrentYear(new Date().getFullYear())
     
-    // Sync Usage from LocalStorage for Guests
     if (!user) {
       const stored = localStorage.getItem('forge_usage_guest')
       const lastReset = localStorage.getItem('forge_usage_last_reset')
@@ -58,7 +55,6 @@ export default function Home() {
         setUsage(parseInt(stored || '0'))
       }
     } else if (db && user) {
-      // Sync Usage from Firestore for Users
       const fetchUsage = async () => {
         const userRef = doc(db, 'users', user.uid)
         const snap = await getDoc(userRef)
@@ -160,7 +156,6 @@ export default function Home() {
           </nav>
           <div className="h-6 w-px bg-foreground/10 hidden md:block" />
           <div className="flex items-center gap-4">
-            <ThemeToggle />
             <AuthUI />
           </div>
         </div>
@@ -176,7 +171,7 @@ export default function Home() {
             <UsageLimitIndicator used={usage} limit={LIMIT} isGuest={!user} />
           </div>
           
-          <h1 className="text-6xl md:text-8xl lg:text-[9rem] font-black text-foreground tracking-tighter leading-[0.85] select-none">
+          <h1 className="text-6xl md:text-8xl lg:text-[9rem] font-black text-foreground tracking-tighter leading-[0.85] select-none text-center">
             ASSET <br />
             <span className="text-gradient">PIPELINE</span>
           </h1>

@@ -20,12 +20,26 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu"
-import { LogOut, User as UserIcon, LogIn, Chrome } from "lucide-react"
+import { LogOut, User as UserIcon, LogIn, Chrome, Moon, Sun } from "lucide-react"
 
 export function AuthUI() {
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
   const [isOpen, setIsOpen] = React.useState(false)
+  const [theme, setTheme] = React.useState<"light" | "dark">("light")
+
+  React.useEffect(() => {
+    const root = window.document.documentElement
+    if (theme === "dark") {
+      root.classList.add("dark")
+      root.classList.remove("light")
+    } else {
+      root.classList.add("light")
+      root.classList.remove("dark")
+    }
+  }, [theme])
+
+  const toggleTheme = () => setTheme(prev => prev === "light" ? "dark" : "light")
 
   const handleGoogleLogin = async () => {
     try {
@@ -62,6 +76,16 @@ export function AuthUI() {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator className="bg-foreground/5" />
+          
+          <DropdownMenuItem onClick={toggleTheme} className="rounded-xl cursor-pointer py-3 transition-colors">
+            {theme === 'light' ? <Moon className="mr-3 h-4 w-4" /> : <Sun className="mr-3 h-4 w-4" />}
+            <span className="font-bold text-xs uppercase tracking-widest">
+              {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+            </span>
+          </DropdownMenuItem>
+          
+          <DropdownMenuSeparator className="bg-foreground/5" />
+          
           <DropdownMenuItem onClick={handleSignOut} className="rounded-xl focus:bg-destructive/10 focus:text-destructive cursor-pointer py-3 transition-colors">
             <LogOut className="mr-3 h-4 w-4" />
             <span className="font-bold text-xs uppercase tracking-widest">Sign Out</span>
