@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -12,7 +13,8 @@ import {
   BarChart3, 
   X,
   Zap,
-  Maximize2
+  Maximize2,
+  ChevronRight
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useUser, useFirestore } from "@/firebase"
@@ -54,7 +56,7 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
     if (!user) {
       toast({
         title: "Auth Required",
-        description: "Sign in to save snippets to your cloud history.",
+        description: "Sign in to vault your assets to the cloud.",
       })
       return
     }
@@ -65,14 +67,14 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
       await addDoc(snippetsRef, {
         userId: user.uid,
         fileName: asset.name,
-        base64String: asset.base64.substring(0, 5000), // Truncated for DB efficiency as requested
+        base64String: asset.base64.substring(0, 10000), // Larger limit for better utility while respecting DB
         mimeType: asset.format,
         outputFormat: 'data-uri',
         createdAt: serverTimestamp()
       })
       toast({
         title: "Asset Vaulted",
-        description: "Synced to your cloud history.",
+        description: "Synced to your secure cloud history.",
       })
     } catch (e) {
       toast({
@@ -92,8 +94,9 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
 
   const getDisplayValue = (type: typeof formats[number]["id"]) => {
     const fullCode = formatBase64Code(asset.base64, type)
-    if (fullCode.length <= 400) return fullCode
-    return `${fullCode.substring(0, 400)}\n\n/* [SYSTEM: LARGE BITSTREAM VIRTUALIZED FOR UI STABILITY] */\n/* CLICK 'COPY' TO RETRIEVE COMPLETE DATA */`
+    // Anti-crash virtualization: Only render a snippet if the string is huge
+    if (fullCode.length <= 1000) return fullCode
+    return `${fullCode.substring(0, 1000)}\n\n/* [SYSTEM: LARGE BITSTREAM VIRTUALIZED FOR UI STABILITY] */\n/* CLICK 'COPY' TO RETRIEVE COMPLETE DATA */`
   }
 
   const sizeIncrease = Math.round(((asset.optimizedSize - asset.originalSize) / asset.originalSize) * 100)
@@ -102,7 +105,7 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
     <div className="w-full relative group">
       <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-6 px-4">
         <div className="flex items-center gap-6">
-          <div className="h-20 w-20 rounded-3xl overflow-hidden bg-foreground/5 p-1 border border-foreground/5 shadow-inner">
+          <div className="h-20 w-20 rounded-3xl overflow-hidden bg-foreground/5 p-1 border border-foreground/5 shadow-inner group-hover:scale-105 transition-transform">
             <img src={asset.base64} alt={asset.name} className="w-full h-full object-contain" />
           </div>
           <div>
@@ -124,7 +127,7 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
             disabled={isSaving}
             className="rounded-2xl h-12 px-6 border-foreground/10 hover:bg-primary hover:text-white transition-all font-bold text-[10px] uppercase tracking-widest"
           >
-            {isSaving ? "Vaulting..." : <><Cloud className="w-4 h-4 mr-2" /> Save to Cloud</>}
+            {isSaving ? "Vaulting..." : <><Cloud className="w-4 h-4 mr-2" /> Vault to Cloud</>}
           </Button>
           <Button 
             variant="ghost" 
@@ -141,8 +144,8 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
         {[
           { label: "Original Size", value: `${(asset.originalSize / 1024).toFixed(1)} KB`, icon: Maximize2, color: "text-foreground" },
           { label: "Base64 Size", value: `${(asset.optimizedSize / 1024).toFixed(1)} KB`, icon: BarChart3, color: "text-primary" },
-          { label: "Size Overhead", value: `+${sizeIncrease}%`, icon: Zap, color: sizeIncrease > 35 ? "text-destructive" : "text-accent" },
-          { label: "Load Impact", value: "Minimal", icon: Zap, color: "text-accent" },
+          { label: "Overhead", value: `+${sizeIncrease}%`, icon: Zap, color: sizeIncrease > 35 ? "text-destructive" : "text-accent" },
+          { label: "Optimized", value: "Ready", icon: ChevronRight, color: "text-accent" },
         ].map((stat, i) => (
           <div key={i} className="bg-foreground/[0.02] border border-foreground/5 rounded-[2rem] p-6 flex flex-col items-center text-center">
             <stat.icon className={cn("w-5 h-5 mb-3 opacity-40", stat.color)} />

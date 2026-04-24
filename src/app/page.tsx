@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -9,8 +10,8 @@ import { UsageLimitIndicator } from "@/components/UsageLimitIndicator"
 import { optimizeImage, type ProcessedAsset, type OutputFormat } from "@/lib/image-utils"
 import { Toaster } from "@/components/ui/toaster"
 import { useToast } from "@/hooks/use-toast"
-import { useUser, useFirestore } from "@/firebase"
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore"
+import { useUser, useFirestore, useMemoFirebase, useCollection } from "@/firebase"
+import { doc, getDoc, setDoc, serverTimestamp, collection, query, orderBy, limit } from "firebase/firestore"
 import { 
   Code2, 
   Sparkles, 
@@ -35,32 +36,44 @@ export default function Home() {
   const [isProcessing, setIsProcessing] = React.useState(false)
   const [targetFormat] = React.useState<OutputFormat>('original')
   const [currentYear, setCurrentYear] = React.useState<number | null>(null)
-  
   const [usage, setUsage] = React.useState(0)
+  
   const LIMIT = user ? 10 : 3
+
+  // Memoized history query
+  const historyQuery = useMemoFirebase(() => {
+    if (!db || !user) return null
+    return query(
+      collection(db, 'users', user.uid, 'conversionSnippets'),
+      orderBy('createdAt', 'desc'),
+      limit(5)
+    )
+  }, [db, user])
+
+  const { data: cloudHistory } = useCollection(historyQuery)
 
   React.useEffect(() => {
     setCurrentYear(new Date().getFullYear())
     
-    if (!user) {
-      const stored = localStorage.getItem('forge_usage_guest')
-      const lastReset = localStorage.getItem('forge_usage_last_reset')
-      const today = new Date().toDateString()
-      
-      if (lastReset !== today) {
-        localStorage.setItem('forge_usage_guest', '0')
-        localStorage.setItem('forge_usage_last_reset', today)
-        setUsage(0)
-      } else {
-        setUsage(parseInt(stored || '0'))
-      }
-    } else if (db && user) {
-      const fetchUsage = async () => {
+    const initializeUsage = async () => {
+      if (!user) {
+        const stored = localStorage.getItem('forge_usage_guest')
+        const lastReset = localStorage.getItem('forge_usage_last_reset')
+        const today = new Date().toDateString()
+        
+        if (lastReset !== today) {
+          localStorage.setItem('forge_usage_guest', '0')
+          localStorage.setItem('forge_usage_last_reset', today)
+          setUsage(0)
+        } else {
+          setUsage(parseInt(stored || '0'))
+        }
+      } else if (db && user) {
         const userRef = doc(db, 'users', user.uid)
         const snap = await getDoc(userRef)
         if (snap.exists()) {
           const data = snap.data()
-          const lastReset = data.lastReset?.toDate().toDateString()
+          const lastReset = data.lastReset?.toDate()?.toDateString()
           const today = new Date().toDateString()
           
           if (lastReset !== today) {
@@ -69,10 +82,21 @@ export default function Home() {
           } else {
             setUsage(data.usageCount || 0)
           }
+        } else {
+          // Initialize new user
+          await setDoc(userRef, { 
+            id: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            usageCount: 0, 
+            lastReset: serverTimestamp(),
+            createdAt: serverTimestamp()
+          })
+          setUsage(0)
         }
       }
-      fetchUsage()
     }
+    initializeUsage()
   }, [user, db])
 
   const incrementUsage = async () => {
@@ -85,9 +109,7 @@ export default function Home() {
       const userRef = doc(db, 'users', user.uid)
       setDoc(userRef, { 
         usageCount: newUsage, 
-        lastReset: serverTimestamp(),
-        email: user.email,
-        displayName: user.displayName
+        lastReset: serverTimestamp()
       }, { merge: true })
     }
   }
@@ -96,10 +118,10 @@ export default function Home() {
     if (usage + files.length > LIMIT) {
       toast({
         variant: "destructive",
-        title: "Limit Reached",
+        title: "Daily Limit Reached",
         description: user 
-          ? "Member limit reached. Capacity resets tomorrow." 
-          : "Guest limit reached. Sign in to unlock 10 daily forges!",
+          ? "You've reached your 10 daily forges. Reset tomorrow." 
+          : "Sign in to unlock 10 daily forges (Currently: 3).",
       })
       return
     }
@@ -108,6 +130,15 @@ export default function Home() {
     const newAssets: ProcessedAsset[] = []
     
     for (const file of files) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast({
+          variant: "destructive",
+          title: "File Too Large",
+          description: "Files over 2MB are not recommended for Base64.",
+        })
+        continue
+      }
+
       try {
         const asset = await optimizeImage(file, targetFormat)
         newAssets.push(asset)
@@ -176,7 +207,7 @@ export default function Home() {
             <span className="text-gradient">PIPELINE</span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
-            Zero-latency, high-compression Base64 forging. Forged in the browser, stored in your history.
+            Zero-latency, high-compression Base64 forging. Optimized for the modern web.
           </p>
         </section>
 
@@ -200,16 +231,15 @@ export default function Home() {
             {assets.length > 0 && (
               <div className="mt-20 space-y-24 w-full">
                 <div className="flex items-center justify-between border-b border-foreground/5 pb-8">
-                  <h2 className="text-4xl font-black tracking-tighter flex items-center gap-4">
-                    FORGED ASSETS
-                    {user && <span className="bg-accent/10 text-accent text-[10px] px-3 py-1 rounded-full uppercase">Saved to cloud</span>}
+                  <h2 className="text-4xl font-black tracking-tighter flex items-center gap-4 uppercase">
+                    Forged Assets
                   </h2>
                   <Button 
                     variant="ghost" 
                     onClick={clearAll}
                     className="rounded-2xl text-[10px] font-bold uppercase tracking-widest text-destructive hover:bg-destructive/10"
                   >
-                    <Trash2 className="w-4 h-4 mr-2" /> Clear Workbench
+                    <Trash2 className="w-4 h-4 mr-2" /> Clear All
                   </Button>
                 </div>
                 
@@ -220,6 +250,28 @@ export default function Home() {
                 ))}
               </div>
             )}
+
+            {user && cloudHistory && cloudHistory.length > 0 && assets.length === 0 && (
+              <div className="mt-20 space-y-12 w-full animate-in fade-in duration-1000">
+                <h2 className="text-2xl font-black tracking-tighter flex items-center gap-3 uppercase text-muted-foreground">
+                  <History className="w-5 h-5" /> Recent Cloud Vaults
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {cloudHistory.map((snippet) => (
+                    <div key={snippet.id} className="glass-card p-6 rounded-[2rem] border-white/10 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-primary">{snippet.mimeType.split('/')[1]}</span>
+                        <span className="text-[10px] font-bold text-muted-foreground">{new Date(snippet.createdAt?.toDate()).toLocaleDateString()}</span>
+                      </div>
+                      <h4 className="font-bold truncate text-sm">{snippet.fileName}</h4>
+                      <Button variant="outline" className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest h-10">
+                        View Details
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
@@ -227,7 +279,7 @@ export default function Home() {
           {[
             { icon: Zap, title: "Zero Latency", desc: "Forging happens entirely in-browser. No server round-trips.", color: "text-primary" },
             { icon: ShieldCheck, title: "Member Vault", desc: "Logged-in users get cloud history sync across all devices.", color: "text-accent" },
-            { icon: History, title: "Smart Limits", desc: "Fair usage system ensures performance stability for all.", color: "text-secondary" },
+            { icon: History, title: "Smart Limits", desc: "Usage caps ensure performance stability for everyone.", color: "text-secondary" },
           ].map((feature, i) => (
             <div key={i} className="glass-card p-10 rounded-[2.5rem] hover:translate-y-[-8px] transition-all duration-500 group">
               <div className={cn("w-16 h-16 rounded-2xl bg-foreground/5 flex items-center justify-center mb-8", feature.color)}>
