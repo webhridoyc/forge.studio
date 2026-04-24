@@ -2,6 +2,7 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import { useAuth, useUser } from "@/firebase"
 import { 
   signInWithPopup, 
@@ -177,41 +178,55 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           
           <div className="p-1.5 space-y-1">
             <div className="text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 px-4 py-2">Workbench</div>
-            <DropdownMenuItem onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-              <LayoutDashboard className="mr-3 h-4 w-4 text-primary" />
-              <span className="font-bold text-[10px] uppercase tracking-widest">Workspace</span>
+            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+              <Link href="/">
+                <LayoutDashboard className="mr-3 h-4 w-4 text-primary" />
+                <span className="font-bold text-[10px] uppercase tracking-widest">Workspace</span>
+              </Link>
             </DropdownMenuItem>
             
-            <DropdownMenuItem className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-              <History className="mr-3 h-4 w-4 text-secondary" />
-              <span className="font-bold text-[10px] uppercase tracking-widest">Cloud Vaults</span>
+            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+              <Link href="/cloud-sync">
+                <History className="mr-3 h-4 w-4 text-secondary" />
+                <span className="font-bold text-[10px] uppercase tracking-widest">Cloud Vaults</span>
+              </Link>
             </DropdownMenuItem>
 
             <div className="text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 px-4 py-2 mt-2">Studio</div>
-            <DropdownMenuItem className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-              <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
-              <span className="font-bold text-[10px] uppercase tracking-widest">Preferences</span>
+            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+              <Link href="/preferences">
+                <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
+                <span className="font-bold text-[10px] uppercase tracking-widest">Preferences</span>
+              </Link>
             </DropdownMenuItem>
             
-            <DropdownMenuItem className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-              <CreditCard className="mr-3 h-4 w-4 text-muted-foreground" />
-              <span className="font-bold text-[10px] uppercase tracking-widest">Billing & Plans</span>
+            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+              <Link href="/billing">
+                <CreditCard className="mr-3 h-4 w-4 text-muted-foreground" />
+                <span className="font-bold text-[10px] uppercase tracking-widest">Billing & Plans</span>
+              </Link>
             </DropdownMenuItem>
 
-            <DropdownMenuItem className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-              <MessageCircle className="mr-3 h-4 w-4 text-muted-foreground" />
-              <span className="font-bold text-[10px] uppercase tracking-widest">Contact Support</span>
+            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+              <Link href="/contact">
+                <MessageCircle className="mr-3 h-4 w-4 text-muted-foreground" />
+                <span className="font-bold text-[10px] uppercase tracking-widest">Contact Support</span>
+              </Link>
             </DropdownMenuItem>
 
             <div className="lg:hidden">
                <div className="text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 px-4 py-2 mt-2">Navigation</div>
-               <DropdownMenuItem onClick={() => document.getElementById('security')?.scrollIntoView()} className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-                <Shield className="mr-3 h-4 w-4 text-muted-foreground" />
-                <span className="font-bold text-[10px] uppercase tracking-widest">Security</span>
+               <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+                <Link href="/docs#security">
+                  <Shield className="mr-3 h-4 w-4 text-muted-foreground" />
+                  <span className="font-bold text-[10px] uppercase tracking-widest">Security</span>
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => document.getElementById('guide')?.scrollIntoView()} className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-                <BookOpen className="mr-3 h-4 w-4 text-muted-foreground" />
-                <span className="font-bold text-[10px] uppercase tracking-widest">Guide</span>
+              <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+                <Link href="/docs">
+                  <BookOpen className="mr-3 h-4 w-4 text-muted-foreground" />
+                  <span className="font-bold text-[10px] uppercase tracking-widest">Guide</span>
+                </Link>
               </DropdownMenuItem>
             </div>
           </div>
