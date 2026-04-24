@@ -56,10 +56,33 @@ export default function Home() {
   }, [])
 
   const handleFilesSelect = async (files: File[]) => {
+    // Enforcement of batch limit (max 10 total)
+    const MAX_BATCH = 10
+    const currentCount = assets.length
+    const remainingSlots = MAX_BATCH - currentCount
+
+    if (remainingSlots <= 0) {
+      toast({
+        variant: "destructive",
+        title: "Batch Limit Reached",
+        description: `Your workbench is limited to ${MAX_BATCH} forged assets to maintain performance.`,
+      })
+      return
+    }
+
+    let filesToProcess = files
+    if (files.length > remainingSlots) {
+      toast({
+        title: "Slicing Batch",
+        description: `Only ${remainingSlots} slots available. Processing first ${remainingSlots} assets.`,
+      })
+      filesToProcess = files.slice(0, remainingSlots)
+    }
+
     setIsProcessing(true)
     const newAssets: ProcessedAsset[] = []
     
-    for (const file of files) {
+    for (const file of filesToProcess) {
       if (file.size > 2 * 1024 * 1024) {
         toast({
           variant: "destructive",
@@ -81,7 +104,7 @@ export default function Home() {
       }
     }
 
-    setAssets(prev => [...newAssets, ...prev])
+    setAssets(prev => [...prev, ...newAssets])
     setIsProcessing(false)
   }
 
@@ -133,9 +156,9 @@ export default function Home() {
             </div>
           </div>
           
-          <h1 className="text-5xl md:text-[10rem] lg:text-[12rem] font-black text-foreground tracking-tighter leading-[0.8] select-none text-center">
-            DUAL <br />
-            <span className="text-gradient">PIPELINE</span>
+          <h1 className="text-5xl md:text-[10rem] lg:text-[12rem] font-black text-foreground tracking-tighter leading-[0.8] select-none text-center uppercase">
+            Dual <br />
+            <span className="text-gradient">Pipeline</span>
           </h1>
           <p className="text-base md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium px-4">
             Unified Base64 synthesis. Encode, decode, and optimize with zero-latency cloud history.
@@ -180,7 +203,7 @@ export default function Home() {
                   <div className="mt-8 md:mt-12 space-y-16 md:space-y-24 w-full">
                     <div className="flex items-center justify-between border-b border-foreground/5 pb-8 px-4">
                       <h2 className="text-lg md:text-2xl font-black tracking-tighter flex items-center gap-4 uppercase opacity-50">
-                        Forged Assets ({assets.length})
+                        Forged Assets ({assets.length} / 10)
                       </h2>
                       <Button 
                         variant="ghost" 
