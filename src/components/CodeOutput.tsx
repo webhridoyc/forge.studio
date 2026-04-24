@@ -4,7 +4,7 @@ import * as React from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Copy, Download, Check, ExternalLink } from "lucide-react"
+import { Copy, Download, Check, ExternalLink, Info } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { formatBase64Code, downloadTextFile } from "@/lib/image-utils"
 import { cn } from "@/lib/utils"
@@ -31,7 +31,7 @@ export function CodeOutput({ base64, fileName }: CodeOutputProps) {
     setCopied(type)
     toast({
       title: "Copied to Clipboard",
-      description: `The ${type.toUpperCase()} fragment is ready for use.`,
+      description: `Full ${type.toUpperCase()} string copied securely.`,
     })
     setTimeout(() => setCopied(null), 2000)
   }
@@ -41,8 +41,22 @@ export function CodeOutput({ base64, fileName }: CodeOutputProps) {
     downloadTextFile(code, `${fileName.split(".")[0]}-${type}.txt`)
   }
 
+  // Anti-crash: Only render first 500 chars in the UI
+  const getDisplayValue = (type: typeof formats[number]["id"]) => {
+    const fullCode = formatBase64Code(base64, type)
+    if (fullCode.length <= 500) return fullCode
+    return `${fullCode.substring(0, 500)}\n\n/* ... [CODE TRUNCATED FOR UI PERFORMANCE] ... */\n/* CLICK COPY TO GET THE FULL STRING */`
+  }
+
   return (
     <div className="w-full max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out fill-mode-forwards">
+      <div className="mb-6 flex items-center gap-3 p-4 bg-accent/10 rounded-2xl border border-accent/20 text-accent">
+        <Info className="w-5 h-5 shrink-0" />
+        <p className="text-xs font-bold uppercase tracking-wider leading-relaxed">
+          Output optimized. Previews are truncated to prevent browser freezing. Use "Copy" for the full string.
+        </p>
+      </div>
+
       <Tabs defaultValue="uri" className="w-full">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
           <TabsList className="bg-white/5 p-1.5 rounded-2xl border border-white/5 backdrop-blur-xl h-auto flex-wrap gap-1">
@@ -65,7 +79,7 @@ export function CodeOutput({ base64, fileName }: CodeOutputProps) {
               <div className="bg-card/80 backdrop-blur-xl rounded-[calc(2.5rem-1px)] relative">
                 <Textarea
                   readOnly
-                  value={formatBase64Code(base64, format.id)}
+                  value={getDisplayValue(format.id)}
                   className="min-h-[380px] font-code text-[13px] leading-relaxed p-10 bg-transparent border-0 resize-none pr-20 focus-visible:ring-0 custom-scrollbar selection:bg-primary/30"
                 />
                 <div className="absolute top-8 right-8 flex flex-col gap-3">
@@ -94,17 +108,17 @@ export function CodeOutput({ base64, fileName }: CodeOutputProps) {
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-6 px-6 font-bold">
               <div className="flex items-center gap-4">
                 <div className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-muted-foreground uppercase tracking-[0.2em]">
-                  Size: <span className="text-foreground">{((base64.length * 0.75) / 1024).toFixed(2)} KB</span>
+                  Optimized Size: <span className="text-foreground">{((base64.length * 0.75) / 1024).toFixed(2)} KB</span>
                 </div>
                 <div className="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_10px_rgba(var(--accent),0.5)]" />
-                <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em]">Optimized Output</span>
+                <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em]">Matrix Processed</span>
               </div>
               <Button 
                 variant="ghost" 
                 className="text-[10px] uppercase tracking-[0.2em] text-accent hover:text-white hover:bg-accent/20 transition-all rounded-full px-8 h-10"
                 onClick={() => handleCopy(format.id)}
               >
-                Copy Snippet <ExternalLink className="ml-2 w-3 h-3" />
+                Copy Full Snippet <ExternalLink className="ml-2 w-3 h-3" />
               </Button>
             </div>
           </TabsContent>

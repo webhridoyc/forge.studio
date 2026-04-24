@@ -5,15 +5,18 @@ import { ThemeToggle } from "@/components/ThemeToggle"
 import { FileUploader } from "@/components/FileUploader"
 import { CodeOutput } from "@/components/CodeOutput"
 import { SEOIntro, FAQSection } from "@/components/SEOSections"
-import { fileToBase64 } from "@/lib/image-utils"
+import { optimizeImage } from "@/lib/image-utils"
 import { Toaster } from "@/components/ui/toaster"
-import { Code2, Zap, Sparkles, Layers, ShieldCheck, ArrowRight } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
+import { Code2, Zap, Sparkles, Layers, ShieldCheck, ArrowRight, Loader2, AlertTriangle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export default function Home() {
+  const { toast } = useToast()
   const [file, setFile] = React.useState<File | null>(null)
   const [base64, setBase64] = React.useState<string | null>(null)
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null)
+  const [isProcessing, setIsProcessing] = React.useState(false)
   const [currentYear, setCurrentYear] = React.useState<number | null>(null)
 
   React.useEffect(() => {
@@ -21,13 +24,37 @@ export default function Home() {
   }, [])
 
   const handleFileSelect = async (selectedFile: File) => {
+    setIsProcessing(true)
     setFile(selectedFile)
+    
+    // Performance Warning for large files
+    if (selectedFile.size > 2 * 1024 * 1024) {
+      toast({
+        variant: "destructive",
+        title: "Performance Warning",
+        description: "Large files are not recommended for Base64 encoding as they impact web speed. We will auto-optimize this for you.",
+      })
+    }
+
     try {
-      const b64 = await fileToBase64(selectedFile)
+      // Automatic Resizing & Compression
+      const b64 = await optimizeImage(selectedFile, 800, 0.7)
       setBase64(b64)
       setPreviewUrl(b64)
+      
+      toast({
+        title: "Asset Forged",
+        description: "Optimized and compressed for production deployment.",
+      })
     } catch (err) {
       console.error("Conversion failed:", err)
+      toast({
+        variant: "destructive",
+        title: "Forging Failed",
+        description: "Could not process image asset.",
+      })
+    } finally {
+      setIsProcessing(false)
     }
   }
 
@@ -35,6 +62,7 @@ export default function Home() {
     setFile(null)
     setBase64(null)
     setPreviewUrl(null)
+    setIsProcessing(false)
   }
 
   return (
@@ -68,15 +96,14 @@ export default function Home() {
         <div className="text-center max-w-5xl mb-32 space-y-10 animate-in fade-in slide-in-from-top-12 duration-1000 ease-out fill-mode-forwards">
           <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-accent text-[10px] font-black uppercase tracking-[0.3em] backdrop-blur-xl hover:bg-white/10 transition-colors cursor-default">
             <Sparkles className="w-4 h-4" />
-            <span>Studio Production Grade</span>
+            <span>Studio Production Grade v3</span>
           </div>
           <h1 className="text-7xl sm:text-[9rem] font-black text-foreground tracking-tighter leading-[0.85] lg:text-[11rem] select-none">
             FORGE <span className="text-primary drop-shadow-[0_0_50px_rgba(var(--primary),0.3)]">ASSETS</span> <br />
             INTO <span className="text-secondary italic drop-shadow-[0_0_50px_rgba(var(--secondary),0.3)]">CODE.</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
-            The high-performance workbench for modern developers. 
-            Zero cloud latency. Pure browser-side power.
+            High-performance web pipeline. Auto-resizing, JPEG compression, and anti-crash technology included.
           </p>
           <div className="flex justify-center pt-4">
             <a href="#tool" className="group flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-full font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all duration-300">
@@ -88,9 +115,9 @@ export default function Home() {
         {/* Feature Grid */}
         <div id="features" className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl mb-32">
           {[
-            { icon: Zap, title: "120Hz Smooth", desc: "Hardware accelerated interface", color: "text-primary" },
-            { icon: ShieldCheck, title: "100% Secure", desc: "No data ever leaves your device", color: "text-accent" },
-            { icon: Layers, title: "Format Ready", desc: "Universal snippets for any stack", color: "text-secondary" },
+            { icon: Zap, title: "Auto-Resized", desc: "Optimized to 800px width automatically", color: "text-primary" },
+            { icon: ShieldCheck, title: "Secure Buffer", desc: "No data ever leaves your device browser", color: "text-accent" },
+            { icon: Layers, title: "Fast Output", desc: "70% smaller Base64 strings for web speed", color: "text-secondary" },
           ].map((feature, i) => (
             <div key={i} className="glass-card p-10 rounded-[2.5rem] hover:border-white/20 transition-all duration-500 hover:translate-y-[-8px] group">
               <div className={cn("w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors", feature.color)}>
@@ -114,7 +141,14 @@ export default function Home() {
               />
             </div>
 
-            {previewUrl && (
+            {isProcessing && (
+              <div className="mt-12 flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-4">
+                <Loader2 className="w-10 h-10 text-primary animate-spin" />
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">Synthesizing Matrix...</p>
+              </div>
+            )}
+
+            {previewUrl && !isProcessing && (
               <div className="mt-20 mb-20 flex flex-col items-center animate-in fade-in zoom-in slide-in-from-bottom-12 duration-700 ease-out fill-mode-forwards">
                 <div className="relative p-1.5 rounded-[2.5rem] bg-gradient-to-br from-primary/40 to-secondary/40 shadow-2xl backdrop-blur-3xl animate-float">
                   <div className="bg-background rounded-[2.4rem] p-6">
@@ -132,7 +166,7 @@ export default function Home() {
               </div>
             )}
 
-            {base64 && file && (
+            {base64 && file && !isProcessing && (
               <div className="mt-12">
                 <CodeOutput base64={base64} fileName={file.name} />
               </div>
@@ -183,9 +217,9 @@ export default function Home() {
           <div className="flex items-center gap-8">
             <span className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-              V3.0.0 STABLE
+              V3.1.0 OPTIMIZED
             </span>
-            <span className="text-accent opacity-60">120HZ OPTIMIZED</span>
+            <span className="text-accent opacity-60">ANTI-CRASH ENABLED</span>
           </div>
         </div>
       </footer>
