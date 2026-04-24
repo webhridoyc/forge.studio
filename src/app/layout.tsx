@@ -1,9 +1,10 @@
 import type {Metadata} from 'next';
 import './globals.css';
+import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
-  title: 'Forge Studios | Professional Image-to-Base64 Utility',
-  description: 'High-performance image-to-code pipeline. Batch process, transcode PNG to WebP, and optimize assets for modern web delivery. 100% Secure & Client-Side.',
+  title: 'FORGE. | Professional Image-to-Base64 Studio',
+  description: 'High-performance image-to-code pipeline with cloud history and batch processing. Optimized for modern web delivery.',
 };
 
 export default function RootLayout({
@@ -36,7 +37,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="font-body antialiased">{children}</body>
+      <body className="font-body antialiased">
+        <FirebaseClientProvider>
+          {children}
+        </FirebaseClientProvider>
+      </body>
     </html>
   );
 }

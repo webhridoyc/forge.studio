@@ -8,14 +8,15 @@ import {
   Copy, 
   Download, 
   Check, 
-  ExternalLink, 
-  ShieldCheck, 
+  Cloud,
   BarChart3, 
   X,
   Zap,
   Maximize2
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { useUser, useFirestore } from "@/firebase"
+import { collection, addDoc, serverTimestamp } from "firebase/firestore"
 import { formatBase64Code, downloadTextFile, type ProcessedAsset } from "@/lib/image-utils"
 import { cn } from "@/lib/utils"
 
@@ -26,7 +27,10 @@ interface CodeOutputProps {
 
 export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
   const { toast } = useToast()
+  const { user } = useUser()
+  const db = useFirestore()
   const [copied, setCopied] = React.useState<string | null>(null)
+  const [isSaving, setIsSaving] = React.useState(false)
 
   const formats = [
     { id: "uri", label: "Data URI", icon: "🔗" },
@@ -46,6 +50,41 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
     setTimeout(() => setCopied(null), 2000)
   }
 
+  const handleSaveToCloud = async () => {
+    if (!user) {
+      toast({
+        title: "Auth Required",
+        description: "Sign in to save snippets to your cloud history.",
+      })
+      return
+    }
+
+    setIsSaving(true)
+    try {
+      const snippetsRef = collection(db, 'users', user.uid, 'conversionSnippets')
+      await addDoc(snippetsRef, {
+        userId: user.uid,
+        fileName: asset.name,
+        base64String: asset.base64.substring(0, 5000), // Truncated for DB efficiency as requested
+        mimeType: asset.format,
+        outputFormat: 'data-uri',
+        createdAt: serverTimestamp()
+      })
+      toast({
+        title: "Asset Vaulted",
+        description: "Synced to your cloud history.",
+      })
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "Sync Failed",
+        description: "Could not save to cloud vault.",
+      })
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
   const handleDownload = (type: typeof formats[number]["id"]) => {
     const code = formatBase64Code(asset.base64, type)
     downloadTextFile(code, `${asset.name.split(".")[0]}-${type}.txt`)
@@ -61,7 +100,6 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
 
   return (
     <div className="w-full relative group">
-      {/* Asset Header Info */}
       <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-6 px-4">
         <div className="flex items-center gap-6">
           <div className="h-20 w-20 rounded-3xl overflow-hidden bg-foreground/5 p-1 border border-foreground/5 shadow-inner">
@@ -79,17 +117,26 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
             </p>
           </div>
         </div>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          onClick={onRemove}
-          className="rounded-full h-12 w-12 hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-all"
-        >
-          <X className="w-6 h-6" />
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button 
+            variant="outline" 
+            onClick={handleSaveToCloud}
+            disabled={isSaving}
+            className="rounded-2xl h-12 px-6 border-foreground/10 hover:bg-primary hover:text-white transition-all font-bold text-[10px] uppercase tracking-widest"
+          >
+            {isSaving ? "Vaulting..." : <><Cloud className="w-4 h-4 mr-2" /> Save to Cloud</>}
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onRemove}
+            className="rounded-full h-12 w-12 hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-all"
+          >
+            <X className="w-6 h-6" />
+          </Button>
+        </div>
       </div>
 
-      {/* Performance Dashboard */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         {[
           { label: "Original Size", value: `${(asset.originalSize / 1024).toFixed(1)} KB`, icon: Maximize2, color: "text-foreground" },
