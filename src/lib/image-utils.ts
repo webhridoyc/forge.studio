@@ -25,7 +25,6 @@ export const optimizeImage = (
       img.src = event.target?.result as string;
       
       img.onload = () => {
-        // SVGs or 'original' requests for small files
         if (file.type === 'image/svg+xml' || (targetFormat === 'original' && file.size < 10240)) {
           const b64 = event.target?.result as string;
           resolve({
@@ -102,6 +101,15 @@ export const downloadTextFile = (content: string, filename: string) => {
   const file = new Blob([content], {type: 'text/plain'});
   element.href = URL.createObjectURL(file);
   element.download = filename;
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+};
+
+export const downloadImageFromBase64 = (base64: string, filename: string) => {
+  const element = document.createElement('a');
+  element.href = base64;
+  element.download = filename || 'forged-image.png';
   document.body.appendChild(element);
   element.click();
   document.body.removeChild(element);

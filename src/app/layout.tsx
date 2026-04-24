@@ -3,8 +3,8 @@ import './globals.css';
 import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
-  title: 'FORGE. | Professional Image-to-Base64 Studio',
-  description: 'High-performance image-to-code pipeline with cloud history and batch processing. Optimized for modern web delivery.',
+  title: 'FORGE. | All-in-One Image Encoder & Decoder',
+  description: 'Professional-grade Base64 studio. Convert images to code and decode Base64 back to images instantly. Optimized for performance and organic search.',
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
     "name": "Forge Studios",
     "operatingSystem": "Web",
     "applicationCategory": "DeveloperApplication",
-    "description": "Professional-grade image to Base64 code converter with performance optimization and batch processing.",
+    "description": "Convert images to Base64 strings and decode Base64 back to images instantly. Privacy-focused, professional-grade pipeline.",
     "offers": {
       "@type": "Offer",
       "price": "0",

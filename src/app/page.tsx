@@ -3,6 +3,7 @@
 import * as React from "react"
 import { FileUploader } from "@/components/FileUploader"
 import { CodeOutput } from "@/components/CodeOutput"
+import { DecoderTool } from "@/components/DecoderTool"
 import { SEOIntro, FAQSection } from "@/components/SEOSections"
 import { AuthUI } from "@/components/AuthModal"
 import { UsageLimitIndicator } from "@/components/UsageLimitIndicator"
@@ -22,10 +23,12 @@ import {
   Twitter,
   Linkedin,
   MessageCircle,
-  History
+  History,
+  ArrowRightLeft
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function Home() {
   const { toast } = useToast()
@@ -40,7 +43,6 @@ export default function Home() {
   
   const LIMIT = user ? 10 : 3
 
-  // Memoized history query
   const historyQuery = useMemoFirebase(() => {
     if (!db || !user) return null
     return query(
@@ -83,7 +85,6 @@ export default function Home() {
             setUsage(data.usageCount || 0)
           }
         } else {
-          // Initialize new user
           await setDoc(userRef, { 
             id: user.uid,
             email: user.email,
@@ -156,6 +157,18 @@ export default function Home() {
     setIsProcessing(false)
   }
 
+  const handleDecode = async () => {
+    if (usage >= LIMIT) {
+      toast({
+        variant: "destructive",
+        title: "Daily Limit Reached",
+        description: "Limit hit. Login for more or wait for tomorrow.",
+      })
+      return
+    }
+    await incrementUsage()
+  }
+
   const removeAsset = (id: string) => {
     setAssets(prev => prev.filter(a => a.id !== id))
   }
@@ -200,82 +213,112 @@ export default function Home() {
           <div className="inline-flex flex-col items-center gap-6">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em]">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Professional Utility v5.0</span>
+              <span>Studio Utility v5.2</span>
             </div>
             <UsageLimitIndicator used={usage} limit={LIMIT} isGuest={!user} />
           </div>
           
           <h1 className="text-5xl md:text-8xl lg:text-[9rem] font-black text-foreground tracking-tighter leading-[0.85] select-none text-center">
-            ASSET <br />
+            DUAL <br />
             <span className="text-gradient">PIPELINE</span>
           </h1>
           <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium px-4">
-            Zero-latency, high-compression Base64 forging. Optimized for the modern web.
+            Unified Base64 synthesis. Encode, decode, and optimize with zero-latency cloud history.
           </p>
         </section>
 
         <section id="workbench" className="w-full max-w-5xl flex flex-col items-center gap-8 md:gap-12 scroll-mt-32">
-          <div className="w-full">
-            <div className="relative glass-card rounded-[2rem] md:rounded-[3rem] p-3 md:p-4 shadow-2xl overflow-hidden border-white/10">
-              <FileUploader 
-                onFilesSelect={handleFilesSelect} 
-                onClear={clearAll}
-                hasAssets={assets.length > 0}
-              />
+          <Tabs defaultValue="encoder" className="w-full">
+            <div className="flex justify-center mb-12">
+              <TabsList className="bg-foreground/5 p-1 rounded-2xl border border-foreground/5 h-auto">
+                <TabsTrigger 
+                  value="encoder" 
+                  className="rounded-xl px-8 py-3 font-black text-[10px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
+                >
+                  <Zap className="w-4 h-4 mr-2" /> Encoder
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="decoder"
+                  className="rounded-xl px-8 py-3 font-black text-[10px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
+                >
+                  <ArrowRightLeft className="w-4 h-4 mr-2" /> Decoder
+                </TabsTrigger>
+              </TabsList>
             </div>
 
-            {isProcessing && (
-              <div className="mt-12 md:mt-16 flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-4">
-                <Loader2 className="w-8 h-8 md:w-10 md:h-10 text-primary animate-spin" />
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Synthesizing Batch...</p>
-              </div>
-            )}
-
-            {assets.length > 0 && (
-              <div className="mt-16 md:mt-20 space-y-16 md:space-y-24 w-full">
-                <div className="flex items-center justify-between border-b border-foreground/5 pb-8 px-4">
-                  <h2 className="text-2xl md:text-4xl font-black tracking-tighter flex items-center gap-4 uppercase">
-                    Forged Assets
-                  </h2>
-                  <Button 
-                    variant="ghost" 
-                    onClick={clearAll}
-                    className="rounded-2xl text-[10px] font-bold uppercase tracking-widest text-destructive hover:bg-destructive/10"
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" /> Clear All
-                  </Button>
+            <TabsContent value="encoder" className="mt-0 outline-none">
+              <div className="w-full">
+                <div className="relative glass-card rounded-[2rem] md:rounded-[3rem] p-3 md:p-4 shadow-2xl overflow-hidden border-white/10">
+                  <FileUploader 
+                    onFilesSelect={handleFilesSelect} 
+                    onClear={clearAll}
+                    hasAssets={assets.length > 0}
+                  />
                 </div>
-                
-                {assets.map((asset) => (
-                  <div key={asset.id} className="animate-in fade-in slide-in-from-bottom-8 duration-700">
-                    <CodeOutput asset={asset} onRemove={() => removeAsset(asset.id)} />
+
+                {isProcessing && (
+                  <div className="mt-12 md:mt-16 flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-4">
+                    <Loader2 className="w-8 h-8 md:w-10 md:h-10 text-primary animate-spin" />
+                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Synthesizing Batch...</p>
+                  </div>
+                )}
+
+                {assets.length > 0 && (
+                  <div className="mt-16 md:mt-20 space-y-16 md:space-y-24 w-full">
+                    <div className="flex items-center justify-between border-b border-foreground/5 pb-8 px-4">
+                      <h2 className="text-2xl md:text-4xl font-black tracking-tighter flex items-center gap-4 uppercase">
+                        Forged Assets
+                      </h2>
+                      <Button 
+                        variant="ghost" 
+                        onClick={clearAll}
+                        className="rounded-2xl text-[10px] font-bold uppercase tracking-widest text-destructive hover:bg-destructive/10"
+                      >
+                        <Trash2 className="w-4 h-4 mr-2" /> Clear All
+                      </Button>
+                    </div>
+                    
+                    {assets.map((asset) => (
+                      <div key={asset.id} className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+                        <CodeOutput asset={asset} onRemove={() => removeAsset(asset.id)} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="decoder" className="mt-0 outline-none">
+              <div className="relative glass-card rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 shadow-2xl overflow-hidden border-white/10">
+                <DecoderTool 
+                  onDecode={handleDecode}
+                  canProcess={usage < LIMIT}
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
+
+          {user && cloudHistory && cloudHistory.length > 0 && assets.length === 0 && (
+            <div className="mt-16 md:mt-20 space-y-8 md:space-y-12 w-full animate-in fade-in duration-1000">
+              <h2 className="text-xl md:text-2xl font-black tracking-tighter flex items-center gap-3 uppercase text-muted-foreground px-4">
+                <History className="w-5 h-5" /> Recent Cloud Vaults
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+                {cloudHistory.map((snippet) => (
+                  <div key={snippet.id} className="glass-card p-6 rounded-[2rem] border-white/10 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-primary">{snippet.mimeType.split('/')[1]}</span>
+                      <span className="text-[10px] font-bold text-muted-foreground">{new Date(snippet.createdAt?.toDate()).toLocaleDateString()}</span>
+                    </div>
+                    <h4 className="font-bold truncate text-sm">{snippet.fileName}</h4>
+                    <Button variant="outline" className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest h-10">
+                      View Details
+                    </Button>
                   </div>
                 ))}
               </div>
-            )}
-
-            {user && cloudHistory && cloudHistory.length > 0 && assets.length === 0 && (
-              <div className="mt-16 md:mt-20 space-y-8 md:space-y-12 w-full animate-in fade-in duration-1000">
-                <h2 className="text-xl md:text-2xl font-black tracking-tighter flex items-center gap-3 uppercase text-muted-foreground px-4">
-                  <History className="w-5 h-5" /> Recent Cloud Vaults
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-                  {cloudHistory.map((snippet) => (
-                    <div key={snippet.id} className="glass-card p-6 rounded-[2rem] border-white/10 space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-primary">{snippet.mimeType.split('/')[1]}</span>
-                        <span className="text-[10px] font-bold text-muted-foreground">{new Date(snippet.createdAt?.toDate()).toLocaleDateString()}</span>
-                      </div>
-                      <h4 className="font-bold truncate text-sm">{snippet.fileName}</h4>
-                      <Button variant="outline" className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest h-10">
-                        View Details
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </section>
 
         <div id="security" className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-6xl mt-32 md:mt-48 mb-24 md:mb-32">
@@ -360,7 +403,7 @@ export default function Home() {
               <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
               LIVE DEPLOYMENT READY
             </span>
-            <span className="opacity-50">V5.0.1</span>
+            <span className="opacity-50">V5.2.0</span>
           </div>
         </div>
       </footer>
