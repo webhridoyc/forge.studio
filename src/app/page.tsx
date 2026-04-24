@@ -105,7 +105,7 @@ export default function Home() {
       </div>
 
       <header className={cn(
-        "sticky top-0 z-[100] w-full border-b border-foreground/5 bg-background/60 backdrop-blur-3xl px-4 md:px-12 h-20 flex items-center justify-between shadow-sm transition-all",
+        "sticky top-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] transition-all",
         isAuthOpen && "hidden"
       )}>
         <div className="flex items-center gap-2 md:gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
