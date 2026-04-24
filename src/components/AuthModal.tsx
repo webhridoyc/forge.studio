@@ -14,8 +14,7 @@ import {
   DialogContent, 
   DialogHeader, 
   DialogTitle, 
-  DialogTrigger,
-  DialogClose
+  DialogTrigger
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -29,7 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { LogOut, User as UserIcon, LogIn, Chrome, Moon, Sun, Mail, Lock, X } from "lucide-react"
+import { LogOut, User as UserIcon, LogIn, Chrome, Moon, Sun, Mail, Lock } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 interface AuthUIProps {
@@ -81,6 +80,8 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!email || !password) return
+
     setIsLoading(true)
     try {
       if (isSignUp) {
@@ -118,7 +119,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-64 p-2 rounded-2xl glass-card" align="end" forceMount>
+        <DropdownMenuContent className="w-64 p-2 rounded-2xl glass-card border-white/10" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-black leading-none tracking-tight">{user.displayName || "Forge Member"}</p>
@@ -152,15 +153,15 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           <LogIn className="w-4 h-4 mr-2 hidden sm:inline" /> Sign In
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[90vw] max-w-[450px] rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 glass-card bg-background/95 dark:bg-background/40 border-white/10 overflow-y-auto max-h-[90vh]">
-        <DialogHeader className="space-y-4 text-center relative">
-          <div className="mx-auto w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-3xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-2xl rotate-3">
+      <DialogContent className="w-[95vw] max-w-[450px] rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 border-none bg-white dark:bg-zinc-950 shadow-2xl overflow-y-auto max-h-[90vh]">
+        <DialogHeader className="space-y-4 text-center">
+          <div className="mx-auto w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-3xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-xl rotate-3">
             <UserIcon className="w-6 h-6 md:w-8 md:h-8 text-white" />
           </div>
-          <DialogTitle className="text-2xl md:text-4xl font-black tracking-tighter uppercase">
+          <DialogTitle className="text-2xl md:text-4xl font-black tracking-tighter uppercase text-zinc-900 dark:text-zinc-100">
             {isSignUp ? "Join the Forge" : "Member Login"}
           </DialogTitle>
-          <p className="text-muted-foreground text-xs md:text-sm font-medium leading-relaxed">
+          <p className="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm font-medium leading-relaxed">
             {isSignUp 
               ? "Personalize your workspace and secure your cloud history."
               : "Access your saved asset history instantly from any device."}
@@ -169,45 +170,51 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
 
         <form onSubmit={handleEmailAuth} className="space-y-4 pt-4 md:pt-6">
           <div className="space-y-2">
-            <Label className="text-[10px] uppercase tracking-widest font-black text-muted-foreground ml-1">Email Address</Label>
+            <Label className="text-[10px] uppercase tracking-[0.2em] font-black text-zinc-400 dark:text-zinc-500 ml-1">
+              Email Address
+            </Label>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
               <Input 
                 type="email" 
                 placeholder="name@example.com" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-background border-foreground/10 focus:ring-primary text-sm shadow-sm dark:bg-foreground/5"
+                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-sm"
               />
             </div>
           </div>
           <div className="space-y-2">
-            <Label className="text-[10px] uppercase tracking-widest font-black text-muted-foreground ml-1">Password</Label>
+            <Label className="text-[10px] uppercase tracking-[0.2em] font-black text-zinc-400 dark:text-zinc-500 ml-1">
+              Password
+            </Label>
             <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
               <Input 
                 type="password" 
                 placeholder="••••••••" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-background border-foreground/10 focus:ring-primary text-sm shadow-sm dark:bg-foreground/5"
+                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-sm"
               />
             </div>
           </div>
           <Button 
             type="submit" 
             disabled={isLoading}
-            className="w-full h-12 md:h-14 rounded-xl md:rounded-2xl bg-primary hover:bg-primary/90 text-white font-black text-xs uppercase tracking-widest transition-all"
+            className="w-full h-12 md:h-14 rounded-xl md:rounded-2xl bg-primary hover:bg-primary/90 text-white font-black text-xs uppercase tracking-widest shadow-lg active:scale-95 transition-all"
           >
             {isLoading ? "Processing..." : (isSignUp ? "Create Account" : "Sign In")}
           </Button>
         </form>
 
-        <div className="relative my-6 md:my-8">
-          <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-foreground/10" /></div>
-          <div className="relative flex justify-center text-[9px] uppercase tracking-[0.3em] font-black"><span className="bg-background px-4 text-muted-foreground">OR</span></div>
+        <div className="relative my-8">
+          <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-zinc-100 dark:border-zinc-800" /></div>
+          <div className="relative flex justify-center text-[9px] uppercase tracking-[0.3em] font-black">
+            <span className="bg-white dark:bg-zinc-950 px-4 text-zinc-400">OR CONTINUE WITH</span>
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -215,9 +222,9 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
             onClick={handleGoogleLogin} 
             variant="outline" 
             disabled={isLoading}
-            className="w-full h-12 md:h-14 rounded-xl md:rounded-2xl border-foreground/10 bg-background hover:bg-foreground hover:text-background transition-all font-bold text-xs shadow-sm dark:bg-transparent dark:hover:bg-foreground"
+            className="w-full h-12 md:h-14 rounded-xl md:rounded-2xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-transparent hover:bg-zinc-50 dark:hover:bg-white/5 transition-all font-bold text-xs text-zinc-900 dark:text-zinc-100 shadow-sm"
           >
-            <Chrome className="w-5 h-5 mr-3" /> Continue with Google
+            <Chrome className="w-5 h-5 mr-3" /> Google Account
           </Button>
           
           <button 
