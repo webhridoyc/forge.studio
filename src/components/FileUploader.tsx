@@ -55,7 +55,7 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
         "relative group flex flex-col items-center justify-center w-full transition-all duration-700 cursor-pointer overflow-hidden border-2 border-dashed",
         hasAssets 
           ? "min-h-[200px] border-primary/20 bg-primary/[0.02] rounded-[2.5rem] hover:bg-primary/[0.04]" 
-          : "min-h-[500px] md:min-h-[600px] border-foreground/10 hover:border-primary/40 hover:bg-foreground/[0.01] rounded-[3.5rem]",
+          : "min-h-[350px] md:min-h-[600px] border-foreground/10 hover:border-primary/40 hover:bg-foreground/[0.01] rounded-[2.5rem] md:rounded-[3.5rem]",
         isDragging && "border-primary bg-primary/5 scale-[1.01] shadow-[0_0_80px_-20px_rgba(var(--primary),0.2)]"
       )}
     >
@@ -71,21 +71,23 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
       
       <div className={cn(
         "flex flex-col items-center justify-center text-center relative z-10 select-none",
-        hasAssets ? "py-8 space-y-6" : "py-16 space-y-16"
+        hasAssets ? "py-8 space-y-6" : "py-10 md:py-16 space-y-10 md:space-y-16"
       )}>
         <div className={cn(
           "rounded-[2.5rem] transition-all duration-700 shadow-2xl relative flex items-center justify-center",
-          hasAssets ? "p-5 bg-primary text-white" : "p-14 bg-gradient-to-br from-primary via-secondary to-accent text-white group-hover:scale-110 group-hover:rotate-6",
+          hasAssets 
+            ? "p-5 bg-primary text-white" 
+            : "p-8 md:p-14 bg-gradient-to-br from-primary via-secondary to-accent text-white group-hover:scale-110 group-hover:rotate-6",
           isDragging && "bg-primary text-white scale-110"
         )}>
-          {hasAssets ? <Plus className="w-8 h-8" /> : <Upload className="w-20 h-20" />}
+          {hasAssets ? <Plus className="w-8 h-8" /> : <Upload className="w-12 h-12 md:w-20 md:h-20" />}
           <div className="absolute -inset-6 bg-white/20 blur-3xl rounded-full -z-10 animate-pulse" />
         </div>
 
         <div className="space-y-4">
           <h3 className={cn(
             "font-black tracking-tighter leading-tight flex flex-col items-center",
-            hasAssets ? "text-2xl uppercase" : "text-6xl md:text-8xl"
+            hasAssets ? "text-xl md:text-2xl uppercase" : "text-4xl md:text-8xl"
           )}>
             {hasAssets ? (
               <span className="flex items-center gap-3">
@@ -101,18 +103,18 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
           </h3>
           
           {!hasAssets && (
-            <div className="flex flex-col items-center gap-10 pt-10">
-              <p className="text-muted-foreground font-bold flex items-center gap-4 tracking-[0.5em] uppercase text-[12px] opacity-60 group-hover:opacity-100 transition-opacity">
-                <MousePointer2 className="w-5 h-5 text-accent" />
+            <div className="flex flex-col items-center gap-6 md:gap-10 pt-6 md:pt-10">
+              <p className="text-muted-foreground font-bold flex items-center gap-4 tracking-[0.3em] uppercase text-[10px] md:text-[12px] opacity-60 group-hover:opacity-100 transition-opacity">
+                <MousePointer2 className="w-4 h-4 md:w-5 md:h-5 text-accent" />
                 OR CLICK TO BROWSE
               </p>
-              <div className="flex items-center gap-6 text-[11px] font-black tracking-widest text-muted-foreground/40">
+              <div className="flex items-center gap-4 md:gap-6 text-[9px] md:text-[11px] font-black tracking-widest text-muted-foreground/40">
                 <span>SVG</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-current" />
                 <span>PNG</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-current" />
                 <span>JPG</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-current" />
                 <span>WEBP</span>
               </div>
             </div>
@@ -122,7 +124,7 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
       
       {isDragging && (
         <div className="absolute inset-0 flex items-center justify-center bg-primary/10 backdrop-blur-md pointer-events-none animate-in fade-in duration-300">
-          <div className="px-16 py-10 rounded-[2.5rem] bg-primary text-white font-black text-4xl uppercase tracking-tighter shadow-2xl animate-pulse">
+          <div className="px-8 md:px-16 py-6 md:py-10 rounded-[2rem] md:rounded-[2.5rem] bg-primary text-white font-black text-2xl md:text-4xl uppercase tracking-tighter shadow-2xl animate-pulse">
             Drop to Expand
           </div>
         </div>
