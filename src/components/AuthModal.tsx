@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -15,7 +14,8 @@ import {
   DialogContent, 
   DialogHeader, 
   DialogTitle, 
-  DialogTrigger 
+  DialogTrigger,
+  DialogClose
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { LogOut, User as UserIcon, LogIn, Chrome, Moon, Sun, Mail, Lock } from "lucide-react"
+import { LogOut, User as UserIcon, LogIn, Chrome, Moon, Sun, Mail, Lock, X } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 export function AuthUI() {
@@ -139,26 +139,29 @@ export function AuthUI() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-2xl h-12 px-8 bg-foreground text-background hover:scale-105 transition-all font-black text-[10px] uppercase tracking-widest">
-          <LogIn className="w-4 h-4 mr-2" /> Sign In
+        <Button className="rounded-2xl h-12 px-6 md:px-8 bg-foreground text-background hover:scale-105 transition-all font-black text-[10px] uppercase tracking-widest">
+          <LogIn className="w-4 h-4 mr-2 hidden sm:inline" /> Sign In
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[450px] rounded-[3rem] p-10 glass-card border-white/10">
-        <DialogHeader className="space-y-4 text-center">
-          <div className="mx-auto w-16 h-16 rounded-3xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-2xl rotate-3">
-            <UserIcon className="w-8 h-8 text-white" />
+      <DialogContent className="w-[90vw] max-w-[450px] rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 glass-card border-white/10 overflow-y-auto max-h-[90vh]">
+        <DialogHeader className="space-y-4 text-center relative">
+          <DialogClose className="absolute right-0 top-0 p-2 opacity-70 hover:opacity-100 transition-opacity md:hidden">
+            <X className="w-6 h-6" />
+          </DialogClose>
+          <div className="mx-auto w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-3xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-2xl rotate-3">
+            <UserIcon className="w-6 h-6 md:w-8 md:h-8 text-white" />
           </div>
-          <DialogTitle className="text-4xl font-black tracking-tighter uppercase">
+          <DialogTitle className="text-2xl md:text-4xl font-black tracking-tighter uppercase">
             {isSignUp ? "Join the Forge" : "Member Login"}
           </DialogTitle>
-          <p className="text-muted-foreground text-sm font-medium leading-relaxed">
+          <p className="text-muted-foreground text-xs md:text-sm font-medium leading-relaxed">
             {isSignUp 
-              ? "Create an account to unlock 10 daily conversions and cloud history."
-              : "Welcome back! Sign in to access your saved asset history."}
+              ? "Unlock 10 daily conversions and secure cloud history."
+              : "Access your saved asset history instantly."}
           </p>
         </DialogHeader>
 
-        <form onSubmit={handleEmailAuth} className="space-y-4 pt-6">
+        <form onSubmit={handleEmailAuth} className="space-y-4 pt-4 md:pt-6">
           <div className="space-y-2">
             <Label className="text-[10px] uppercase tracking-widest font-black text-muted-foreground ml-1">Email Address</Label>
             <div className="relative">
@@ -169,7 +172,7 @@ export function AuthUI() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="rounded-2xl h-14 pl-12 bg-foreground/5 border-foreground/10 focus:ring-primary"
+                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-foreground/5 border-foreground/10 focus:ring-primary text-sm"
               />
             </div>
           </div>
@@ -183,20 +186,20 @@ export function AuthUI() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="rounded-2xl h-14 pl-12 bg-foreground/5 border-foreground/10 focus:ring-primary"
+                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-foreground/5 border-foreground/10 focus:ring-primary text-sm"
               />
             </div>
           </div>
           <Button 
             type="submit" 
             disabled={isLoading}
-            className="w-full h-14 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black text-xs uppercase tracking-widest transition-all"
+            className="w-full h-12 md:h-14 rounded-xl md:rounded-2xl bg-primary hover:bg-primary/90 text-white font-black text-xs uppercase tracking-widest transition-all"
           >
             {isLoading ? "Processing..." : (isSignUp ? "Create Account" : "Sign In")}
           </Button>
         </form>
 
-        <div className="relative my-8">
+        <div className="relative my-6 md:my-8">
           <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-foreground/10" /></div>
           <div className="relative flex justify-center text-[9px] uppercase tracking-[0.3em] font-black"><span className="bg-background px-4 text-muted-foreground">OR</span></div>
         </div>
@@ -206,7 +209,7 @@ export function AuthUI() {
             onClick={handleGoogleLogin} 
             variant="outline" 
             disabled={isLoading}
-            className="w-full h-14 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-bold text-xs"
+            className="w-full h-12 md:h-14 rounded-xl md:rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-bold text-xs"
           >
             <Chrome className="w-5 h-5 mr-3" /> Continue with Google
           </Button>
