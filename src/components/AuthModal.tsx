@@ -45,7 +45,8 @@ import {
   CreditCard,
   MessageCircle,
   Zap,
-  Code
+  Code,
+  Settings
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
@@ -185,6 +186,13 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
               <Link href="/cloud-sync">
                 <History className="mr-3 h-4 w-4 text-secondary" />
                 <span className="font-bold text-[10px] uppercase tracking-widest">Cloud Sync</span>
+              </Link>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+              <Link href="/preferences">
+                <Settings className="mr-3 h-4 w-4 text-accent" />
+                <span className="font-bold text-[10px] uppercase tracking-widest">Studio Settings</span>
               </Link>
             </DropdownMenuItem>
 
