@@ -88,7 +88,7 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-[50%] bg-accent/5 blur-[120px] rounded-full" />
       </div>
 
-      <header className="sticky top-0 z-50 w-full border-b border-foreground/5 bg-background/70 backdrop-blur-xl px-6 md:px-12 h-20 flex items-center justify-between transition-all">
+      <header className="sticky top-0 z-[100] w-full border-b border-white/10 dark:border-white/5 bg-background/60 backdrop-blur-2xl px-6 md:px-12 h-20 flex items-center justify-between transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.03)] dark:shadow-none">
         <div className="flex items-center gap-3 group cursor-pointer">
           <div className="bg-gradient-to-br from-primary to-secondary p-2 rounded-xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
             <Code2 className="w-6 h-6 text-white" />
