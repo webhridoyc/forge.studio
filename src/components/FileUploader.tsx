@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Upload, ImageIcon, X, MousePointer2 } from "lucide-react"
+import { Upload, ImageIcon, X, MousePointer2, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface FileUploaderProps {
@@ -43,17 +43,20 @@ export function FileUploader({ onFileSelect, onClear, currentFile }: FileUploade
   return (
     <div className="w-full">
       {currentFile ? (
-        <div className="relative group overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5 p-6 flex items-center gap-6 animate-in fade-in zoom-in duration-300 backdrop-blur-md">
-          <div className="h-20 w-20 rounded-2xl overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center shrink-0 shadow-xl shadow-primary/20">
-            <ImageIcon className="text-white w-10 h-10" />
+        <div className="relative group overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 p-8 flex items-center gap-8 animate-in fade-in zoom-in duration-500 backdrop-blur-2xl">
+          <div className="h-24 w-24 rounded-[1.5rem] overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center shrink-0 shadow-2xl shadow-primary/20 transition-transform duration-500 group-hover:scale-105">
+            <ImageIcon className="text-white w-12 h-12" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-lg font-bold truncate mb-1">{currentFile.name}</p>
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded-md bg-white/10 text-[10px] font-black uppercase text-accent">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="w-4 h-4 text-accent animate-pulse" />
+              <p className="text-xl font-black tracking-tight truncate">{currentFile.name}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="px-3 py-1 rounded-lg bg-white/10 text-[10px] font-black uppercase tracking-widest text-accent border border-white/5">
                 {currentFile.type.split("/")[1]}
               </span>
-              <span className="text-xs text-muted-foreground font-medium">
+              <span className="text-xs text-muted-foreground font-bold tracking-tight">
                 {(currentFile.size / 1024).toFixed(2)} KB
               </span>
             </div>
@@ -63,9 +66,9 @@ export function FileUploader({ onFileSelect, onClear, currentFile }: FileUploade
               e.stopPropagation()
               onClear()
             }}
-            className="p-3 bg-white/5 hover:bg-destructive/20 text-muted-foreground hover:text-destructive rounded-2xl transition-all hover:scale-110 border border-white/5"
+            className="p-4 bg-white/5 hover:bg-destructive/20 text-muted-foreground hover:text-destructive rounded-2xl transition-all duration-300 hover:scale-110 active:scale-90 border border-white/5"
           >
-            <X className="w-6 h-6" />
+            <X className="w-7 h-7" />
           </button>
         </div>
       ) : (
@@ -75,15 +78,15 @@ export function FileUploader({ onFileSelect, onClear, currentFile }: FileUploade
           onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
           className={cn(
-            "relative group flex flex-col items-center justify-center w-full h-80 border-2 border-dashed rounded-[1.5rem] transition-all cursor-pointer overflow-hidden",
+            "relative group flex flex-col items-center justify-center w-full h-[400px] border-2 border-dashed rounded-[2.5rem] transition-all duration-500 cursor-pointer overflow-hidden",
             isDragging
-              ? "border-primary bg-primary/10 scale-[1.02]"
-              : "border-white/10 hover:border-primary/50 hover:bg-white/5"
+              ? "border-primary bg-primary/10 scale-[1.01]"
+              : "border-white/10 hover:border-primary/40 hover:bg-white/5"
           )}
         >
-          {/* Animated background blobs */}
-          <div className="absolute top-[-20%] left-[-20%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[100px] group-hover:bg-primary/20 transition-all duration-500" />
-          <div className="absolute bottom-[-20%] right-[-20%] w-[50%] h-[50%] bg-secondary/10 rounded-full blur-[100px] group-hover:bg-secondary/20 transition-all duration-500" />
+          {/* Hardware accelerated background effects */}
+          <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[120px] group-hover:bg-primary/20 transition-all duration-700 pointer-events-none" />
+          <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-secondary/10 rounded-full blur-[120px] group-hover:bg-secondary/20 transition-all duration-700 pointer-events-none" />
 
           <input
             type="file"
@@ -93,25 +96,26 @@ export function FileUploader({ onFileSelect, onClear, currentFile }: FileUploade
             className="hidden"
           />
           
-          <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-8 relative z-10">
+          <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-12 relative z-10">
             <div className={cn(
-              "mb-6 p-6 rounded-3xl transition-all duration-500 shadow-2xl group-hover:rotate-6",
+              "mb-8 p-8 rounded-[2rem] transition-all duration-500 shadow-2xl group-hover:rotate-12 group-hover:scale-110",
               isDragging 
-                ? "bg-primary text-white scale-110" 
-                : "bg-gradient-to-br from-primary to-secondary text-white"
+                ? "bg-primary text-white scale-125 rotate-0 shadow-primary/50" 
+                : "bg-gradient-to-br from-primary via-secondary to-accent text-white"
             )}>
-              <Upload className="w-10 h-10" />
+              <Upload className="w-12 h-12" />
             </div>
-            <h3 className="mb-2 text-3xl font-black tracking-tight leading-tight">
-              DROP YOUR <span className="text-primary italic">ASSET</span> HERE
+            <h3 className="mb-4 text-4xl font-black tracking-tighter leading-none uppercase">
+              DROP <span className="text-primary italic">ASSET</span> <br />
+              <span className="text-muted-foreground text-2xl font-bold tracking-normal lowercase">to begin the forge</span>
             </h3>
-            <p className="text-muted-foreground font-medium flex items-center gap-2">
+            <p className="text-muted-foreground/60 font-bold flex items-center gap-2 tracking-wide uppercase text-[10px]">
               <MousePointer2 className="w-4 h-4" />
-              Or click to browse your file system
+              Direct access file system
             </p>
-            <div className="mt-8 flex gap-3">
+            <div className="mt-10 flex gap-4">
               {['SVG', 'PNG', 'JPG', 'WEBP'].map(ext => (
-                <span key={ext} className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-[10px] font-black text-muted-foreground">
+                <span key={ext} className="px-4 py-1.5 rounded-xl bg-white/5 border border-white/5 text-[10px] font-black text-muted-foreground tracking-widest hover:text-white hover:border-white/20 transition-all duration-300">
                   {ext}
                 </span>
               ))}

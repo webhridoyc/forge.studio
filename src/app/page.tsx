@@ -7,12 +7,18 @@ import { CodeOutput } from "@/components/CodeOutput"
 import { SEOIntro, FAQSection } from "@/components/SEOSections"
 import { fileToBase64 } from "@/lib/image-utils"
 import { Toaster } from "@/components/ui/toaster"
-import { Code2, Zap, Sparkles, Layers, ShieldCheck } from "lucide-react"
+import { Code2, Zap, Sparkles, Layers, ShieldCheck, ArrowRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export default function Home() {
   const [file, setFile] = React.useState<File | null>(null)
   const [base64, setBase64] = React.useState<string | null>(null)
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null)
+  const [currentYear, setCurrentYear] = React.useState<number | null>(null)
+
+  React.useEffect(() => {
+    setCurrentYear(new Date().getFullYear())
+  }, [])
 
   const handleFileSelect = async (selectedFile: File) => {
     setFile(selectedFile)
@@ -32,62 +38,75 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
-      {/* Dynamic Background Elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[120px] pointer-events-none" />
+    <div className="min-h-screen relative overflow-x-hidden selection:bg-primary/30">
+      {/* High-Performance Dynamic Background Elements */}
+      <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[150px] pointer-events-none animate-pulse duration-[10000ms]" />
+      <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/10 rounded-full blur-[150px] pointer-events-none animate-pulse duration-[8000ms]" />
 
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/60 backdrop-blur-xl px-4 sm:px-8 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="bg-gradient-to-br from-primary to-secondary p-2 rounded-xl shadow-lg shadow-primary/20">
-            <Code2 className="w-6 h-6 text-white" />
+      <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/50 backdrop-blur-2xl px-6 sm:px-12 h-20 flex items-center justify-between transition-all">
+        <div className="flex items-center gap-4 group cursor-pointer">
+          <div className="bg-gradient-to-br from-primary to-secondary p-2.5 rounded-2xl shadow-2xl shadow-primary/30 group-hover:rotate-6 transition-transform duration-500">
+            <Code2 className="w-7 h-7 text-white" />
           </div>
-          <span className="text-2xl font-black tracking-tighter bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+          <span className="text-3xl font-black tracking-tighter bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
             FORGE.
           </span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+            <a href="#tool" className="hover:text-primary transition-colors">Workbench</a>
+            <a href="#features" className="hover:text-secondary transition-colors">Privacy</a>
+            <a href="#faq" className="hover:text-accent transition-colors">FAQ</a>
+          </nav>
+          <div className="h-6 w-px bg-white/10 hidden md:block" />
           <ThemeToggle />
         </div>
       </header>
 
-      <main className="container mx-auto px-4 pt-20 pb-24 flex flex-col items-center relative z-10">
+      <main className="container mx-auto px-6 pt-24 pb-32 flex flex-col items-center relative z-10">
         {/* Hero Section */}
-        <div className="text-center max-w-4xl mb-20 space-y-6 animate-in fade-in slide-in-from-top-8 duration-1000">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-accent text-sm font-bold uppercase tracking-widest backdrop-blur-md">
+        <div className="text-center max-w-5xl mb-32 space-y-10 animate-in fade-in slide-in-from-top-12 duration-1000 ease-out fill-mode-forwards">
+          <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-accent text-[10px] font-black uppercase tracking-[0.3em] backdrop-blur-xl hover:bg-white/10 transition-colors cursor-default">
             <Sparkles className="w-4 h-4" />
-            <span>Next-Gen Image Encoding</span>
+            <span>Studio Production Grade</span>
           </div>
-          <h1 className="text-6xl sm:text-8xl font-black text-foreground tracking-tight leading-[0.9] lg:text-9xl">
-            FORGE <span className="text-primary">ASSETS</span> <br />
-            INTO <span className="text-secondary italic">PIXELS</span>
+          <h1 className="text-7xl sm:text-[9rem] font-black text-foreground tracking-tighter leading-[0.85] lg:text-[11rem] select-none">
+            FORGE <span className="text-primary drop-shadow-[0_0_50px_rgba(var(--primary),0.3)]">ASSETS</span> <br />
+            INTO <span className="text-secondary italic drop-shadow-[0_0_50px_rgba(var(--secondary),0.3)]">CODE.</span>
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            The professional developer's workbench for instant, secure Base64 conversion. 
-            No cloud. No latency. Just pure performance.
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
+            The high-performance workbench for modern developers. 
+            Zero cloud latency. Pure browser-side power.
           </p>
+          <div className="flex justify-center pt-4">
+            <a href="#tool" className="group flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-full font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all duration-300">
+              Launch Workbench <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+            </a>
+          </div>
         </div>
 
         {/* Feature Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl mb-20">
+        <div id="features" className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl mb-32">
           {[
-            { icon: Zap, title: "Instant", desc: "Real-time encoding in your browser", color: "text-primary" },
-            { icon: ShieldCheck, title: "Private", desc: "Zero server uploads. 100% client-side", color: "text-accent" },
-            { icon: Layers, title: "Versatile", desc: "HTML, CSS, URI, and Raw formats", color: "text-secondary" },
+            { icon: Zap, title: "120Hz Smooth", desc: "Hardware accelerated interface", color: "text-primary" },
+            { icon: ShieldCheck, title: "100% Secure", desc: "No data ever leaves your device", color: "text-accent" },
+            { icon: Layers, title: "Format Ready", desc: "Universal snippets for any stack", color: "text-secondary" },
           ].map((feature, i) => (
-            <div key={i} className="glass-card p-6 rounded-3xl border hover:border-white/20 transition-all hover:translate-y-[-4px] group">
-              <feature.icon className={`w-8 h-8 ${feature.color} mb-4 group-hover:scale-110 transition-transform`} />
-              <h3 className="text-lg font-bold mb-1">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground">{feature.desc}</p>
+            <div key={i} className="glass-card p-10 rounded-[2.5rem] hover:border-white/20 transition-all duration-500 hover:translate-y-[-8px] group">
+              <div className={cn("w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors", feature.color)}>
+                <feature.icon className="w-8 h-8 group-hover:scale-110 transition-transform duration-500" />
+              </div>
+              <h3 className="text-2xl font-black mb-3 tracking-tight">{feature.title}</h3>
+              <p className="text-muted-foreground leading-relaxed font-medium">{feature.desc}</p>
             </div>
           ))}
         </div>
 
         {/* Tool Section */}
-        <section className="w-full flex flex-col items-center gap-12 relative">
+        <section id="tool" className="w-full flex flex-col items-center gap-16 relative scroll-mt-32">
           <div className="w-full max-w-4xl relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary via-secondary to-accent rounded-[2rem] blur opacity-20 pointer-events-none" />
-            <div className="relative glass-card rounded-[2rem] p-2">
+            <div className="absolute -inset-2 bg-gradient-to-r from-primary via-secondary to-accent rounded-[3rem] blur-2xl opacity-10 pointer-events-none animate-pulse" />
+            <div className="relative glass-card rounded-[3rem] p-3 shadow-2xl">
               <FileUploader 
                 onFileSelect={handleFileSelect} 
                 onClear={handleClear}
@@ -96,72 +115,77 @@ export default function Home() {
             </div>
 
             {previewUrl && (
-              <div className="mt-12 mb-12 flex flex-col items-center animate-in fade-in zoom-in duration-500">
-                <div className="relative p-1 rounded-2xl bg-gradient-to-br from-primary/50 to-secondary/50 shadow-2xl">
-                  <div className="bg-card rounded-[calc(var(--radius)-4px)] p-4">
+              <div className="mt-20 mb-20 flex flex-col items-center animate-in fade-in zoom-in slide-in-from-bottom-12 duration-700 ease-out fill-mode-forwards">
+                <div className="relative p-1.5 rounded-[2.5rem] bg-gradient-to-br from-primary/40 to-secondary/40 shadow-2xl backdrop-blur-3xl animate-float">
+                  <div className="bg-background rounded-[2.4rem] p-6">
                     <img 
                       src={previewUrl} 
                       alt="Uploaded preview" 
-                      className="max-h-64 rounded-lg object-contain"
+                      className="max-h-[300px] rounded-2xl object-contain shadow-lg"
                     />
                   </div>
                 </div>
-                <div className="mt-4 flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
-                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-primary">Live Asset Ready</span>
+                <div className="mt-8 flex items-center gap-3 px-5 py-2 bg-primary/10 rounded-full border border-primary/20 backdrop-blur-xl">
+                  <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Forge Matrix Synced</span>
                 </div>
               </div>
             )}
 
             {base64 && file && (
-              <div className="mt-8">
+              <div className="mt-12">
                 <CodeOutput base64={base64} fileName={file.name} />
               </div>
             )}
           </div>
         </section>
 
-        <SEOIntro />
-        <FAQSection />
+        <div id="faq">
+          <SEOIntro />
+          <FAQSection />
+        </div>
       </main>
 
-      <footer className="w-full py-16 px-4 border-t border-border/50 bg-card/50 backdrop-blur-md">
-        <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="bg-primary p-2 rounded-lg">
-                <Code2 className="w-5 h-5 text-white" />
+      <footer className="w-full py-24 px-8 border-t border-white/5 bg-card/40 backdrop-blur-3xl">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-20">
+          <div className="md:col-span-2 space-y-8">
+            <div className="flex items-center gap-4">
+              <div className="bg-primary p-2.5 rounded-xl shadow-xl">
+                <Code2 className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-black tracking-tighter">FORGE.</span>
+              <span className="text-3xl font-black tracking-tighter">FORGE.</span>
             </div>
-            <p className="text-muted-foreground max-w-sm leading-relaxed">
-              We provide the tools, you build the future. A premium utility for modern developers who value speed and privacy.
+            <p className="text-muted-foreground max-w-md leading-relaxed text-lg font-medium">
+              Architecting the fastest asset pipeline for elite teams. Professional utility focused on performance, privacy, and precision.
             </p>
           </div>
           
-          <div className="space-y-4">
-            <h4 className="font-bold text-sm uppercase tracking-widest text-primary">Resources</h4>
-            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+          <div className="space-y-6">
+            <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-primary">Product</h4>
+            <nav className="flex flex-col gap-4 text-sm font-bold text-muted-foreground/80">
               <a href="#" className="hover:text-white transition-colors">Documentation</a>
-              <a href="#" className="hover:text-white transition-colors">API Reference</a>
-              <a href="#" className="hover:text-white transition-colors">Changelog</a>
+              <a href="#" className="hover:text-white transition-colors">Benchmarks</a>
+              <a href="#" className="hover:text-white transition-colors">Security Audit</a>
             </nav>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="font-bold text-sm uppercase tracking-widest text-secondary">Legal</h4>
-            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Contact</a>
+          <div className="space-y-6">
+            <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-secondary">Studio</h4>
+            <nav className="flex flex-col gap-4 text-sm font-bold text-muted-foreground/80">
+              <a href="#" className="hover:text-white transition-colors">Privacy Charter</a>
+              <a href="#" className="hover:text-white transition-colors">Brand Assets</a>
+              <a href="#" className="hover:text-white transition-colors">Support</a>
             </nav>
           </div>
         </div>
-        <div className="container mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground font-medium">
-          <p>© {new Date().getFullYear()} FORGE STUDIOS. BUILT FOR THE BOLD.</p>
-          <div className="flex gap-4">
-            <span>V2.4.0</span>
-            <span className="text-accent">STABLE RELEASE</span>
+        <div className="container mx-auto mt-24 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] text-muted-foreground font-black tracking-[0.2em] uppercase">
+          <p>© {currentYear ?? '...'} FORGE STUDIOS. ENGINEERED FOR SPEED.</p>
+          <div className="flex items-center gap-8">
+            <span className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+              V3.0.0 STABLE
+            </span>
+            <span className="text-accent opacity-60">120HZ OPTIMIZED</span>
           </div>
         </div>
       </footer>
