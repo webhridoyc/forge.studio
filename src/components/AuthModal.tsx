@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -130,16 +131,19 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-12 w-12 rounded-full ring-2 ring-primary/20 ring-offset-2 hover:ring-primary hover:scale-105 transition-all p-0 overflow-hidden shadow-lg">
-            <Avatar className="h-full w-full">
+          <button className="relative h-12 w-12 rounded-full ring-2 ring-primary/20 ring-offset-2 hover:ring-primary hover:scale-110 transition-all outline-none group">
+            <Avatar className="h-full w-full border-2 border-white/10 shadow-lg">
               <AvatarImage src={user.photoURL || ""} alt={user.displayName || "User"} />
-              <AvatarFallback className="bg-primary text-white font-black text-xs">
+              <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-white font-black text-xs">
                 {user.displayName?.charAt(0) || user.email?.charAt(0).toUpperCase() || <UserIcon className="w-4 h-4" />}
               </AvatarFallback>
             </Avatar>
-          </Button>
+            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-background flex items-center justify-center shadow-md">
+              <Zap className="w-2.5 h-2.5 text-white" />
+            </div>
+          </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-80 p-2 rounded-[2.5rem] glass-card border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-300 z-[150]" align="end" forceMount>
+        <DropdownMenuContent className="w-80 p-2 rounded-[2.5rem] glass-card border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-300 z-[200]" align="end" sideOffset={8}>
           <DropdownMenuLabel className="font-normal px-5 py-6">
             <div className="flex flex-col space-y-4">
               <div className="flex items-center justify-between">
@@ -248,11 +252,11 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
 
         <form onSubmit={handleEmailAuth} className="space-y-5 pt-8">
           <div className="space-y-2">
-            <Label className="text-[10px] uppercase tracking-[0.3em] font-black text-zinc-400 dark:text-zinc-500 ml-2">
+            <Label className="text-[10px] uppercase tracking-[0.3em] font-black text-zinc-600 dark:text-zinc-500 ml-2">
               Email Address
             </Label>
             <div className="relative group">
-              <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 group-focus-within:text-primary transition-colors" />
+              <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
               <Input 
                 type="email" 
                 placeholder="architect@forge.studio" 
@@ -264,11 +268,11 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
             </div>
           </div>
           <div className="space-y-2">
-            <Label className="text-[10px] uppercase tracking-[0.3em] font-black text-zinc-400 dark:text-zinc-500 ml-2">
+            <Label className="text-[10px] uppercase tracking-[0.3em] font-black text-zinc-600 dark:text-zinc-500 ml-2">
               Secure Password
             </Label>
             <div className="relative group">
-              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 group-focus-within:text-primary transition-colors" />
+              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
               <Input 
                 type="password" 
                 placeholder="••••••••" 
@@ -291,7 +295,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
         <div className="relative my-10">
           <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-zinc-100 dark:border-zinc-800" /></div>
           <div className="relative flex justify-center text-[9px] uppercase tracking-[0.4em] font-black">
-            <span className="bg-white dark:bg-zinc-950 px-6 text-zinc-300">OR</span>
+            <span className="bg-white dark:bg-zinc-950 px-6 text-zinc-500">OR</span>
           </div>
         </div>
 
@@ -308,7 +312,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           <button 
             type="button"
             onClick={() => setIsSignUp(!isSignUp)}
-            className="w-full text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] hover:text-primary transition-colors"
+            className="w-full text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] hover:text-primary transition-colors"
           >
             {isSignUp ? "Already a member? Sign in" : "New architect? Create account"}
           </button>
