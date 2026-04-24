@@ -32,12 +32,28 @@ export function DecoderTool({ onDecode }: DecoderToolProps) {
       return
     }
 
-    // Try to normalize input
+    // Try to normalize input by extracting Data URIs from common dev formats
     let cleanVal = val.trim()
+
+    // 1. Check for HTML <img> tag src attribute
+    const imgMatch = cleanVal.match(/<img[^>]+src=["']([^"']+)["']/i);
+    if (imgMatch && imgMatch[1]) {
+      cleanVal = imgMatch[1];
+    } 
+    // 2. Check for CSS url() property
+    else {
+      const cssMatch = cleanVal.match(/url\(["']?([^"']+)["']?\)/i);
+      if (cssMatch && cssMatch[1]) {
+        cleanVal = cssMatch[1];
+      }
+    }
+
+    // 3. Final normalization check
     if (!cleanVal.startsWith("data:")) {
-      // Basic heuristic: check if it looks like base64
-      if (/^[A-Za-z0-9+/=]+$/.test(cleanVal)) {
-        cleanVal = `data:image/png;base64,${cleanVal}`
+      // Heuristic: check if it looks like raw base64 (ignoring whitespace/newlines)
+      const sanitizedBase64 = cleanVal.replace(/[\s\n]/g, '');
+      if (/^[A-Za-z0-9+/=]+$/.test(sanitizedBase64)) {
+        cleanVal = `data:image/png;base64,${sanitizedBase64}`;
       }
     }
 
@@ -102,13 +118,13 @@ export function DecoderTool({ onDecode }: DecoderToolProps) {
     <div className="w-full space-y-8 animate-in fade-in duration-700">
       <div className="space-y-4">
         <label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground ml-2">
-          Paste Base64 Payload
+          Paste Base64, HTML, or CSS Snippet
         </label>
         <div className="relative group">
           <Textarea
             value={input}
             onChange={(e) => handleInput(e.target.value)}
-            placeholder="data:image/png;base64,..."
+            placeholder="Paste <img src='...'> or background-image: url('...')"
             className="min-h-[200px] rounded-[2rem] bg-foreground/5 border-foreground/10 focus:ring-primary p-6 text-[13px] font-code transition-all custom-scrollbar"
           />
           {input && (
@@ -184,7 +200,7 @@ export function DecoderTool({ onDecode }: DecoderToolProps) {
           <ImageIcon className="w-16 h-16" />
           <div className="space-y-1">
             <p className="text-sm font-black uppercase tracking-[0.3em]">Awaiting Payload</p>
-            <p className="text-xs font-medium">Insert a Base64 string to begin synthesis</p>
+            <p className="text-xs font-medium">Insert a Base64 string, HTML img tag, or CSS url property</p>
           </div>
         </div>
       )}
