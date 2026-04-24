@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Upload, ImageIcon, X } from "lucide-react"
+import { Upload, ImageIcon, X, MousePointer2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface FileUploaderProps {
@@ -41,26 +41,31 @@ export function FileUploader({ onFileSelect, onClear, currentFile }: FileUploade
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto mb-8">
+    <div className="w-full">
       {currentFile ? (
-        <div className="relative group overflow-hidden rounded-xl border-2 border-primary/20 bg-card p-4 flex items-center gap-4 animate-in fade-in zoom-in duration-300">
-          <div className="h-16 w-16 rounded-md overflow-hidden bg-muted flex items-center justify-center shrink-0">
-            <ImageIcon className="text-muted-foreground w-8 h-8" />
+        <div className="relative group overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5 p-6 flex items-center gap-6 animate-in fade-in zoom-in duration-300 backdrop-blur-md">
+          <div className="h-20 w-20 rounded-2xl overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center shrink-0 shadow-xl shadow-primary/20">
+            <ImageIcon className="text-white w-10 h-10" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold truncate">{currentFile.name}</p>
-            <p className="text-xs text-muted-foreground">
-              {(currentFile.size / 1024).toFixed(2)} KB • {currentFile.type.split("/")[1].toUpperCase()}
-            </p>
+            <p className="text-lg font-bold truncate mb-1">{currentFile.name}</p>
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded-md bg-white/10 text-[10px] font-black uppercase text-accent">
+                {currentFile.type.split("/")[1]}
+              </span>
+              <span className="text-xs text-muted-foreground font-medium">
+                {(currentFile.size / 1024).toFixed(2)} KB
+              </span>
+            </div>
           </div>
           <button
             onClick={(e) => {
               e.stopPropagation()
               onClear()
             }}
-            className="p-2 hover:bg-destructive/10 text-muted-foreground hover:text-destructive rounded-full transition-colors"
+            className="p-3 bg-white/5 hover:bg-destructive/20 text-muted-foreground hover:text-destructive rounded-2xl transition-all hover:scale-110 border border-white/5"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" />
           </button>
         </div>
       ) : (
@@ -70,12 +75,16 @@ export function FileUploader({ onFileSelect, onClear, currentFile }: FileUploade
           onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
           className={cn(
-            "relative group flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-2xl transition-all cursor-pointer",
+            "relative group flex flex-col items-center justify-center w-full h-80 border-2 border-dashed rounded-[1.5rem] transition-all cursor-pointer overflow-hidden",
             isDragging
-              ? "border-primary bg-primary/5 scale-[1.01]"
-              : "border-border hover:border-primary/50 hover:bg-muted/50"
+              ? "border-primary bg-primary/10 scale-[1.02]"
+              : "border-white/10 hover:border-primary/50 hover:bg-white/5"
           )}
         >
+          {/* Animated background blobs */}
+          <div className="absolute top-[-20%] left-[-20%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[100px] group-hover:bg-primary/20 transition-all duration-500" />
+          <div className="absolute bottom-[-20%] right-[-20%] w-[50%] h-[50%] bg-secondary/10 rounded-full blur-[100px] group-hover:bg-secondary/20 transition-all duration-500" />
+
           <input
             type="file"
             ref={inputRef}
@@ -83,19 +92,30 @@ export function FileUploader({ onFileSelect, onClear, currentFile }: FileUploade
             accept="image/*"
             className="hidden"
           />
-          <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+          
+          <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-8 relative z-10">
             <div className={cn(
-              "mb-4 p-4 rounded-full transition-transform group-hover:scale-110",
-              isDragging ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"
+              "mb-6 p-6 rounded-3xl transition-all duration-500 shadow-2xl group-hover:rotate-6",
+              isDragging 
+                ? "bg-primary text-white scale-110" 
+                : "bg-gradient-to-br from-primary to-secondary text-white"
             )}>
-              <Upload className="w-8 h-8" />
+              <Upload className="w-10 h-10" />
             </div>
-            <p className="mb-2 text-lg font-headline font-semibold">
-              <span className="text-primary">Click to upload</span> or drag and drop
+            <h3 className="mb-2 text-3xl font-black tracking-tight leading-tight">
+              DROP YOUR <span className="text-primary italic">ASSET</span> HERE
+            </h3>
+            <p className="text-muted-foreground font-medium flex items-center gap-2">
+              <MousePointer2 className="w-4 h-4" />
+              Or click to browse your file system
             </p>
-            <p className="text-sm text-muted-foreground">
-              SVG, PNG, JPG or WEBP (Max 5MB for best performance)
-            </p>
+            <div className="mt-8 flex gap-3">
+              {['SVG', 'PNG', 'JPG', 'WEBP'].map(ext => (
+                <span key={ext} className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-[10px] font-black text-muted-foreground">
+                  {ext}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       )}
