@@ -165,8 +165,8 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           </DialogTitle>
           <p className="text-muted-foreground text-xs md:text-sm font-medium leading-relaxed">
             {isSignUp 
-              ? "Unlock 10 daily conversions and secure cloud history."
-              : "Access your saved asset history instantly."}
+              ? "Personalize your workspace and secure your cloud history."
+              : "Access your saved asset history instantly from any device."}
           </p>
         </DialogHeader>
 

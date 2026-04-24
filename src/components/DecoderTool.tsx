@@ -9,10 +9,9 @@ import { useToast } from "@/hooks/use-toast"
 
 interface DecoderToolProps {
   onDecode: () => void;
-  canProcess: boolean;
 }
 
-export function DecoderTool({ onDecode, canProcess }: DecoderToolProps) {
+export function DecoderTool({ onDecode }: DecoderToolProps) {
   const { toast } = useToast()
   const [input, setInput] = React.useState("")
   const [preview, setPreview] = React.useState<string | null>(null)
@@ -41,10 +40,6 @@ export function DecoderTool({ onDecode, canProcess }: DecoderToolProps) {
 
   const handleDownload = () => {
     if (!preview) return
-    if (!canProcess) {
-      onDecode() // Trigger limit warning
-      return
-    }
     
     try {
       downloadImageFromBase64(preview, `decoded-asset-${Date.now()}.png`)

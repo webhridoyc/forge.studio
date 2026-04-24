@@ -6,12 +6,11 @@ import { CodeOutput } from "@/components/CodeOutput"
 import { DecoderTool } from "@/components/DecoderTool"
 import { SEOIntro, FAQSection } from "@/components/SEOSections"
 import { AuthUI } from "@/components/AuthModal"
-import { UsageLimitIndicator } from "@/components/UsageLimitIndicator"
 import { optimizeImage, type ProcessedAsset, type OutputFormat } from "@/lib/image-utils"
 import { Toaster } from "@/components/ui/toaster"
 import { useToast } from "@/hooks/use-toast"
 import { useUser, useFirestore, useMemoFirebase, useCollection } from "@/firebase"
-import { doc, getDoc, setDoc, serverTimestamp, collection, query, orderBy, limit } from "firebase/firestore"
+import { collection, query, orderBy, limit } from "firebase/firestore"
 import { 
   Code2, 
   Sparkles, 
@@ -38,11 +37,8 @@ export default function Home() {
   const [isProcessing, setIsProcessing] = React.useState(false)
   const [targetFormat] = React.useState<OutputFormat>('original')
   const [currentYear, setCurrentYear] = React.useState<number | null>(null)
-  const [usage, setUsage] = React.useState(0)
   const [isAuthOpen, setIsAuthOpen] = React.useState(false)
   
-  const LIMIT = user ? 10 : 3
-
   const historyQuery = useMemoFirebase(() => {
     if (!db || !user) return null
     return query(
@@ -56,77 +52,9 @@ export default function Home() {
 
   React.useEffect(() => {
     setCurrentYear(new Date().getFullYear())
-    
-    const initializeUsage = async () => {
-      if (!user) {
-        const stored = localStorage.getItem('forge_usage_guest')
-        const lastReset = localStorage.getItem('forge_usage_last_reset')
-        const today = new Date().toDateString()
-        
-        if (lastReset !== today) {
-          localStorage.setItem('forge_usage_guest', '0')
-          localStorage.setItem('forge_usage_last_reset', today)
-          setUsage(0)
-        } else {
-          setUsage(parseInt(stored || '0'))
-        }
-      } else if (db && user) {
-        const userRef = doc(db, 'users', user.uid)
-        const snap = await getDoc(userRef)
-        if (snap.exists()) {
-          const data = snap.data()
-          const lastReset = data.lastReset?.toDate()?.toDateString()
-          const today = new Date().toDateString()
-          
-          if (lastReset !== today) {
-            setDoc(userRef, { usageCount: 0, lastReset: serverTimestamp() }, { merge: true })
-            setUsage(0)
-          } else {
-            setUsage(data.usageCount || 0)
-          }
-        } else {
-          await setDoc(userRef, { 
-            id: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            usageCount: 0, 
-            lastReset: serverTimestamp(),
-            createdAt: serverTimestamp()
-          })
-          setUsage(0)
-        }
-      }
-    }
-    initializeUsage()
-  }, [user, db])
-
-  const incrementUsage = async () => {
-    const newUsage = usage + 1
-    setUsage(newUsage)
-    
-    if (!user) {
-      localStorage.setItem('forge_usage_guest', newUsage.toString())
-    } else {
-      const userRef = doc(db, 'users', user.uid)
-      setDoc(userRef, { 
-        usageCount: newUsage, 
-        lastReset: serverTimestamp()
-      }, { merge: true })
-    }
-  }
+  }, [])
 
   const handleFilesSelect = async (files: File[]) => {
-    if (usage + files.length > LIMIT) {
-      toast({
-        variant: "destructive",
-        title: "Daily Limit Reached",
-        description: user 
-          ? "You've reached your 10 daily forges. Reset tomorrow." 
-          : "Sign in to unlock 10 daily forges (Currently: 3).",
-      })
-      return
-    }
-
     setIsProcessing(true)
     const newAssets: ProcessedAsset[] = []
     
@@ -143,7 +71,6 @@ export default function Home() {
       try {
         const asset = await optimizeImage(file, targetFormat)
         newAssets.push(asset)
-        await incrementUsage()
       } catch (err) {
         toast({
           variant: "destructive",
@@ -158,15 +85,7 @@ export default function Home() {
   }
 
   const handleDecode = async () => {
-    if (usage >= LIMIT) {
-      toast({
-        variant: "destructive",
-        title: "Daily Limit Reached",
-        description: "Limit hit. Login for more or wait for tomorrow.",
-      })
-      return
-    }
-    await incrementUsage()
+    // Decoding processed
   }
 
   const removeAsset = (id: string) => {
@@ -213,9 +132,8 @@ export default function Home() {
           <div className="inline-flex flex-col items-center gap-6">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em]">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Studio Utility v5.2</span>
+              <span>Unlimited Pro Edition</span>
             </div>
-            <UsageLimitIndicator used={usage} limit={LIMIT} isGuest={!user} />
           </div>
           
           <h1 className="text-4xl md:text-8xl lg:text-[9rem] font-black text-foreground tracking-tighter leading-[0.85] select-none text-center">
@@ -292,7 +210,6 @@ export default function Home() {
               <div className="relative glass-card rounded-[2rem] md:rounded-[3rem] p-6 md:p-12 shadow-2xl overflow-hidden border-white/10">
                 <DecoderTool 
                   onDecode={handleDecode}
-                  canProcess={usage < LIMIT}
                 />
               </div>
             </TabsContent>
@@ -325,7 +242,7 @@ export default function Home() {
           {[
             { icon: Zap, title: "Zero Latency", desc: "Forging happens entirely in-browser. No server round-trips.", color: "text-primary" },
             { icon: ShieldCheck, title: "Member Vault", desc: "Logged-in users get cloud history sync across all devices.", color: "text-accent" },
-            { icon: History, title: "Smart Limits", desc: "Usage caps ensure performance stability for everyone.", color: "text-secondary" },
+            { icon: History, title: "Unlimited Use", desc: "No caps. Forge as many assets as your pipeline requires.", color: "text-secondary" },
           ].map((feature, i) => (
             <div key={i} className="glass-card p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:translate-y-[-8px] transition-all duration-500 group">
               <div className={cn("w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-foreground/5 flex items-center justify-center mb-6 md:mb-8", feature.color)}>
