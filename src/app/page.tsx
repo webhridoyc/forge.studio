@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -248,14 +247,12 @@ export default function Home() {
             </div>
 
             <TabsContent value="encoder" className="mt-0 outline-none">
-              <div className="w-full">
-                <div className="relative glass-card rounded-[2rem] md:rounded-[3rem] p-3 md:p-4 shadow-2xl overflow-hidden border-white/10">
-                  <FileUploader 
-                    onFilesSelect={handleFilesSelect} 
-                    onClear={clearAll}
-                    hasAssets={assets.length > 0}
-                  />
-                </div>
+              <div className="w-full relative glass-card rounded-[2rem] md:rounded-[3rem] p-3 md:p-6 shadow-2xl overflow-hidden border-white/10">
+                <FileUploader 
+                  onFilesSelect={handleFilesSelect} 
+                  onClear={clearAll}
+                  hasAssets={assets.length > 0}
+                />
 
                 {isProcessing && (
                   <div className="mt-12 md:mt-16 flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-4">
@@ -265,10 +262,10 @@ export default function Home() {
                 )}
 
                 {assets.length > 0 && (
-                  <div className="mt-16 md:mt-20 space-y-16 md:space-y-24 w-full">
+                  <div className="mt-8 md:mt-12 space-y-16 md:space-y-24 w-full">
                     <div className="flex items-center justify-between border-b border-foreground/5 pb-8 px-4">
-                      <h2 className="text-xl md:text-4xl font-black tracking-tighter flex items-center gap-4 uppercase">
-                        Forged Assets
+                      <h2 className="text-lg md:text-2xl font-black tracking-tighter flex items-center gap-4 uppercase opacity-50">
+                        Forged Assets ({assets.length})
                       </h2>
                       <Button 
                         variant="ghost" 
@@ -279,11 +276,13 @@ export default function Home() {
                       </Button>
                     </div>
                     
-                    {assets.map((asset) => (
-                      <div key={asset.id} className="animate-in fade-in slide-in-from-bottom-8 duration-700">
-                        <CodeOutput asset={asset} onRemove={() => removeAsset(asset.id)} />
-                      </div>
-                    ))}
+                    <div className="space-y-16 md:space-y-24">
+                      {assets.map((asset) => (
+                        <div key={asset.id} className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+                          <CodeOutput asset={asset} onRemove={() => removeAsset(asset.id)} />
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
