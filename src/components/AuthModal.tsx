@@ -32,7 +32,11 @@ import { Label } from "@/components/ui/label"
 import { LogOut, User as UserIcon, LogIn, Chrome, Moon, Sun, Mail, Lock, X } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
-export function AuthUI() {
+interface AuthUIProps {
+  onOpenChange?: (open: boolean) => void
+}
+
+export function AuthUI({ onOpenChange }: AuthUIProps) {
   const auth = useAuth()
   const { toast } = useToast()
   const { user, isUserLoading } = useUser()
@@ -56,12 +60,17 @@ export function AuthUI() {
 
   const toggleTheme = () => setTheme(prev => prev === "light" ? "dark" : "light")
 
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open)
+    onOpenChange?.(open)
+  }
+
   const handleGoogleLogin = async () => {
     try {
       setIsLoading(true)
       const provider = new GoogleAuthProvider()
       await signInWithPopup(auth, provider)
-      setIsOpen(false)
+      handleOpenChange(false)
       toast({ title: "Welcome back!", description: "Successfully signed in with Google." })
     } catch (error: any) {
       toast({ variant: "destructive", title: "Auth Error", description: error.message })
@@ -81,7 +90,7 @@ export function AuthUI() {
         await signInWithEmailAndPassword(auth, email, password)
         toast({ title: "Welcome back!", description: "Signed in successfully." })
       }
-      setIsOpen(false)
+      handleOpenChange(false)
     } catch (error: any) {
       toast({ variant: "destructive", title: "Auth Error", description: error.message })
     } finally {
@@ -137,7 +146,7 @@ export function AuthUI() {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button className="rounded-2xl h-12 px-6 md:px-8 bg-foreground text-background hover:scale-105 transition-all font-black text-[10px] uppercase tracking-widest">
           <LogIn className="w-4 h-4 mr-2 hidden sm:inline" /> Sign In

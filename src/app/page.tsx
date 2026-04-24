@@ -36,6 +36,7 @@ export default function Home() {
   const [targetFormat] = React.useState<OutputFormat>('original')
   const [currentYear, setCurrentYear] = React.useState<number | null>(null)
   const [usage, setUsage] = React.useState(0)
+  const [isAuthOpen, setIsAuthOpen] = React.useState(false)
   
   const LIMIT = user ? 10 : 3
 
@@ -170,7 +171,10 @@ export default function Home() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-secondary/5 blur-[150px] animate-pulse delay-1000 rounded-full" />
       </div>
 
-      <header className="sticky top-0 z-[100] w-full border-b border-foreground/5 bg-background/60 backdrop-blur-3xl px-4 md:px-12 h-20 flex items-center justify-between shadow-sm transition-all">
+      <header className={cn(
+        "sticky top-0 z-[100] w-full border-b border-foreground/5 bg-background/60 backdrop-blur-3xl px-4 md:px-12 h-20 flex items-center justify-between shadow-sm transition-all",
+        isAuthOpen && "hidden"
+      )}>
         <div className="flex items-center gap-2 md:gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <div className="bg-gradient-to-br from-primary to-secondary p-1.5 md:p-2 rounded-xl shadow-lg group-hover:scale-110 transition-all">
             <Code2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
@@ -186,7 +190,7 @@ export default function Home() {
           </nav>
           <div className="h-6 w-px bg-foreground/10 hidden md:block" />
           <div className="flex items-center gap-4">
-            <AuthUI />
+            <AuthUI onOpenChange={setIsAuthOpen} />
           </div>
         </div>
       </header>
