@@ -105,7 +105,7 @@ export default function Home() {
       </div>
 
       <header className={cn(
-        "sticky top-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] transition-all",
+        "fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] transition-all",
         isAuthOpen && "hidden"
       )}>
         <div className="flex items-center gap-2 md:gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -128,7 +128,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 md:px-6 pt-12 md:pt-24 pb-32 flex flex-col items-center relative z-10">
+      <main className="container mx-auto px-4 md:px-6 pt-24 md:pt-32 pb-32 flex flex-col items-center relative z-10">
         <section className="text-center max-w-5xl mb-16 md:mb-24 space-y-8 md:space-y-12 animate-in fade-in slide-in-from-top-12 duration-1000">
           <div className="inline-flex flex-col items-center gap-6">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em]">
