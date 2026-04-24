@@ -152,11 +152,8 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           <LogIn className="w-4 h-4 mr-2 hidden sm:inline" /> Sign In
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[90vw] max-w-[450px] rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 glass-card border-white/10 overflow-y-auto max-h-[90vh]">
+      <DialogContent className="w-[90vw] max-w-[450px] rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 glass-card bg-background/95 dark:bg-background/40 border-white/10 overflow-y-auto max-h-[90vh]">
         <DialogHeader className="space-y-4 text-center relative">
-          <DialogClose className="absolute right-0 top-0 p-2 opacity-70 hover:opacity-100 transition-opacity md:hidden">
-            <X className="w-6 h-6" />
-          </DialogClose>
           <div className="mx-auto w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-3xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-2xl rotate-3">
             <UserIcon className="w-6 h-6 md:w-8 md:h-8 text-white" />
           </div>
@@ -181,7 +178,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-foreground/5 border-foreground/10 focus:ring-primary text-sm"
+                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-background border-foreground/10 focus:ring-primary text-sm shadow-sm dark:bg-foreground/5"
               />
             </div>
           </div>
@@ -195,7 +192,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-foreground/5 border-foreground/10 focus:ring-primary text-sm"
+                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-background border-foreground/10 focus:ring-primary text-sm shadow-sm dark:bg-foreground/5"
               />
             </div>
           </div>
@@ -218,7 +215,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
             onClick={handleGoogleLogin} 
             variant="outline" 
             disabled={isLoading}
-            className="w-full h-12 md:h-14 rounded-xl md:rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-bold text-xs"
+            className="w-full h-12 md:h-14 rounded-xl md:rounded-2xl border-foreground/10 bg-background hover:bg-foreground hover:text-background transition-all font-bold text-xs shadow-sm dark:bg-transparent dark:hover:bg-foreground"
           >
             <Chrome className="w-5 h-5 mr-3" /> Continue with Google
           </Button>
