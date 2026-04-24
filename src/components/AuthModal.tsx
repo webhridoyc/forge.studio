@@ -40,19 +40,12 @@ import {
   Sun, 
   Mail, 
   Lock,
-  LayoutDashboard,
   ShieldCheck,
   History,
-  Settings,
   CreditCard,
   MessageCircle,
   Zap,
-  Shield,
-  BookOpen,
-  BarChart3,
-  Code,
-  Flame,
-  Info
+  Code
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
@@ -171,7 +164,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground">
                   <span>Forge Capacity</span>
-                  <span className="text-primary">Unlimited Member</span>
+                  <span className="text-primary font-black">Unlimited Member</span>
                 </div>
                 <Progress value={100} className="h-1 bg-foreground/5" />
               </div>
@@ -181,28 +174,8 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           <DropdownMenuSeparator className="bg-foreground/5 mx-2" />
           
           <div className="p-1.5 space-y-1">
-            <div className="text-[8px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 px-4 py-2">System</div>
-            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-              <Link href="/">
-                <LayoutDashboard className="mr-3 h-4 w-4 text-primary" />
-                <span className="font-bold text-[10px] uppercase tracking-widest">Workbench</span>
-              </Link>
-            </DropdownMenuItem>
+            <div className="text-[8px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 px-4 py-2">Member Workspace</div>
             
-            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-              <Link href="/docs">
-                <BookOpen className="mr-3 h-4 w-4 text-primary" />
-                <span className="font-bold text-[10px] uppercase tracking-widest">Documentation</span>
-              </Link>
-            </DropdownMenuItem>
-
-            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-              <Link href="/performance">
-                <BarChart3 className="mr-3 h-4 w-4 text-primary" />
-                <span className="font-bold text-[10px] uppercase tracking-widest">Performance Audit</span>
-              </Link>
-            </DropdownMenuItem>
-
             <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
               <Link href="/api-reference">
                 <Code className="mr-3 h-4 w-4 text-primary" />
@@ -210,7 +183,6 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
               </Link>
             </DropdownMenuItem>
 
-            <div className="text-[8px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 px-4 py-2 mt-2">History</div>
             <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
               <Link href="/cloud-sync">
                 <History className="mr-3 h-4 w-4 text-secondary" />
@@ -219,9 +191,9 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
             </DropdownMenuItem>
 
             <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-              <Link href="/usage-specs">
-                <Zap className="mr-3 h-4 w-4 text-secondary" />
-                <span className="font-bold text-[10px] uppercase tracking-widest">Usage Specs</span>
+              <Link href="/billing">
+                <CreditCard className="mr-3 h-4 w-4 text-primary" />
+                <span className="font-bold text-[10px] uppercase tracking-widest">Pricing & Plans</span>
               </Link>
             </DropdownMenuItem>
 
@@ -229,21 +201,6 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
               <Link href="/contact">
                 <MessageCircle className="mr-3 h-4 w-4 text-secondary" />
                 <span className="font-bold text-[10px] uppercase tracking-widest">Contact Support</span>
-              </Link>
-            </DropdownMenuItem>
-
-            <div className="text-[8px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 px-4 py-2 mt-2">About</div>
-            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-              <Link href="/about">
-                <Flame className="mr-3 h-4 w-4 text-accent" />
-                <span className="font-bold text-[10px] uppercase tracking-widest">Forge Studios</span>
-              </Link>
-            </DropdownMenuItem>
-
-            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
-              <Link href="/privacy">
-                <Shield className="mr-3 h-4 w-4 text-accent" />
-                <span className="font-bold text-[10px] uppercase tracking-widest">Privacy Policy</span>
               </Link>
             </DropdownMenuItem>
           </div>
