@@ -4,28 +4,6 @@
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 263.4 70% 50.4%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 316.4 70% 50.4%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 199.4 89% 48.4%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 263.4 70% 50.4%;
-    --radius: 1.25rem;
-  }
-  .light {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -45,6 +23,28 @@
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 262.1 83.3% 57.8%;
+    --radius: 1.5rem;
+  }
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 263.4 70% 50.4%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 316.4 70% 50.4%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 199.4 89% 48.4%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 263.4 70% 50.4%;
   }
 }
 
@@ -54,40 +54,38 @@
     outline-color: hsl(var(--ring));
   }
   body {
-    @apply bg-background text-foreground font-body antialiased transition-colors duration-500 ease-in-out;
+    @apply bg-background text-foreground font-body antialiased transition-colors duration-700 ease-in-out;
     background-image: 
-      radial-gradient(at 0% 0%, hsla(263, 70%, 50%, 0.12) 0px, transparent 55%),
-      radial-gradient(at 100% 100%, hsla(316, 70%, 50%, 0.12) 0px, transparent 55%),
-      radial-gradient(at 50% 50%, hsla(199, 89%, 48%, 0.05) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, hsla(var(--primary), 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(var(--secondary), 0.08) 0px, transparent 50%);
     background-attachment: fixed;
   }
 }
 
 .glass-card {
-  @apply bg-card/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)];
+  @apply bg-card/40 backdrop-blur-3xl border border-foreground/5 shadow-2xl;
   will-change: transform, opacity;
 }
 
 @keyframes float {
-  0% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(0, -12px, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -15px, 0); }
 }
 
 .animate-float {
-  animation: float 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-.smooth-transition {
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: float 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  @apply bg-transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
   @apply bg-primary/20 rounded-full hover:bg-primary/40 transition-colors;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent;
 }
