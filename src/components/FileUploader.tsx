@@ -105,6 +105,15 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
                 <MousePointer2 className="w-4 h-4 text-accent" />
                 OR CLICK TO BROWSE
               </p>
+              <div className="flex items-center gap-4 text-[9px] font-black tracking-widest text-muted-foreground/40">
+                <span>SVG</span>
+                <span className="w-1 h-1 rounded-full bg-current" />
+                <span>PNG</span>
+                <span className="w-1 h-1 rounded-full bg-current" />
+                <span>JPG</span>
+                <span className="w-1 h-1 rounded-full bg-current" />
+                <span>WEBP</span>
+              </div>
             </div>
           )}
         </div>

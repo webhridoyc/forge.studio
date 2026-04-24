@@ -98,6 +98,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative overflow-x-hidden selection:bg-primary/20 transition-colors duration-700">
+      {/* Dynamic Header Blur Background */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-background">
         <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-primary/5 blur-[150px] animate-pulse rounded-full" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-secondary/5 blur-[150px] animate-pulse delay-1000 rounded-full" />
