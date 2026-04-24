@@ -13,11 +13,12 @@ import {
   Sparkles, 
   ShieldCheck, 
   Zap, 
-  ArrowRight, 
   Loader2, 
-  MonitorSmartphone,
   Trash2,
-  FileDown
+  Github,
+  Twitter,
+  Linkedin,
+  MessageCircle
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -26,7 +27,7 @@ export default function Home() {
   const { toast } = useToast()
   const [assets, setAssets] = React.useState<ProcessedAsset[]>([])
   const [isProcessing, setIsProcessing] = React.useState(false)
-  const [targetFormat, setTargetFormat] = React.useState<OutputFormat>('original')
+  const [targetFormat] = React.useState<OutputFormat>('original')
   const [currentYear, setCurrentYear] = React.useState<number | null>(null)
 
   React.useEffect(() => {
@@ -188,18 +189,35 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="w-full py-24 px-8 border-t border-foreground/5 bg-background/80 backdrop-blur-3xl">
+      <footer className="w-full py-24 px-8 border-t border-foreground/5 bg-background/80 backdrop-blur-3xl relative z-10">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-16">
-          <div className="md:col-span-2 space-y-8">
+          <div className="md:col-span-2 space-y-10">
             <div className="flex items-center gap-3">
-              <div className="bg-primary p-2 rounded-xl">
-                <Code2 className="w-5 h-5 text-white" />
+              <div className="bg-gradient-to-br from-primary to-secondary p-2.5 rounded-xl shadow-lg">
+                <Code2 className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-black tracking-tighter">FORGE.</span>
+              <span className="text-3xl font-black tracking-tighter">FORGE.</span>
             </div>
             <p className="text-muted-foreground max-w-md leading-relaxed text-lg font-medium">
               Architecting high-performance asset pipelines for modern developers. Optimized for speed, engineered for quality.
             </p>
+            <div className="flex items-center gap-4">
+              {[
+                { icon: Github, href: "#", label: "GitHub" },
+                { icon: Twitter, href: "#", label: "Twitter" },
+                { icon: Linkedin, href: "#", label: "LinkedIn" },
+                { icon: MessageCircle, href: "#", label: "Discord" }
+              ].map((social, i) => (
+                <a 
+                  key={i}
+                  href={social.href} 
+                  className="w-12 h-12 rounded-2xl bg-foreground/5 border border-foreground/10 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/5 hover:border-primary/20 hover:scale-110 transition-all duration-300"
+                  aria-label={social.label}
+                >
+                  <social.icon className="w-5 h-5" />
+                </a>
+              ))}
+            </div>
           </div>
           
           <div className="space-y-6">
@@ -208,6 +226,7 @@ export default function Home() {
               <a href="#" className="hover:text-foreground transition-colors">Documentation</a>
               <a href="#" className="hover:text-foreground transition-colors">Performance Audit</a>
               <a href="#" className="hover:text-foreground transition-colors">API Reference</a>
+              <a href="#" className="hover:text-foreground transition-colors">Security Specs</a>
             </nav>
           </div>
 
@@ -217,6 +236,7 @@ export default function Home() {
               <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
               <a href="#" className="hover:text-foreground transition-colors">Engineering Blog</a>
+              <a href="#" className="hover:text-foreground transition-colors">Contact Forge</a>
             </nav>
           </div>
         </div>
