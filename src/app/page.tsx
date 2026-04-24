@@ -85,10 +85,6 @@ export default function Home() {
     setIsProcessing(false)
   }
 
-  const handleDecode = async () => {
-    // Decoding processed
-  }
-
   const removeAsset = (id: string) => {
     setAssets(prev => prev.filter(a => a.id !== id))
   }
@@ -99,7 +95,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative overflow-x-hidden selection:bg-primary/20 transition-colors duration-700">
-      {/* Dynamic Header Blur Background */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-background">
         <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-primary/5 blur-[150px] animate-pulse rounded-full" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-secondary/5 blur-[150px] animate-pulse delay-1000 rounded-full" />
@@ -134,7 +129,7 @@ export default function Home() {
           <div className="inline-flex flex-col items-center gap-6">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em]">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Unlimited Pro Edition</span>
+              <span>Unlimited Member Access</span>
             </div>
           </div>
           
@@ -211,7 +206,7 @@ export default function Home() {
             <TabsContent value="decoder" className="mt-0 outline-none">
               <div className="relative glass-card rounded-[2rem] md:rounded-[3rem] p-6 md:p-12 shadow-2xl overflow-hidden border-white/10">
                 <DecoderTool 
-                  onDecode={handleDecode}
+                  onDecode={() => {}}
                 />
               </div>
             </TabsContent>
@@ -303,6 +298,7 @@ export default function Home() {
               <a href="/docs" className="hover:text-foreground transition-colors">Documentation</a>
               <a href="/performance" className="hover:text-foreground transition-colors">Performance Audit</a>
               <a href="/api-reference" className="hover:text-foreground transition-colors">API Reference</a>
+              <a href="/preferences" className="hover:text-foreground transition-colors">Settings</a>
             </nav>
           </div>
 
@@ -311,7 +307,8 @@ export default function Home() {
             <nav className="flex flex-col gap-3 md:gap-4 text-sm font-semibold text-muted-foreground">
               <a href="/cloud-sync" className="hover:text-foreground transition-colors">Cloud Sync</a>
               <a href="/usage-specs" className="hover:text-foreground transition-colors">Usage Specs</a>
-              <a href="/contact" className="hover:text-foreground transition-colors">Contact Forge</a>
+              <a href="/about" className="hover:text-foreground transition-colors">Forge Studios</a>
+              <a href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</a>
             </nav>
           </div>
         </div>
@@ -322,7 +319,7 @@ export default function Home() {
               <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
               LIVE DEPLOYMENT READY
             </span>
-            <span className="opacity-50">V5.2.0</span>
+            <span className="opacity-50">V6.0.0</span>
           </div>
         </div>
       </footer>
