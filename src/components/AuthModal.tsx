@@ -149,21 +149,22 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-80 p-2 rounded-[2.5rem] glass-card border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-300 z-[200]" align="end" sideOffset={8}>
-          <DropdownMenuLabel className="font-normal px-5 py-6">
-            <div className="flex flex-col space-y-4">
+          {/* Section 3: User Status & Capacity (The "3" of 3/6 Ratio) */}
+          <DropdownMenuLabel className="font-normal px-5 py-5 bg-foreground/[0.02] rounded-[2rem] mb-1">
+            <div className="flex flex-col space-y-3">
               <div className="flex items-center justify-between">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-black leading-none tracking-tight text-foreground">{user.displayName || "Forge Member"}</p>
-                  <p className="text-[10px] text-muted-foreground font-medium">{user.email}</p>
+                <div className="flex flex-col space-y-0.5">
+                  <p className="text-[13px] font-black leading-tight tracking-tight text-foreground truncate max-w-[140px]">{user.displayName || "Forge Member"}</p>
+                  <p className="text-[9px] text-muted-foreground font-bold truncate max-w-[140px]">{user.email}</p>
                 </div>
-                <div className="bg-primary/10 px-3 py-1 rounded-full border border-primary/20 flex items-center gap-1.5">
-                  <ShieldCheck className="w-3 h-3 text-primary" />
-                  <span className="text-[9px] font-black uppercase text-primary tracking-widest">PRO</span>
+                <div className="bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20 flex items-center gap-1">
+                  <ShieldCheck className="w-2.5 h-2.5 text-primary" />
+                  <span className="text-[8px] font-black uppercase text-primary tracking-widest">PRO</span>
                 </div>
               </div>
               
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+              <div className="space-y-1.5 pt-1">
+                <div className="flex items-center justify-between text-[7px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
                   <span>Forge Capacity</span>
                   <span className="text-primary font-black">Unlimited Member</span>
                 </div>
@@ -174,38 +175,39 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           
           <DropdownMenuSeparator className="bg-foreground/5 mx-2" />
           
-          <div className="p-1.5 space-y-1">
-            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+          {/* Section 6: Navigation Tools (The "6" of 3/6 Ratio) */}
+          <div className="p-1 space-y-0.5">
+            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
               <Link href="/api-reference">
-                <Code className="mr-3 h-4 w-4 text-primary" />
+                <Code className="mr-3 h-3.5 w-3.5 text-primary" />
                 <span className="font-bold text-[10px] uppercase tracking-widest">API Reference</span>
               </Link>
             </DropdownMenuItem>
 
-            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
               <Link href="/cloud-sync">
-                <History className="mr-3 h-4 w-4 text-secondary" />
+                <History className="mr-3 h-3.5 w-3.5 text-secondary" />
                 <span className="font-bold text-[10px] uppercase tracking-widest">Cloud Sync</span>
               </Link>
             </DropdownMenuItem>
 
-            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
               <Link href="/preferences">
-                <Settings className="mr-3 h-4 w-4 text-accent" />
+                <Settings className="mr-3 h-3.5 w-3.5 text-accent" />
                 <span className="font-bold text-[10px] uppercase tracking-widest">Studio Settings</span>
               </Link>
             </DropdownMenuItem>
 
-            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
               <Link href="/billing">
-                <CreditCard className="mr-3 h-4 w-4 text-primary" />
+                <CreditCard className="mr-3 h-3.5 w-3.5 text-primary" />
                 <span className="font-bold text-[10px] uppercase tracking-widest">Pricing & Plans</span>
               </Link>
             </DropdownMenuItem>
 
-            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+            <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
               <Link href="/contact">
-                <MessageCircle className="mr-3 h-4 w-4 text-secondary" />
+                <MessageCircle className="mr-3 h-3.5 w-3.5 text-secondary" />
                 <span className="font-bold text-[10px] uppercase tracking-widest">Contact Support</span>
               </Link>
             </DropdownMenuItem>
@@ -214,11 +216,11 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           <DropdownMenuSeparator className="bg-foreground/5 mx-2" />
           
           <div className="p-1.5 flex items-center justify-between gap-2">
-            <Button variant="ghost" onClick={toggleTheme} className="flex-1 rounded-2xl h-12 hover:bg-foreground/5">
-              {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            <Button variant="ghost" onClick={toggleTheme} className="flex-1 rounded-2xl h-11 hover:bg-foreground/5">
+              {theme === 'light' ? <Moon className="h-3.5 w-3.5" /> : <Sun className="h-3.5 w-3.5" />}
             </Button>
-            <Button onClick={handleSignOut} variant="ghost" className="flex-1 rounded-2xl h-12 hover:bg-destructive/10 text-destructive">
-              <LogOut className="mr-2 h-4 w-4" />
+            <Button onClick={handleSignOut} variant="ghost" className="flex-1 rounded-2xl h-11 hover:bg-destructive/10 text-destructive">
+              <LogOut className="mr-2 h-3.5 w-3.5" />
               <span className="font-bold text-[9px] uppercase tracking-widest">Logout</span>
             </Button>
           </div>
