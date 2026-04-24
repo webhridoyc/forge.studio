@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -218,11 +219,11 @@ export default function Home() {
             <UsageLimitIndicator used={usage} limit={LIMIT} isGuest={!user} />
           </div>
           
-          <h1 className="text-5xl md:text-8xl lg:text-[9rem] font-black text-foreground tracking-tighter leading-[0.85] select-none text-center">
+          <h1 className="text-4xl md:text-8xl lg:text-[9rem] font-black text-foreground tracking-tighter leading-[0.85] select-none text-center">
             DUAL <br />
             <span className="text-gradient">PIPELINE</span>
           </h1>
-          <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium px-4">
+          <p className="text-sm md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium px-4">
             Unified Base64 synthesis. Encode, decode, and optimize with zero-latency cloud history.
           </p>
         </section>
@@ -230,16 +231,16 @@ export default function Home() {
         <section id="workbench" className="w-full max-w-5xl flex flex-col items-center gap-8 md:gap-12 scroll-mt-32">
           <Tabs defaultValue="encoder" className="w-full">
             <div className="flex justify-center mb-12">
-              <TabsList className="bg-foreground/5 p-1 rounded-2xl border border-foreground/5 h-auto">
+              <TabsList className="bg-foreground/5 p-1 rounded-2xl border border-foreground/5 h-auto w-full max-w-xs md:max-w-md mx-auto">
                 <TabsTrigger 
                   value="encoder" 
-                  className="rounded-xl px-8 py-3 font-black text-[10px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
+                  className="flex-1 rounded-xl px-4 md:px-8 py-3 font-black text-[10px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
                 >
                   <Zap className="w-4 h-4 mr-2" /> Encoder
                 </TabsTrigger>
                 <TabsTrigger 
                   value="decoder"
-                  className="rounded-xl px-8 py-3 font-black text-[10px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
+                  className="flex-1 rounded-xl px-4 md:px-8 py-3 font-black text-[10px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
                 >
                   <ArrowRightLeft className="w-4 h-4 mr-2" /> Decoder
                 </TabsTrigger>
@@ -266,7 +267,7 @@ export default function Home() {
                 {assets.length > 0 && (
                   <div className="mt-16 md:mt-20 space-y-16 md:space-y-24 w-full">
                     <div className="flex items-center justify-between border-b border-foreground/5 pb-8 px-4">
-                      <h2 className="text-2xl md:text-4xl font-black tracking-tighter flex items-center gap-4 uppercase">
+                      <h2 className="text-xl md:text-4xl font-black tracking-tighter flex items-center gap-4 uppercase">
                         Forged Assets
                       </h2>
                       <Button 
@@ -289,7 +290,7 @@ export default function Home() {
             </TabsContent>
 
             <TabsContent value="decoder" className="mt-0 outline-none">
-              <div className="relative glass-card rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 shadow-2xl overflow-hidden border-white/10">
+              <div className="relative glass-card rounded-[2rem] md:rounded-[3rem] p-6 md:p-12 shadow-2xl overflow-hidden border-white/10">
                 <DecoderTool 
                   onDecode={handleDecode}
                   canProcess={usage < LIMIT}
@@ -321,13 +322,13 @@ export default function Home() {
           )}
         </section>
 
-        <div id="security" className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-6xl mt-32 md:mt-48 mb-24 md:mb-32">
+        <div id="security" className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-6xl mt-32 md:mt-48 mb-24 md:mb-32 px-4 md:px-0">
           {[
             { icon: Zap, title: "Zero Latency", desc: "Forging happens entirely in-browser. No server round-trips.", color: "text-primary" },
             { icon: ShieldCheck, title: "Member Vault", desc: "Logged-in users get cloud history sync across all devices.", color: "text-accent" },
             { icon: History, title: "Smart Limits", desc: "Usage caps ensure performance stability for everyone.", color: "text-secondary" },
           ].map((feature, i) => (
-            <div key={i} className="glass-card p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:translate-y-[-8px] transition-all duration-500 group mx-4 md:mx-0">
+            <div key={i} className="glass-card p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:translate-y-[-8px] transition-all duration-500 group">
               <div className={cn("w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-foreground/5 flex items-center justify-center mb-6 md:mb-8", feature.color)}>
                 <feature.icon className="w-7 h-7 md:w-8 md:h-8" />
               </div>
