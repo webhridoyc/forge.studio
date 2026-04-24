@@ -1,0 +1,133 @@
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a registered user of the Base64 Forge application, storing essential profile information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserProfile entity."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address, used for authentication and communication.",
+          "format": "email"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The public name chosen by the user or provided by a social login service."
+        },
+        "profilePictureUrl": {
+          "type": "string",
+          "description": "URL to the user's profile picture, if available.",
+          "format": "uri"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user profile was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "createdAt"
+      ]
+    },
+    "ConversionSnippet": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ConversionSnippet",
+      "type": "object",
+      "description": "Represents a Base64 conversion result saved by a user, allowing them to revisit or reuse their generated code snippets.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ConversionSnippet entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the UserProfile who saved this snippet. (Relationship: UserProfile 1:N ConversionSnippet)"
+        },
+        "fileName": {
+          "type": "string",
+          "description": "The original file name of the image that was converted."
+        },
+        "base64String": {
+          "type": "string",
+          "description": "The generated Base64 encoded string, potentially truncated for storage efficiency."
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "The MIME type of the original image (e.g., 'image/png'), useful for reconstructing data URIs."
+        },
+        "outputFormat": {
+          "type": "string",
+          "description": "The specific output format the user chose to save (e.g., 'raw', 'html', 'css', 'data-uri')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when this snippet was saved.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "fileName",
+        "base64String",
+        "mimeType",
+        "outputFormat",
+        "createdAt"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores individual user profile information, primarily for authentication context and display. Access is restricted to the authenticated user whose `uid` matches `{userId}`.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user, matching `request.auth.uid`."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/conversionSnippets/{snippetId}",
+        "definition": {
+          "entityName": "ConversionSnippet",
+          "schema": {
+            "$ref": "#/backend/entities/ConversionSnippet"
+          },
+          "description": "Stores Base64 conversion snippets saved by a specific user. Each snippet document includes the `userId` field, which is denormalized from the parent path for authorization independence. Only the owning user can access their snippets.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user who owns this snippet, matching `request.auth.uid` and `resource.data.userId`."
+            },
+            {
+              "name": "snippetId",
+              "description": "The unique ID of the saved Base64 conversion snippet."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed with a clear focus on user-centric private data, adhering strictly to the core design principles of Authorization Independence, Structural Segregation, and Access Modeling. We will utilize two primary collections: 'users' for user profiles and a subcollection 'conversionSnippets' nested under each user for their saved Base64 content.\n\n**Authorization Independence (Denormalization Strategy):**\nEach `ConversionSnippet` document will be stored within a user-specific subcollection: `/users/{userId}/conversionSnippets/{snippetId}`. Crucially, every `ConversionSnippet` document will explicitly contain a `userId` field, matching both the parent `UserProfile`'s ID and the `{userId}` wildcard in its own path. This denormalization is vital: when a security rule evaluates access to a `ConversionSnippet` document, it can check `request.auth.uid == resource.data.userId` (or `request.auth.uid == userId` from the path wildcard) directly on the document's data without needing to perform a `get()` operation on the parent `UserProfile` document. This eliminates hierarchical authorization dependencies, enabling atomic writes (e.g., creating a user and their first snippet in a single batch) and significantly simplifying security rules. This makes rules robust and easy to debug.\n\n**Querying and Authorization Posture (QAPs):**\nThis structure directly supports secure `list` operations (Query-as-a-Privilege) without the need for client-side filtering or complex server-side logic. For example, a user requesting their conversion history would query `/users/{request.auth.uid}/conversionSnippets`. The Firestore security rules can then enforce that the `{userId}` wildcard in the path precisely matches `request.auth.uid`. This ensures that a user can only query their own `conversionSnippets` subcollection. Any attempt to list snippets belonging to another user, or to list snippets from an unauthenticated context, will be blocked by the rules *before* any data is returned, thus upholding the principle that 'rules are not filters'. This structural approach ensures that only authorized `list` queries are ever processed by the database, making the application inherently more secure and performant."
+  }
+}
