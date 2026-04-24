@@ -9,15 +9,25 @@ interface FileUploaderProps {
   onFilesSelect: (files: File[]) => void
   onClear: () => void
   hasAssets: boolean
+  assetCount: number
+  maxAssets: number
 }
 
-export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploaderProps) {
+export function FileUploader({ 
+  onFilesSelect, 
+  onClear, 
+  hasAssets, 
+  assetCount, 
+  maxAssets 
+}: FileUploaderProps) {
   const [isDragging, setIsDragging] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const isLimitReached = assetCount >= maxAssets
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    if (isLimitReached) return
     setIsDragging(true)
   }
 
@@ -31,6 +41,7 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
     e.preventDefault()
     e.stopPropagation()
     setIsDragging(false)
+    if (isLimitReached) return
     const droppedFiles = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith("image/"))
     if (droppedFiles.length > 0) {
       onFilesSelect(droppedFiles)
@@ -50,13 +61,14 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      onClick={() => inputRef.current?.click()}
+      onClick={() => !isLimitReached && inputRef.current?.click()}
       className={cn(
-        "relative group flex flex-col items-center justify-center w-full transition-all duration-700 cursor-pointer overflow-hidden border-2 border-dashed",
+        "relative group flex flex-col items-center justify-center w-full transition-all duration-700 overflow-hidden border-2 border-dashed",
+        isLimitReached ? "cursor-not-allowed opacity-80" : "cursor-pointer",
         hasAssets 
           ? "min-h-[100px] border-primary/20 bg-primary/[0.02] rounded-[1.5rem] hover:bg-primary/[0.04]" 
           : "min-h-[350px] md:min-h-[600px] border-foreground/10 hover:border-primary/40 hover:bg-foreground/[0.01] rounded-[2.5rem] md:rounded-[3.5rem]",
-        isDragging && "border-primary bg-primary/5 scale-[1.01] shadow-[0_0_80px_-20px_rgba(var(--primary),0.2)]"
+        isDragging && !isLimitReached && "border-primary bg-primary/5 scale-[1.01] shadow-[0_0_80px_-20px_rgba(var(--primary),0.2)]"
       )}
     >
       <input
@@ -65,6 +77,7 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
         onChange={handleFileChange}
         accept="image/*"
         multiple
+        disabled={isLimitReached}
         className="sr-only"
         aria-label="Upload images"
       />
@@ -76,12 +89,16 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
         <div className={cn(
           "rounded-[1.5rem] md:rounded-[2.5rem] transition-all duration-700 shadow-2xl relative flex items-center justify-center",
           hasAssets 
-            ? "p-3 bg-primary text-white" 
+            ? isLimitReached 
+              ? "p-3 bg-foreground/5 text-muted-foreground/30"
+              : "p-3 bg-primary text-white" 
             : "p-8 md:p-14 bg-gradient-to-br from-primary via-secondary to-accent text-white group-hover:scale-110 group-hover:rotate-6",
-          isDragging && "bg-primary text-white scale-110"
+          isDragging && !isLimitReached && "bg-primary text-white scale-110"
         )}>
           {hasAssets ? <Plus className="w-5 h-5" /> : <Upload className="w-12 h-12 md:w-20 md:h-20" />}
-          <div className="absolute -inset-6 bg-white/20 blur-3xl rounded-full -z-10 animate-pulse" />
+          {!hasAssets && (
+            <div className="absolute -inset-6 bg-white/20 blur-3xl rounded-full -z-10 animate-pulse" />
+          )}
         </div>
 
         <div className={cn("space-y-3", hasAssets && "space-y-0 text-left")}>
@@ -90,9 +107,12 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
             hasAssets ? "text-xs md:text-sm uppercase" : "text-4xl md:text-8xl items-center"
           )}>
             {hasAssets ? (
-              <span className="flex items-center gap-2">
+              <span className={cn(
+                "flex items-center gap-2",
+                isLimitReached ? "opacity-30" : "opacity-100"
+              )}>
                 <Files className="w-3 h-3 opacity-50" />
-                APPEND TO BATCH
+                {isLimitReached ? "BATCH FULL" : "APPEND TO BATCH"}
               </span>
             ) : (
               <>
@@ -120,14 +140,17 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
             </div>
           )}
           {hasAssets && (
-            <p className="text-[9px] font-bold text-muted-foreground/60 uppercase tracking-widest">
-              Limit: 10 assets per session
+            <p className={cn(
+              "text-[9px] font-bold uppercase tracking-widest",
+              isLimitReached ? "text-destructive/60" : "text-muted-foreground/60"
+            )}>
+              {isLimitReached ? "Session Limit Reached" : `Batch Limit: ${assetCount} / ${maxAssets}`}
             </p>
           )}
         </div>
       </div>
       
-      {isDragging && (
+      {isDragging && !isLimitReached && (
         <div className="absolute inset-0 flex items-center justify-center bg-primary/10 backdrop-blur-md pointer-events-none animate-in fade-in duration-300">
           <div className="px-8 md:px-16 py-6 md:py-10 rounded-[2rem] md:rounded-[2.5rem] bg-primary text-white font-black text-2xl md:text-4xl uppercase tracking-tighter shadow-2xl animate-pulse">
             Drop to Expand

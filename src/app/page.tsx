@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -214,6 +215,8 @@ export default function Home() {
                   onFilesSelect={handleFilesSelect} 
                   onClear={clearAll}
                   hasAssets={assets.length > 0}
+                  assetCount={assets.length}
+                  maxAssets={10}
                 />
 
                 {isProcessing && (
