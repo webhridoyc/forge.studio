@@ -47,8 +47,7 @@ import {
   MessageCircle,
   Zap,
   Shield,
-  BookOpen,
-  X
+  BookOpen
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
@@ -97,6 +96,8 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
       let message = error.message;
       if (error.code === 'auth/unauthorized-domain') {
         message = "Unauthorized Domain: Please add this workstation URL to 'Authorized Domains' in your Firebase Console.";
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        message = "Login Interrupted: The auth window was closed before completion. Please try again.";
       }
       toast({ variant: "destructive", title: "Auth Error", description: message })
     } finally {
@@ -167,7 +168,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
                   <span>Usage Capacity</span>
                   <span className="text-primary">Unlimited</span>
                 </div>
-                <Progress value={85} className="h-1 bg-foreground/5" />
+                <Progress value={100} className="h-1 bg-foreground/5" />
               </div>
             </div>
           </DropdownMenuLabel>
