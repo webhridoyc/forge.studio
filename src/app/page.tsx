@@ -309,9 +309,9 @@ export default function Home() {
           <div className="space-y-4 md:space-y-6">
             <h4 className="font-bold text-[10px] uppercase tracking-[0.3em] text-secondary">History</h4>
             <nav className="flex flex-col gap-3 md:gap-4 text-sm font-semibold text-muted-foreground">
-              <a href="#" className="hover:text-foreground transition-colors">Cloud Sync</a>
-              <a href="#" className="hover:text-foreground transition-colors">Usage Specs</a>
-              <a href="#" className="hover:text-foreground transition-colors">Contact Forge</a>
+              <a href="/cloud-sync" className="hover:text-foreground transition-colors">Cloud Sync</a>
+              <a href="/usage-specs" className="hover:text-foreground transition-colors">Usage Specs</a>
+              <a href="/contact" className="hover:text-foreground transition-colors">Contact Forge</a>
             </nav>
           </div>
         </div>
