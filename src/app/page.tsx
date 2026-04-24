@@ -88,7 +88,7 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-[50%] bg-accent/5 blur-[120px] rounded-full" />
       </div>
 
-      <header className="sticky top-0 z-50 w-full border-b border-foreground/5 bg-background/60 backdrop-blur-2xl px-6 md:px-12 h-20 flex items-center justify-between transition-all">
+      <header className="sticky top-0 z-50 w-full border-b border-foreground/5 bg-background/70 backdrop-blur-xl px-6 md:px-12 h-20 flex items-center justify-between transition-all">
         <div className="flex items-center gap-3 group cursor-pointer">
           <div className="bg-gradient-to-br from-primary to-secondary p-2 rounded-xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
             <Code2 className="w-6 h-6 text-white" />
@@ -109,8 +109,7 @@ export default function Home() {
       </header>
 
       <main className="container mx-auto px-6 pt-16 md:pt-24 pb-32 flex flex-col items-center relative z-10">
-        {/* Professional Hero */}
-        <section className="text-center max-w-5xl mb-24 space-y-12 animate-in fade-in slide-in-from-top-12 duration-1000 fill-mode-forwards">
+        <section className="text-center max-w-5xl mb-24 space-y-12 animate-in fade-in slide-in-from-top-12 duration-1000">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Professional Utility v5.0</span>
@@ -124,7 +123,6 @@ export default function Home() {
           </p>
         </section>
 
-        {/* Workbench Section */}
         <section id="workbench" className="w-full max-w-5xl flex flex-col items-center gap-12 scroll-mt-32">
           <div className="w-full">
             <div className="relative glass-card rounded-[3rem] p-4 shadow-2xl overflow-hidden border border-foreground/5">
@@ -166,7 +164,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Strategic Features */}
         <div id="security" className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl mt-48 mb-32">
           {[
             { icon: Zap, title: "Zero Latency", desc: "Forging happens entirely in-browser. No server round-trips.", color: "text-primary" },
