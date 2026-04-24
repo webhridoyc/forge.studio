@@ -47,7 +47,8 @@ import {
   MessageCircle,
   Zap,
   Shield,
-  BookOpen
+  BookOpen,
+  X
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
@@ -93,7 +94,11 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
       handleOpenChange(false)
       toast({ title: "Welcome back!", description: "Successfully signed in with Google." })
     } catch (error: any) {
-      toast({ variant: "destructive", title: "Auth Error", description: error.message })
+      let message = error.message;
+      if (error.code === 'auth/unauthorized-domain') {
+        message = "Unauthorized Domain: Please add this workstation URL to 'Authorized Domains' in your Firebase Console.";
+      }
+      toast({ variant: "destructive", title: "Auth Error", description: message })
     } finally {
       setIsLoading(false)
     }
