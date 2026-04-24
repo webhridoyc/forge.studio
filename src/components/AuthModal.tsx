@@ -28,8 +28,21 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { LogOut, User as UserIcon, LogIn, Chrome, Moon, Sun, Mail, Lock } from "lucide-react"
+import { 
+  LogOut, 
+  User as UserIcon, 
+  LogIn, 
+  Chrome, 
+  Moon, 
+  Sun, 
+  Mail, 
+  Lock,
+  LayoutDashboard,
+  ShieldCheck,
+  History
+} from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { cn } from "@/lib/utils"
 
 interface AuthUIProps {
   onOpenChange?: (open: boolean) => void
@@ -110,37 +123,57 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-12 w-12 rounded-full ring-2 ring-primary/20 ring-offset-2 hover:ring-primary transition-all p-0">
+          <Button variant="ghost" className="relative h-12 w-12 rounded-full ring-2 ring-primary/20 ring-offset-2 hover:ring-primary hover:scale-105 transition-all p-0 overflow-hidden shadow-lg">
             <Avatar className="h-full w-full">
               <AvatarImage src={user.photoURL || ""} alt={user.displayName || "User"} />
-              <AvatarFallback className="bg-primary text-white font-black">
+              <AvatarFallback className="bg-primary text-white font-black text-xs">
                 {user.displayName?.charAt(0) || user.email?.charAt(0).toUpperCase() || <UserIcon className="w-4 h-4" />}
               </AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-64 p-2 rounded-2xl glass-card border-white/10" align="end" forceMount>
-          <DropdownMenuLabel className="font-normal">
+        <DropdownMenuContent className="w-72 p-2 rounded-[2rem] glass-card border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-300" align="end" forceMount>
+          <DropdownMenuLabel className="font-normal px-4 py-4">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-black leading-none tracking-tight">{user.displayName || "Forge Member"}</p>
-              <p className="text-xs leading-none text-muted-foreground font-medium">{user.email}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-black leading-none tracking-tight text-foreground">{user.displayName || "Forge Member"}</p>
+                <div className="bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20 flex items-center gap-1">
+                  <ShieldCheck className="w-2.5 h-2.5 text-primary" />
+                  <span className="text-[8px] font-black uppercase text-primary tracking-widest">PRO</span>
+                </div>
+              </div>
+              <p className="text-xs leading-none text-muted-foreground font-medium pt-1">{user.email}</p>
             </div>
           </DropdownMenuLabel>
-          <DropdownMenuSeparator className="bg-foreground/5" />
+          <DropdownMenuSeparator className="bg-foreground/5 mx-2" />
           
-          <DropdownMenuItem onClick={toggleTheme} className="rounded-xl cursor-pointer py-3 transition-colors">
-            {theme === 'light' ? <Moon className="mr-3 h-4 w-4" /> : <Sun className="mr-3 h-4 w-4" />}
-            <span className="font-bold text-xs uppercase tracking-widest">
-              {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-            </span>
-          </DropdownMenuItem>
+          <div className="p-1 space-y-1">
+            <DropdownMenuItem onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="rounded-xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
+              <LayoutDashboard className="mr-3 h-4 w-4 text-muted-foreground" />
+              <span className="font-bold text-[10px] uppercase tracking-widest">My Workbench</span>
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem className="rounded-xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
+              <History className="mr-3 h-4 w-4 text-muted-foreground" />
+              <span className="font-bold text-[10px] uppercase tracking-widest">Cloud Vaults</span>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onClick={toggleTheme} className="rounded-xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
+              {theme === 'light' ? <Moon className="mr-3 h-4 w-4 text-muted-foreground" /> : <Sun className="mr-3 h-4 w-4 text-muted-foreground" />}
+              <span className="font-bold text-[10px] uppercase tracking-widest">
+                {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+              </span>
+            </DropdownMenuItem>
+          </div>
           
-          <DropdownMenuSeparator className="bg-foreground/5" />
+          <DropdownMenuSeparator className="bg-foreground/5 mx-2" />
           
-          <DropdownMenuItem onClick={handleSignOut} className="rounded-xl focus:bg-destructive/10 focus:text-destructive cursor-pointer py-3 transition-colors">
-            <LogOut className="mr-3 h-4 w-4" />
-            <span className="font-bold text-xs uppercase tracking-widest">Sign Out</span>
-          </DropdownMenuItem>
+          <div className="p-1">
+            <DropdownMenuItem onClick={handleSignOut} className="rounded-xl focus:bg-destructive/10 focus:text-destructive cursor-pointer py-3 px-4 transition-colors">
+              <LogOut className="mr-3 h-4 w-4" />
+              <span className="font-bold text-[10px] uppercase tracking-widest">Sign Out</span>
+            </DropdownMenuItem>
+          </div>
         </DropdownMenuContent>
       </DropdownMenu>
     )
@@ -149,90 +182,92 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button className="rounded-2xl h-12 px-6 md:px-8 bg-foreground text-background hover:scale-105 transition-all font-black text-[10px] uppercase tracking-widest">
+        <Button className="rounded-2xl h-12 px-6 md:px-8 bg-foreground text-background hover:scale-105 transition-all font-black text-[10px] uppercase tracking-widest shadow-xl">
           <LogIn className="w-4 h-4 mr-2 hidden sm:inline" /> Sign In
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[95vw] max-w-[450px] rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 border-none bg-white dark:bg-zinc-950 shadow-2xl overflow-y-auto max-h-[90vh]">
-        <DialogHeader className="space-y-4 text-center">
-          <div className="mx-auto w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-3xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-xl rotate-3">
-            <UserIcon className="w-6 h-6 md:w-8 md:h-8 text-white" />
+      <DialogContent className="w-[95vw] max-w-[450px] rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-12 border-none bg-white dark:bg-zinc-950 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] overflow-y-auto max-h-[90vh]">
+        <DialogHeader className="space-y-6 text-center">
+          <div className="mx-auto w-16 h-16 md:w-20 md:h-20 rounded-[2rem] bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-2xl rotate-3 transform hover:rotate-0 transition-transform duration-500">
+            <UserIcon className="w-8 h-8 md:w-10 md:h-10 text-white" />
           </div>
-          <DialogTitle className="text-2xl md:text-4xl font-black tracking-tighter uppercase text-zinc-900 dark:text-zinc-100">
-            {isSignUp ? "Join the Forge" : "Member Login"}
-          </DialogTitle>
-          <p className="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm font-medium leading-relaxed">
-            {isSignUp 
-              ? "Personalize your workspace and secure your cloud history."
-              : "Access your saved asset history instantly from any device."}
-          </p>
+          <div className="space-y-2">
+            <DialogTitle className="text-3xl md:text-5xl font-black tracking-tighter uppercase text-zinc-900 dark:text-zinc-100">
+              {isSignUp ? "Join Forge" : "Welcome"}
+            </DialogTitle>
+            <p className="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm font-medium leading-relaxed max-w-[280px] mx-auto">
+              {isSignUp 
+                ? "Secure your assets in the cloud and access them from any device."
+                : "Enter the studio to sync your conversion history globally."}
+            </p>
+          </div>
         </DialogHeader>
 
-        <form onSubmit={handleEmailAuth} className="space-y-4 pt-4 md:pt-6">
+        <form onSubmit={handleEmailAuth} className="space-y-5 pt-8">
           <div className="space-y-2">
-            <Label className="text-[10px] uppercase tracking-[0.2em] font-black text-zinc-400 dark:text-zinc-500 ml-1">
+            <Label className="text-[10px] uppercase tracking-[0.3em] font-black text-zinc-400 dark:text-zinc-500 ml-2">
               Email Address
             </Label>
-            <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+            <div className="relative group">
+              <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 group-focus-within:text-primary transition-colors" />
               <Input 
                 type="email" 
-                placeholder="name@example.com" 
+                placeholder="architect@forge.studio" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-sm"
+                className="rounded-2xl h-14 md:h-16 pl-14 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 focus:ring-primary focus:border-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-sm transition-all"
               />
             </div>
           </div>
           <div className="space-y-2">
-            <Label className="text-[10px] uppercase tracking-[0.2em] font-black text-zinc-400 dark:text-zinc-500 ml-1">
-              Password
+            <Label className="text-[10px] uppercase tracking-[0.3em] font-black text-zinc-400 dark:text-zinc-500 ml-2">
+              Secure Password
             </Label>
-            <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+            <div className="relative group">
+              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 group-focus-within:text-primary transition-colors" />
               <Input 
                 type="password" 
                 placeholder="••••••••" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="rounded-xl md:rounded-2xl h-12 md:h-14 pl-12 bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-sm"
+                className="rounded-2xl h-14 md:h-16 pl-14 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 focus:ring-primary focus:border-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-sm transition-all"
               />
             </div>
           </div>
           <Button 
             type="submit" 
             disabled={isLoading}
-            className="w-full h-12 md:h-14 rounded-xl md:rounded-2xl bg-primary hover:bg-primary/90 text-white font-black text-xs uppercase tracking-widest shadow-lg active:scale-95 transition-all"
+            className="w-full h-14 md:h-16 rounded-2xl bg-foreground text-background hover:bg-primary hover:text-white font-black text-[11px] uppercase tracking-widest shadow-xl active:scale-95 transition-all mt-4"
           >
-            {isLoading ? "Processing..." : (isSignUp ? "Create Account" : "Sign In")}
+            {isLoading ? "Synthesizing..." : (isSignUp ? "Establish Account" : "Access Studio")}
           </Button>
         </form>
 
-        <div className="relative my-8">
+        <div className="relative my-10">
           <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-zinc-100 dark:border-zinc-800" /></div>
-          <div className="relative flex justify-center text-[9px] uppercase tracking-[0.3em] font-black">
-            <span className="bg-white dark:bg-zinc-950 px-4 text-zinc-400">OR CONTINUE WITH</span>
+          <div className="relative flex justify-center text-[9px] uppercase tracking-[0.4em] font-black">
+            <span className="bg-white dark:bg-zinc-950 px-6 text-zinc-300">OR</span>
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           <Button 
             onClick={handleGoogleLogin} 
             variant="outline" 
             disabled={isLoading}
-            className="w-full h-12 md:h-14 rounded-xl md:rounded-2xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-transparent hover:bg-zinc-50 dark:hover:bg-white/5 transition-all font-bold text-xs text-zinc-900 dark:text-zinc-100 shadow-sm"
+            className="w-full h-14 md:h-16 rounded-2xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-transparent hover:bg-zinc-50 dark:hover:bg-white/5 transition-all font-bold text-xs text-zinc-900 dark:text-zinc-100 shadow-sm"
           >
-            <Chrome className="w-5 h-5 mr-3" /> Google Account
+            <Chrome className="w-5 h-5 mr-3 text-primary" /> Continue with Google
           </Button>
           
           <button 
             type="button"
             onClick={() => setIsSignUp(!isSignUp)}
-            className="w-full text-[10px] font-black text-primary uppercase tracking-[0.2em] hover:underline"
+            className="w-full text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] hover:text-primary transition-colors"
           >
-            {isSignUp ? "Already have an account? Log in" : "Don't have an account? Sign up"}
+            {isSignUp ? "Already a member? Sign in" : "New architect? Create account"}
           </button>
         </div>
       </DialogContent>
