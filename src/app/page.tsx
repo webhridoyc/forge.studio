@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -24,7 +23,8 @@ import {
   Linkedin,
   MessageCircle,
   History,
-  ArrowRightLeft
+  ArrowRightLeft,
+  Settings2
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -36,7 +36,7 @@ export default function Home() {
   const db = useFirestore()
   const [assets, setAssets] = React.useState<ProcessedAsset[]>([])
   const [isProcessing, setIsProcessing] = React.useState(false)
-  const [targetFormat] = React.useState<OutputFormat>('original')
+  const [qualityMode, setQualityMode] = React.useState<'optimized' | 'original'>('optimized')
   const [currentYear, setCurrentYear] = React.useState<number | null>(null)
   const [isAuthOpen, setIsAuthOpen] = React.useState(false)
   
@@ -56,7 +56,6 @@ export default function Home() {
   }, [])
 
   const handleFilesSelect = async (files: File[]) => {
-    // Enforcement of batch limit (max 10 total)
     const MAX_BATCH = 10
     const currentCount = assets.length
     const remainingSlots = MAX_BATCH - currentCount
@@ -65,7 +64,7 @@ export default function Home() {
       toast({
         variant: "destructive",
         title: "Batch Limit Reached",
-        description: `Your workbench is limited to ${MAX_BATCH} forged assets to maintain performance.`,
+        description: `Your workbench is limited to ${MAX_BATCH} forged assets per session.`,
       })
       return
     }
@@ -83,16 +82,16 @@ export default function Home() {
     const newAssets: ProcessedAsset[] = []
     
     for (const file of filesToProcess) {
-      if (file.size > 2 * 1024 * 1024) {
+      // Memory warning for large files in original mode
+      if (qualityMode === 'original' && file.size > 2 * 1024 * 1024) {
         toast({
-          variant: "destructive",
-          title: "File Too Large",
-          description: "Files over 2MB are not recommended for Base64.",
+          title: "Large Asset Detected",
+          description: "Original mode for files >2MB may impact UI performance.",
         })
-        continue
       }
 
       try {
+        const targetFormat: OutputFormat = qualityMode === 'original' ? 'original' : 'image/webp'
         const asset = await optimizeImage(file, targetFormat)
         newAssets.push(asset)
       } catch (err) {
@@ -167,8 +166,8 @@ export default function Home() {
 
         <section id="workbench" className="w-full max-w-6xl flex flex-col items-center gap-8 md:gap-16 scroll-mt-32">
           <Tabs defaultValue="encoder" className="w-full">
-            <div className="flex justify-center mb-16">
-              <TabsList className="bg-foreground/5 p-1.5 rounded-2xl border border-foreground/5 h-auto w-full max-w-xs md:max-w-md mx-auto">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-16">
+              <TabsList className="bg-foreground/5 p-1.5 rounded-2xl border border-foreground/5 h-auto w-full max-w-xs md:max-w-md">
                 <TabsTrigger 
                   value="encoder" 
                   className="flex-1 rounded-xl px-4 md:px-8 py-4 font-black text-[11px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
@@ -182,6 +181,31 @@ export default function Home() {
                   <ArrowRightLeft className="w-4 h-4 mr-2" /> Decoder
                 </TabsTrigger>
               </TabsList>
+
+              <div className="h-10 w-px bg-foreground/10 hidden md:block" />
+
+              <div className="flex items-center gap-2 bg-foreground/5 p-1.5 rounded-2xl border border-foreground/5">
+                <Button
+                  variant="ghost"
+                  onClick={() => setQualityMode('optimized')}
+                  className={cn(
+                    "rounded-xl px-4 py-3 font-black text-[9px] uppercase tracking-widest transition-all",
+                    qualityMode === 'optimized' ? "bg-background text-primary shadow-sm" : "text-muted-foreground"
+                  )}
+                >
+                  <Zap className="w-3 h-3 mr-1.5" /> Optimized
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => setQualityMode('original')}
+                  className={cn(
+                    "rounded-xl px-4 py-3 font-black text-[9px] uppercase tracking-widest transition-all",
+                    qualityMode === 'original' ? "bg-background text-accent shadow-sm" : "text-muted-foreground"
+                  )}
+                >
+                  <Settings2 className="w-3 h-3 mr-1.5" /> 1:1 Original
+                </Button>
+              </div>
             </div>
 
             <TabsContent value="encoder" className="mt-0 outline-none">

@@ -10,23 +10,26 @@ export interface ProcessedAsset {
   dimensions: { width: number; height: number };
 }
 
+/**
+ * Optimized image synthesis engine.
+ * Supports 'Original' mode for 1:1 quality and 'Optimized' modes for performance.
+ */
 export const optimizeImage = (
   file: File, 
   targetFormat: OutputFormat = 'original',
-  maxWidth = 800, 
-  quality = 0.7
+  maxWidth = 1200, 
+  quality = 0.8
 ): Promise<ProcessedAsset> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.readAsDataURL(file);
     
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target?.result as string;
-      
-      img.onload = () => {
-        if (file.type === 'image/svg+xml' || (targetFormat === 'original' && file.size < 10240)) {
-          const b64 = event.target?.result as string;
+    // --- MODE 1: ORIGINAL QUALITY (Lossless) ---
+    // Directly read the file to preserve 1:1 pixel data and bypass canvas limitations.
+    if (targetFormat === 'original') {
+      reader.onload = (event) => {
+        const b64 = event.target?.result as string;
+        const img = new Image();
+        img.onload = () => {
           resolve({
             id: Math.random().toString(36).substr(2, 9),
             name: file.name,
@@ -36,13 +39,27 @@ export const optimizeImage = (
             format: file.type,
             dimensions: { width: img.width, height: img.height }
           });
-          return;
-        }
+        };
+        img.onerror = () => reject(new Error('Could not read image dimensions.'));
+        img.src = b64;
+      };
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+      return;
+    }
 
+    // --- MODE 2: OPTIMIZED SYNTHESIS (Canvas-based) ---
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      
+      img.onload = () => {
         const canvas = document.createElement('canvas');
         let width = img.width;
         let height = img.height;
 
+        // High-performance resizing logic
         if (width > maxWidth) {
           height = (maxWidth / width) * height;
           width = maxWidth;
@@ -56,12 +73,14 @@ export const optimizeImage = (
           return;
         }
 
+        // Enable premium smoothing for better optimized quality
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
         ctx.drawImage(img, 0, 0, width, height);
         
-        const outputMime = targetFormat === 'original' 
-          ? (file.type === 'image/png' ? 'image/png' : 'image/jpeg')
-          : targetFormat;
-
+        // Default to WebP if not specified, as it offers the best Base64 length/quality ratio
+        const outputMime = targetFormat === 'original' ? 'image/webp' : targetFormat;
         const b64 = canvas.toDataURL(outputMime, quality);
         
         resolve({
