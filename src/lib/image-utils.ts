@@ -1,25 +1,49 @@
-export const optimizeImage = (file: File, maxWidth = 800, quality = 0.7): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    // SVGs should not be resized or compressed as they are vector/text based
-    if (file.type === 'image/svg+xml') {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-      return;
-    }
+export type OutputFormat = 'image/png' | 'image/jpeg' | 'image/webp' | 'original';
 
+export interface ProcessedAsset {
+  id: string;
+  name: string;
+  originalSize: number;
+  base64: string;
+  optimizedSize: number;
+  format: string;
+  dimensions: { width: number; height: number };
+}
+
+export const optimizeImage = (
+  file: File, 
+  targetFormat: OutputFormat = 'original',
+  maxWidth = 800, 
+  quality = 0.7
+): Promise<ProcessedAsset> => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
+    
     reader.onload = (event) => {
       const img = new Image();
       img.src = event.target?.result as string;
+      
       img.onload = () => {
+        // SVGs or 'original' requests for small files
+        if (file.type === 'image/svg+xml' || (targetFormat === 'original' && file.size < 10240)) {
+          const b64 = event.target?.result as string;
+          resolve({
+            id: Math.random().toString(36).substr(2, 9),
+            name: file.name,
+            originalSize: file.size,
+            base64: b64,
+            optimizedSize: Math.round(b64.length * 0.75),
+            format: file.type,
+            dimensions: { width: img.width, height: img.height }
+          });
+          return;
+        }
+
         const canvas = document.createElement('canvas');
         let width = img.width;
         let height = img.height;
 
-        // Resize logic
         if (width > maxWidth) {
           height = (maxWidth / width) * height;
           width = maxWidth;
@@ -35,9 +59,21 @@ export const optimizeImage = (file: File, maxWidth = 800, quality = 0.7): Promis
 
         ctx.drawImage(img, 0, 0, width, height);
         
-        // Compression logic - JPEG/WebP supports quality, PNG does not
-        const outputType = file.type === 'image/webp' ? 'image/webp' : 'image/jpeg';
-        resolve(canvas.toDataURL(outputType, quality));
+        const outputMime = targetFormat === 'original' 
+          ? (file.type === 'image/png' ? 'image/png' : 'image/jpeg')
+          : targetFormat;
+
+        const b64 = canvas.toDataURL(outputMime, quality);
+        
+        resolve({
+          id: Math.random().toString(36).substr(2, 9),
+          name: file.name,
+          originalSize: file.size,
+          base64: b64,
+          optimizedSize: Math.round(b64.length * 0.75),
+          format: outputMime,
+          dimensions: { width: Math.round(width), height: Math.round(height) }
+        });
       };
       img.onerror = (error) => reject(error);
     };
