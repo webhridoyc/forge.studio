@@ -174,8 +174,6 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           <DropdownMenuSeparator className="bg-foreground/5 mx-2" />
           
           <div className="p-1.5 space-y-1">
-            <div className="text-[8px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 px-4 py-2">Member Workspace</div>
-            
             <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
               <Link href="/api-reference">
                 <Code className="mr-3 h-4 w-4 text-primary" />

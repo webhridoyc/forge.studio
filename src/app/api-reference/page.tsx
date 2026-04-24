@@ -101,7 +101,7 @@ export default function ApiRefPage() {
 
       <main className="container mx-auto px-4 pt-28 md:pt-32 pb-32 relative z-10 max-w-6xl">
         <div className="grid lg:grid-cols-[250px_1fr] gap-8 md:gap-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-          {/* Sidebar Nav */}
+          {/* Sidebar Nav - Desktop Only */}
           <aside className="hidden lg:block space-y-8 sticky top-32 h-fit">
             <div className="space-y-2">
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground mb-4">API Navigation</p>
@@ -132,7 +132,7 @@ export default function ApiRefPage() {
                 <Braces className="w-3.5 h-3.5" />
                 V1.0.0 Stable
               </div>
-              <h1 className="text-3xl md:text-7xl font-black tracking-tighter leading-none uppercase">Technical <br /><span className="text-gradient">API Reference</span></h1>
+              <h1 className="text-3xl md:text-7xl font-black tracking-tighter leading-tight uppercase">Technical <br /><span className="text-gradient">API Reference</span></h1>
               <p className="text-sm md:text-xl text-muted-foreground font-medium max-w-2xl leading-relaxed">
                 Seamlessly integrate the Forge synthesis engine into your developer workstation or server-side pipelines.
               </p>
@@ -149,7 +149,7 @@ export default function ApiRefPage() {
                 <p className="text-xs md:text-sm text-muted-foreground font-medium leading-relaxed">
                   All Forge API requests must include a secret key in the request header. You can manage your access tokens within the <Link href="/usage-specs" className="text-primary hover:underline">Usage Specs</Link> portal.
                 </p>
-                <div className="p-4 md:p-6 bg-zinc-950 rounded-2xl md:rounded-3xl border border-white/5 font-code text-[11px] md:text-sm overflow-x-auto whitespace-nowrap group relative">
+                <div className="p-4 md:p-6 bg-zinc-950 rounded-2xl md:rounded-3xl border border-white/5 font-code text-[11px] md:text-sm overflow-x-auto whitespace-nowrap group relative custom-scrollbar">
                   <span className="text-zinc-500">Header:</span> <span className="text-accent font-bold">X-Forge-API-Key</span> <span className="text-zinc-500">:</span> <span className="text-zinc-300">your_secret_token_here</span>
                   <Button
                     size="icon"
@@ -176,10 +176,10 @@ export default function ApiRefPage() {
                   <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">Upload an asset to simulate a real-time API response from the Forge Studio engine.</p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-4">
                     <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground block mb-2">Input Simulation</label>
-                    <div className="relative border-2 border-dashed border-foreground/10 rounded-[1.5rem] p-8 text-center hover:border-primary/50 transition-colors cursor-pointer group">
+                    <div className="relative border-2 border-dashed border-foreground/10 rounded-[1.5rem] p-6 md:p-8 text-center hover:border-primary/50 transition-colors cursor-pointer group min-h-[160px] flex items-center justify-center">
                       <input 
                         type="file" 
                         onChange={simulateApiCall}
@@ -199,13 +199,13 @@ export default function ApiRefPage() {
 
                   <div className="space-y-4">
                     <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground block mb-2">Real-time Response</label>
-                    <div className="bg-zinc-950 rounded-[1.5rem] p-6 border border-white/5 min-h-[200px] font-code text-xs overflow-hidden">
+                    <div className="bg-zinc-950 rounded-[1.5rem] p-6 border border-white/5 min-h-[200px] font-code text-xs overflow-x-auto custom-scrollbar">
                       {sandboxResult ? (
                         <pre className="text-green-400 whitespace-pre-wrap break-all leading-relaxed animate-in fade-in slide-in-from-top-2">
                           {JSON.stringify(sandboxResult, null, 2)}
                         </pre>
                       ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-zinc-600 space-y-2 opacity-50">
+                        <div className="h-full min-h-[160px] flex flex-col items-center justify-center text-zinc-600 space-y-2 opacity-50">
                           <Terminal className="w-6 h-6" />
                           <span className="text-[9px] uppercase tracking-widest font-black italic">Awaiting Request...</span>
                         </div>
@@ -233,7 +233,7 @@ export default function ApiRefPage() {
                 </p>
 
                 <Tabs defaultValue="js" className="w-full">
-                  <TabsList className="bg-foreground/5 p-1 rounded-xl md:rounded-2xl border border-foreground/5 mb-6 w-full md:w-fit">
+                  <TabsList className="bg-foreground/5 p-1 rounded-xl md:rounded-2xl border border-foreground/5 mb-6 w-full md:w-fit flex overflow-x-auto custom-scrollbar">
                     <TabsTrigger value="js" className="flex-1 md:flex-none rounded-lg md:rounded-xl px-4 md:px-6 py-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest">JavaScript</TabsTrigger>
                     <TabsTrigger value="curl" className="flex-1 md:flex-none rounded-lg md:rounded-xl px-4 md:px-6 py-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest">cURL</TabsTrigger>
                     <TabsTrigger value="python" className="flex-1 md:flex-none rounded-lg md:rounded-xl px-4 md:px-6 py-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest">Python</TabsTrigger>
