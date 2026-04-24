@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Progress } from "@/components/ui/progress"
 import { 
   LogOut, 
   User as UserIcon, 
@@ -39,7 +40,13 @@ import {
   Lock,
   LayoutDashboard,
   ShieldCheck,
-  History
+  History,
+  Settings,
+  CreditCard,
+  MessageCircle,
+  Zap,
+  Shield,
+  BookOpen
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
@@ -132,47 +139,83 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-72 p-2 rounded-[2rem] glass-card border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-300" align="end" forceMount>
-          <DropdownMenuLabel className="font-normal px-4 py-4">
-            <div className="flex flex-col space-y-1">
-              <div className="flex items-center gap-2">
-                <p className="text-sm font-black leading-none tracking-tight text-foreground">{user.displayName || "Forge Member"}</p>
-                <div className="bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20 flex items-center gap-1">
-                  <ShieldCheck className="w-2.5 h-2.5 text-primary" />
-                  <span className="text-[8px] font-black uppercase text-primary tracking-widest">PRO</span>
+        <DropdownMenuContent className="w-80 p-2 rounded-[2.5rem] glass-card border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-300" align="end" forceMount>
+          <DropdownMenuLabel className="font-normal px-5 py-6">
+            <div className="flex flex-col space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-black leading-none tracking-tight text-foreground">{user.displayName || "Forge Member"}</p>
+                  <p className="text-[10px] text-muted-foreground font-medium">{user.email}</p>
+                </div>
+                <div className="bg-primary/10 px-3 py-1 rounded-full border border-primary/20 flex items-center gap-1.5">
+                  <ShieldCheck className="w-3 h-3 text-primary" />
+                  <span className="text-[9px] font-black uppercase text-primary tracking-widest">PRO</span>
                 </div>
               </div>
-              <p className="text-xs leading-none text-muted-foreground font-medium pt-1">{user.email}</p>
+              
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-[8px] font-black uppercase tracking-widest text-muted-foreground">
+                  <span>Usage Capacity</span>
+                  <span className="text-primary">Unlimited</span>
+                </div>
+                <Progress value={85} className="h-1 bg-foreground/5" />
+              </div>
             </div>
           </DropdownMenuLabel>
+          
           <DropdownMenuSeparator className="bg-foreground/5 mx-2" />
           
-          <div className="p-1 space-y-1">
-            <DropdownMenuItem onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="rounded-xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
-              <LayoutDashboard className="mr-3 h-4 w-4 text-muted-foreground" />
-              <span className="font-bold text-[10px] uppercase tracking-widest">My Workbench</span>
+          <div className="p-1.5 space-y-1">
+            <div className="text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 px-4 py-2">Workbench</div>
+            <DropdownMenuItem onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+              <LayoutDashboard className="mr-3 h-4 w-4 text-primary" />
+              <span className="font-bold text-[10px] uppercase tracking-widest">Workspace</span>
             </DropdownMenuItem>
             
-            <DropdownMenuItem className="rounded-xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
-              <History className="mr-3 h-4 w-4 text-muted-foreground" />
+            <DropdownMenuItem className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+              <History className="mr-3 h-4 w-4 text-secondary" />
               <span className="font-bold text-[10px] uppercase tracking-widest">Cloud Vaults</span>
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={toggleTheme} className="rounded-xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
-              {theme === 'light' ? <Moon className="mr-3 h-4 w-4 text-muted-foreground" /> : <Sun className="mr-3 h-4 w-4 text-muted-foreground" />}
-              <span className="font-bold text-[10px] uppercase tracking-widest">
-                {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-              </span>
+            <div className="text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 px-4 py-2 mt-2">Studio</div>
+            <DropdownMenuItem className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+              <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
+              <span className="font-bold text-[10px] uppercase tracking-widest">Preferences</span>
             </DropdownMenuItem>
+            
+            <DropdownMenuItem className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+              <CreditCard className="mr-3 h-4 w-4 text-muted-foreground" />
+              <span className="font-bold text-[10px] uppercase tracking-widest">Billing & Plans</span>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+              <MessageCircle className="mr-3 h-4 w-4 text-muted-foreground" />
+              <span className="font-bold text-[10px] uppercase tracking-widest">Contact Support</span>
+            </DropdownMenuItem>
+
+            <div className="lg:hidden">
+               <div className="text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 px-4 py-2 mt-2">Navigation</div>
+               <DropdownMenuItem onClick={() => document.getElementById('security')?.scrollIntoView()} className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+                <Shield className="mr-3 h-4 w-4 text-muted-foreground" />
+                <span className="font-bold text-[10px] uppercase tracking-widest">Security</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => document.getElementById('guide')?.scrollIntoView()} className="rounded-2xl cursor-pointer py-3.5 px-5 transition-colors hover:bg-foreground/5">
+                <BookOpen className="mr-3 h-4 w-4 text-muted-foreground" />
+                <span className="font-bold text-[10px] uppercase tracking-widest">Guide</span>
+              </DropdownMenuItem>
+            </div>
           </div>
           
           <DropdownMenuSeparator className="bg-foreground/5 mx-2" />
           
-          <div className="p-1">
-            <DropdownMenuItem onClick={handleSignOut} className="rounded-xl focus:bg-destructive/10 focus:text-destructive cursor-pointer py-3 px-4 transition-colors">
-              <LogOut className="mr-3 h-4 w-4" />
-              <span className="font-bold text-[10px] uppercase tracking-widest">Sign Out</span>
-            </DropdownMenuItem>
+          <div className="p-1.5 flex items-center justify-between gap-2">
+            <Button variant="ghost" onClick={toggleTheme} className="flex-1 rounded-2xl h-12 hover:bg-foreground/5">
+              {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            </Button>
+            <Button onClick={handleSignOut} variant="ghost" className="flex-1 rounded-2xl h-12 hover:bg-destructive/10 text-destructive">
+              <LogOut className="mr-2 h-4 w-4" />
+              <span className="font-bold text-[9px] uppercase tracking-widest">Logout</span>
+            </Button>
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
