@@ -57,7 +57,7 @@ export default function Home() {
       } else {
         setUsage(parseInt(stored || '0'))
       }
-    } else {
+    } else if (db && user) {
       // Sync Usage from Firestore for Users
       const fetchUsage = async () => {
         const userRef = doc(db, 'users', user.uid)
@@ -145,7 +145,7 @@ export default function Home() {
       </div>
 
       <header className="sticky top-0 z-[100] w-full border-b border-foreground/5 bg-background/60 backdrop-blur-3xl px-6 md:px-12 h-20 flex items-center justify-between shadow-sm">
-        <div className="flex items-center gap-3 group cursor-pointer">
+        <div className="flex items-center gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <div className="bg-gradient-to-br from-primary to-secondary p-2 rounded-xl shadow-lg group-hover:scale-110 transition-all">
             <Code2 className="w-6 h-6 text-white" />
           </div>
