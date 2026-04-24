@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -53,8 +54,8 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
       className={cn(
         "relative group flex flex-col items-center justify-center w-full transition-all duration-700 cursor-pointer overflow-hidden border-2 border-dashed",
         hasAssets 
-          ? "min-h-[160px] border-primary/20 bg-primary/[0.02] rounded-[2rem] hover:bg-primary/[0.04]" 
-          : "min-h-[440px] border-foreground/10 hover:border-primary/40 hover:bg-foreground/[0.01] rounded-[3rem]",
+          ? "min-h-[200px] border-primary/20 bg-primary/[0.02] rounded-[2.5rem] hover:bg-primary/[0.04]" 
+          : "min-h-[500px] md:min-h-[600px] border-foreground/10 hover:border-primary/40 hover:bg-foreground/[0.01] rounded-[3.5rem]",
         isDragging && "border-primary bg-primary/5 scale-[1.01] shadow-[0_0_80px_-20px_rgba(var(--primary),0.2)]"
       )}
     >
@@ -70,48 +71,48 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
       
       <div className={cn(
         "flex flex-col items-center justify-center text-center relative z-10 select-none",
-        hasAssets ? "py-6 space-y-4" : "py-12 space-y-12"
+        hasAssets ? "py-8 space-y-6" : "py-16 space-y-16"
       )}>
         <div className={cn(
-          "rounded-3xl transition-all duration-700 shadow-2xl relative flex items-center justify-center",
-          hasAssets ? "p-4 bg-primary text-white" : "p-10 bg-gradient-to-br from-primary via-secondary to-accent text-white group-hover:scale-110 group-hover:rotate-6",
+          "rounded-[2.5rem] transition-all duration-700 shadow-2xl relative flex items-center justify-center",
+          hasAssets ? "p-5 bg-primary text-white" : "p-14 bg-gradient-to-br from-primary via-secondary to-accent text-white group-hover:scale-110 group-hover:rotate-6",
           isDragging && "bg-primary text-white scale-110"
         )}>
-          {hasAssets ? <Plus className="w-6 h-6" /> : <Upload className="w-14 h-14" />}
-          <div className="absolute -inset-4 bg-white/20 blur-2xl rounded-full -z-10 animate-pulse" />
+          {hasAssets ? <Plus className="w-8 h-8" /> : <Upload className="w-20 h-20" />}
+          <div className="absolute -inset-6 bg-white/20 blur-3xl rounded-full -z-10 animate-pulse" />
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-4">
           <h3 className={cn(
             "font-black tracking-tighter leading-tight flex flex-col items-center",
-            hasAssets ? "text-xl uppercase" : "text-5xl md:text-7xl"
+            hasAssets ? "text-2xl uppercase" : "text-6xl md:text-8xl"
           )}>
             {hasAssets ? (
-              <span className="flex items-center gap-2">
-                <Files className="w-4 h-4 opacity-50" />
+              <span className="flex items-center gap-3">
+                <Files className="w-5 h-5 opacity-50" />
                 ADD MORE ASSETS
               </span>
             ) : (
               <>
                 <span className="opacity-40 group-hover:opacity-100 transition-opacity duration-500">DROP</span>
-                <span className="text-gradient italic px-2 -mt-2">ASSETS</span>
+                <span className="text-gradient italic px-2 -mt-4">ASSETS</span>
               </>
             )}
           </h3>
           
           {!hasAssets && (
-            <div className="flex flex-col items-center gap-6 pt-6">
-              <p className="text-muted-foreground font-bold flex items-center gap-3 tracking-[0.4em] uppercase text-[10px] opacity-60 group-hover:opacity-100 transition-opacity">
-                <MousePointer2 className="w-4 h-4 text-accent" />
+            <div className="flex flex-col items-center gap-10 pt-10">
+              <p className="text-muted-foreground font-bold flex items-center gap-4 tracking-[0.5em] uppercase text-[12px] opacity-60 group-hover:opacity-100 transition-opacity">
+                <MousePointer2 className="w-5 h-5 text-accent" />
                 OR CLICK TO BROWSE
               </p>
-              <div className="flex items-center gap-4 text-[9px] font-black tracking-widest text-muted-foreground/40">
+              <div className="flex items-center gap-6 text-[11px] font-black tracking-widest text-muted-foreground/40">
                 <span>SVG</span>
-                <span className="w-1 h-1 rounded-full bg-current" />
+                <span className="w-1.5 h-1.5 rounded-full bg-current" />
                 <span>PNG</span>
-                <span className="w-1 h-1 rounded-full bg-current" />
+                <span className="w-1.5 h-1.5 rounded-full bg-current" />
                 <span>JPG</span>
-                <span className="w-1 h-1 rounded-full bg-current" />
+                <span className="w-1.5 h-1.5 rounded-full bg-current" />
                 <span>WEBP</span>
               </div>
             </div>
@@ -121,7 +122,7 @@ export function FileUploader({ onFilesSelect, onClear, hasAssets }: FileUploader
       
       {isDragging && (
         <div className="absolute inset-0 flex items-center justify-center bg-primary/10 backdrop-blur-md pointer-events-none animate-in fade-in duration-300">
-          <div className="px-12 py-6 rounded-full bg-primary text-white font-black text-2xl uppercase tracking-tighter shadow-2xl animate-pulse">
+          <div className="px-16 py-10 rounded-[2.5rem] bg-primary text-white font-black text-4xl uppercase tracking-tighter shadow-2xl animate-pulse">
             Drop to Expand
           </div>
         </div>

@@ -124,8 +124,8 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 md:px-6 pt-24 md:pt-32 pb-32 flex flex-col items-center relative z-10">
-        <section className="text-center max-w-5xl mb-16 md:mb-24 space-y-8 md:space-y-12 animate-in fade-in slide-in-from-top-12 duration-1000">
+      <main className="container mx-auto px-4 md:px-6 pt-32 md:pt-48 pb-32 flex flex-col items-center relative z-10">
+        <section className="text-center max-w-6xl mb-24 md:mb-40 space-y-10 md:space-y-16 animate-in fade-in slide-in-from-top-12 duration-1000">
           <div className="inline-flex flex-col items-center gap-6">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em]">
               <Sparkles className="w-3.5 h-3.5" />
@@ -133,28 +133,28 @@ export default function Home() {
             </div>
           </div>
           
-          <h1 className="text-4xl md:text-8xl lg:text-[9rem] font-black text-foreground tracking-tighter leading-[0.85] select-none text-center">
+          <h1 className="text-5xl md:text-[10rem] lg:text-[12rem] font-black text-foreground tracking-tighter leading-[0.8] select-none text-center">
             DUAL <br />
             <span className="text-gradient">PIPELINE</span>
           </h1>
-          <p className="text-sm md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium px-4">
+          <p className="text-base md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium px-4">
             Unified Base64 synthesis. Encode, decode, and optimize with zero-latency cloud history.
           </p>
         </section>
 
-        <section id="workbench" className="w-full max-w-5xl flex flex-col items-center gap-8 md:gap-12 scroll-mt-32">
+        <section id="workbench" className="w-full max-w-6xl flex flex-col items-center gap-8 md:gap-16 scroll-mt-32">
           <Tabs defaultValue="encoder" className="w-full">
-            <div className="flex justify-center mb-12">
-              <TabsList className="bg-foreground/5 p-1 rounded-2xl border border-foreground/5 h-auto w-full max-w-xs md:max-w-md mx-auto">
+            <div className="flex justify-center mb-16">
+              <TabsList className="bg-foreground/5 p-1.5 rounded-2xl border border-foreground/5 h-auto w-full max-w-xs md:max-w-md mx-auto">
                 <TabsTrigger 
                   value="encoder" 
-                  className="flex-1 rounded-xl px-4 md:px-8 py-3 font-black text-[10px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
+                  className="flex-1 rounded-xl px-4 md:px-8 py-4 font-black text-[11px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
                 >
                   <Zap className="w-4 h-4 mr-2" /> Encoder
                 </TabsTrigger>
                 <TabsTrigger 
                   value="decoder"
-                  className="flex-1 rounded-xl px-4 md:px-8 py-3 font-black text-[10px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
+                  className="flex-1 rounded-xl px-4 md:px-8 py-4 font-black text-[11px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
                 >
                   <ArrowRightLeft className="w-4 h-4 mr-2" /> Decoder
                 </TabsTrigger>
@@ -162,7 +162,7 @@ export default function Home() {
             </div>
 
             <TabsContent value="encoder" className="mt-0 outline-none">
-              <div className="w-full relative glass-card rounded-[2rem] md:rounded-[3rem] p-3 md:p-6 shadow-2xl overflow-hidden border-white/10">
+              <div className="w-full relative glass-card rounded-[2.5rem] md:rounded-[4rem] p-4 md:p-8 shadow-2xl overflow-hidden border-white/10">
                 <FileUploader 
                   onFilesSelect={handleFilesSelect} 
                   onClear={clearAll}
@@ -171,8 +171,8 @@ export default function Home() {
 
                 {isProcessing && (
                   <div className="mt-12 md:mt-16 flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-4">
-                    <Loader2 className="w-8 h-8 md:w-10 md:h-10 text-primary animate-spin" />
-                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Synthesizing Batch...</p>
+                    <Loader2 className="w-10 h-10 text-primary animate-spin" />
+                    <p className="text-[11px] font-black uppercase tracking-[0.4em] text-primary">Synthesizing Batch...</p>
                   </div>
                 )}
 
@@ -204,7 +204,7 @@ export default function Home() {
             </TabsContent>
 
             <TabsContent value="decoder" className="mt-0 outline-none">
-              <div className="relative glass-card rounded-[2rem] md:rounded-[3rem] p-6 md:p-12 shadow-2xl overflow-hidden border-white/10">
+              <div className="relative glass-card rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-16 shadow-2xl overflow-hidden border-white/10">
                 <DecoderTool 
                   onDecode={() => {}}
                 />
@@ -213,19 +213,19 @@ export default function Home() {
           </Tabs>
 
           {user && cloudHistory && cloudHistory.length > 0 && assets.length === 0 && (
-            <div className="mt-16 md:mt-20 space-y-8 md:space-y-12 w-full animate-in fade-in duration-1000">
+            <div className="mt-20 md:mt-32 space-y-12 md:space-y-16 w-full animate-in fade-in duration-1000">
               <h2 className="text-xl md:text-2xl font-black tracking-tighter flex items-center gap-3 uppercase text-muted-foreground px-4">
                 <History className="w-5 h-5" /> Recent Cloud Vaults
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
                 {cloudHistory.map((snippet) => (
-                  <div key={snippet.id} className="glass-card p-6 rounded-[2rem] border-white/10 space-y-4">
+                  <div key={snippet.id} className="glass-card p-8 rounded-[2.5rem] border-white/10 space-y-6">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-black uppercase tracking-widest text-primary">{snippet.mimeType.split('/')[1]}</span>
                       <span className="text-[10px] font-bold text-muted-foreground">{new Date(snippet.createdAt?.toDate()).toLocaleDateString()}</span>
                     </div>
-                    <h4 className="font-bold truncate text-sm">{snippet.fileName}</h4>
-                    <Button variant="outline" className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest h-10">
+                    <h4 className="font-bold truncate text-base">{snippet.fileName}</h4>
+                    <Button variant="outline" className="w-full rounded-2xl text-[10px] font-black uppercase tracking-widest h-12">
                       View Details
                     </Button>
                   </div>
@@ -235,46 +235,46 @@ export default function Home() {
           )}
         </section>
 
-        <div id="security" className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-6xl mt-32 md:mt-48 mb-24 md:mb-32 px-4 md:px-0">
+        <div id="security" className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 w-full max-w-6xl mt-48 md:mt-64 mb-24 md:mb-40 px-4 md:px-0">
           {[
             { icon: Zap, title: "Zero Latency", desc: "Forging happens entirely in-browser. No server round-trips.", color: "text-primary" },
             { icon: ShieldCheck, title: "Member Vault", desc: "Logged-in users get cloud history sync across all devices.", color: "text-accent" },
             { icon: History, title: "Unlimited Use", desc: "No caps. Forge as many assets as your pipeline requires.", color: "text-secondary" },
           ].map((feature, i) => (
-            <div key={i} className="glass-card p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:translate-y-[-8px] transition-all duration-500 group">
-              <div className={cn("w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-foreground/5 flex items-center justify-center mb-6 md:mb-8", feature.color)}>
-                <feature.icon className="w-7 h-7 md:w-8 md:h-8" />
+            <div key={i} className="glass-card p-10 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] hover:translate-y-[-12px] transition-all duration-500 group">
+              <div className={cn("w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-foreground/5 flex items-center justify-center mb-8 md:mb-10", feature.color)}>
+                <feature.icon className="w-8 h-8 md:w-10 md:h-10" />
               </div>
-              <h3 className="text-xl md:text-2xl font-black mb-4 tracking-tight">{feature.title}</h3>
-              <p className="text-muted-foreground leading-relaxed font-medium text-sm md:text-base">{feature.desc}</p>
+              <h3 className="text-2xl md:text-3xl font-black mb-4 tracking-tight">{feature.title}</h3>
+              <p className="text-muted-foreground leading-relaxed font-medium text-base md:text-lg">{feature.desc}</p>
             </div>
           ))}
         </div>
 
-        <div id="guide" className="w-full mt-24 md:mt-32">
+        <div id="guide" className="w-full mt-32 md:mt-48">
           <SEOIntro />
           <FAQSection />
         </div>
       </main>
 
-      <footer className="w-full py-16 md:py-24 px-6 md:px-8 border-t border-foreground/5 bg-background/80 backdrop-blur-3xl">
-        <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-16">
-          <div className="md:col-span-2 space-y-8 md:space-y-10">
+      <footer className="w-full py-16 md:py-32 px-6 md:px-8 border-t border-foreground/5 bg-background/80 backdrop-blur-3xl">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-24">
+          <div className="md:col-span-2 space-y-10 md:space-y-12">
             <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-br from-primary to-secondary p-2 rounded-xl shadow-lg">
-                <Code2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
+              <div className="bg-gradient-to-br from-primary to-secondary p-2.5 rounded-xl shadow-lg">
+                <Code2 className="w-6 h-6 md:w-7 md:h-7 text-white" />
               </div>
-              <span className="text-2xl md:text-3xl font-black tracking-tighter">FORGE.</span>
+              <span className="text-3xl md:text-4xl font-black tracking-tighter">FORGE.</span>
             </div>
-            <div className="space-y-4">
-              <p className="text-muted-foreground max-w-md leading-relaxed text-base md:text-lg font-medium">
+            <div className="space-y-6">
+              <p className="text-muted-foreground max-w-md leading-relaxed text-lg md:text-xl font-medium">
                 Architecting high-performance asset pipelines for modern developers. Optimized for speed, engineered for quality.
               </p>
               <p className="text-primary/60 max-w-md leading-relaxed text-sm font-semibold italic">
                 Looking for a fast Base64 converter? Our tool provides Data URI, Raw Strings, and ready-to-use HTML/CSS tags instantly.
               </p>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               {[
                 { icon: Github, href: "#" },
                 { icon: Twitter, href: "#" },
@@ -284,17 +284,17 @@ export default function Home() {
                 <a 
                   key={i}
                   href={social.href} 
-                  className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-foreground/5 border border-foreground/10 flex items-center justify-center text-muted-foreground hover:text-primary transition-all duration-300"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-foreground/5 border border-foreground/10 flex items-center justify-center text-muted-foreground hover:text-primary transition-all duration-300"
                 >
-                  <social.icon className="w-4 h-4 md:w-5 md:h-5" />
+                  <social.icon className="w-5 h-5 md:w-6 md:h-6" />
                 </a>
               ))}
             </div>
           </div>
           
-          <div className="space-y-4 md:space-y-6">
-            <h4 className="font-bold text-[10px] uppercase tracking-[0.3em] text-primary">System</h4>
-            <nav className="flex flex-col gap-3 md:gap-4 text-sm font-semibold text-muted-foreground">
+          <div className="space-y-6 md:space-y-8">
+            <h4 className="font-bold text-[11px] uppercase tracking-[0.3em] text-primary">System</h4>
+            <nav className="flex flex-col gap-4 md:gap-5 text-base font-semibold text-muted-foreground">
               <a href="/docs" className="hover:text-foreground transition-colors">Documentation</a>
               <a href="/performance" className="hover:text-foreground transition-colors">Performance Audit</a>
               <a href="/api-reference" className="hover:text-foreground transition-colors">API Reference</a>
@@ -302,9 +302,9 @@ export default function Home() {
             </nav>
           </div>
 
-          <div className="space-y-4 md:space-y-6">
-            <h4 className="font-bold text-[10px] uppercase tracking-[0.3em] text-secondary">History</h4>
-            <nav className="flex flex-col gap-3 md:gap-4 text-sm font-semibold text-muted-foreground">
+          <div className="space-y-6 md:space-y-8">
+            <h4 className="font-bold text-[11px] uppercase tracking-[0.3em] text-secondary">History</h4>
+            <nav className="flex flex-col gap-4 md:gap-5 text-base font-semibold text-muted-foreground">
               <a href="/cloud-sync" className="hover:text-foreground transition-colors">Cloud Sync</a>
               <a href="/usage-specs" className="hover:text-foreground transition-colors">Usage Specs</a>
               <a href="/about" className="hover:text-foreground transition-colors">Forge Studios</a>
@@ -312,9 +312,9 @@ export default function Home() {
             </nav>
           </div>
         </div>
-        <div className="container mx-auto mt-16 md:mt-24 pt-12 border-t border-foreground/5 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 text-[10px] text-muted-foreground font-bold tracking-[0.2em] uppercase text-center md:text-left">
+        <div className="container mx-auto mt-24 md:mt-32 pt-16 border-t border-foreground/5 flex flex-col md:flex-row justify-between items-center gap-8 md:gap-10 text-[11px] text-muted-foreground font-bold tracking-[0.2em] uppercase text-center md:text-left">
           <p>© {currentYear ?? '...'} FORGE STUDIOS. DISTRIBUTED SECURELY.</p>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8">
             <span className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
               LIVE DEPLOYMENT READY
