@@ -139,7 +139,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-80 p-2 rounded-[2.5rem] glass-card border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-300" align="end" forceMount>
+        <DropdownMenuContent className="w-80 p-2 rounded-[2.5rem] glass-card border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-300 z-[150]" align="end" forceMount>
           <DropdownMenuLabel className="font-normal px-5 py-6">
             <div className="flex flex-col space-y-4">
               <div className="flex items-center justify-between">
@@ -229,7 +229,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           <LogIn className="w-4 h-4 mr-2 hidden sm:inline" /> Sign In
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[95vw] max-w-[450px] rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-12 border-none bg-white dark:bg-zinc-950 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] overflow-y-auto max-h-[90vh]">
+      <DialogContent className="w-[95vw] max-w-[450px] rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-12 border-none bg-white dark:bg-zinc-950 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] overflow-y-auto max-h-[90vh] z-[200]">
         <DialogHeader className="space-y-6 text-center">
           <div className="mx-auto w-16 h-16 md:w-20 md:h-20 rounded-[2rem] bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-2xl rotate-3 transform hover:rotate-0 transition-transform duration-500">
             <UserIcon className="w-8 h-8 md:w-10 md:h-10 text-white" />
