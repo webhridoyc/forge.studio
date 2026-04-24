@@ -198,9 +198,14 @@ export default function Home() {
               </div>
               <span className="text-3xl font-black tracking-tighter">FORGE.</span>
             </div>
-            <p className="text-muted-foreground max-w-md leading-relaxed text-lg font-medium">
-              Architecting high-performance asset pipelines for modern developers. Optimized for speed, engineered for quality.
-            </p>
+            <div className="space-y-4">
+              <p className="text-muted-foreground max-w-md leading-relaxed text-lg font-medium">
+                Architecting high-performance asset pipelines for modern developers. Optimized for speed, engineered for quality.
+              </p>
+              <p className="text-primary/60 max-w-md leading-relaxed text-sm font-semibold italic">
+                Looking for a fast Base64 converter? Our tool provides Data URI, Raw Strings, and ready-to-use HTML/CSS tags instantly.
+              </p>
+            </div>
             <div className="flex items-center gap-4">
               {[
                 { icon: Github, href: "#", label: "GitHub" },
