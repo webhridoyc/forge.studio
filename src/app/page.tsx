@@ -300,9 +300,9 @@ export default function Home() {
           <div className="space-y-4 md:space-y-6">
             <h4 className="font-bold text-[10px] uppercase tracking-[0.3em] text-primary">System</h4>
             <nav className="flex flex-col gap-3 md:gap-4 text-sm font-semibold text-muted-foreground">
-              <a href="#" className="hover:text-foreground transition-colors">Documentation</a>
-              <a href="#" className="hover:text-foreground transition-colors">Performance Audit</a>
-              <a href="#" className="hover:text-foreground transition-colors">API Reference</a>
+              <a href="/docs" className="hover:text-foreground transition-colors">Documentation</a>
+              <a href="/performance" className="hover:text-foreground transition-colors">Performance Audit</a>
+              <a href="/api-reference" className="hover:text-foreground transition-colors">API Reference</a>
             </nav>
           </div>
 
