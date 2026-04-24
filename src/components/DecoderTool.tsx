@@ -1,11 +1,14 @@
+
 "use client"
 
 import * as React from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Image as ImageIcon, Download, Trash2, Zap, AlertCircle } from "lucide-react"
+import { Image as ImageIcon, Download, Trash2, Zap, AlertCircle, Cloud } from "lucide-react"
 import { downloadImageFromBase64 } from "@/lib/image-utils"
 import { useToast } from "@/hooks/use-toast"
+import { useUser, useFirestore, addDocumentNonBlocking } from "@/firebase"
+import { collection, serverTimestamp } from "firebase/firestore"
 
 interface DecoderToolProps {
   onDecode: () => void;
@@ -13,9 +16,12 @@ interface DecoderToolProps {
 
 export function DecoderTool({ onDecode }: DecoderToolProps) {
   const { toast } = useToast()
+  const { user } = useUser()
+  const db = useFirestore()
   const [input, setInput] = React.useState("")
   const [preview, setPreview] = React.useState<string | null>(null)
   const [error, setError] = React.useState<string | null>(null)
+  const [isVaulting, setIsVaulting] = React.useState(false)
 
   const handleInput = (val: string) => {
     setInput(val)
@@ -51,6 +57,39 @@ export function DecoderTool({ onDecode }: DecoderToolProps) {
     } catch (e) {
       setError("Invalid Base64 format. Synthesis failed.")
     }
+  }
+
+  const handleVaultToCloud = () => {
+    if (!user || !db || !preview) {
+      toast({
+        title: "Auth Required",
+        description: "Sign in to vault assets to your cloud sync.",
+      })
+      return
+    }
+
+    setIsVaulting(true)
+    const snippetsRef = collection(db, 'users', user.uid, 'conversionSnippets')
+    
+    // Extract basic metadata for the vault
+    const mimeMatch = preview.match(/^data:(image\/[a-z+]+);base64,/)
+    const mimeType = mimeMatch ? mimeMatch[1] : 'image/png'
+
+    addDocumentNonBlocking(snippetsRef, {
+      userId: user.uid,
+      fileName: `restored-asset-${Date.now()}.${mimeType.split('/')[1] || 'png'}`,
+      base64String: preview,
+      mimeType: mimeType,
+      outputFormat: 'data-uri',
+      createdAt: serverTimestamp()
+    });
+
+    toast({
+      title: "Reconstruction Vaulted",
+      description: "Asset metadata pushed to your cloud history.",
+    })
+    
+    setTimeout(() => setIsVaulting(false), 1000)
   }
 
   const clear = () => {
@@ -108,16 +147,26 @@ export function DecoderTool({ onDecode }: DecoderToolProps) {
                 </div>
                 <h3 className="text-3xl font-black tracking-tighter">SYNTHESIS READY</h3>
                 <p className="text-sm text-muted-foreground font-medium leading-relaxed">
-                  Payload detected and validated. You can now restore this binary asset to your local file system.
+                  Payload detected and validated. You can now restore this binary asset or sync it to your member vault.
                 </p>
               </div>
 
-              <Button 
-                onClick={handleDownload}
-                className="w-full md:w-auto h-14 rounded-2xl bg-foreground text-background hover:scale-105 transition-all font-black text-xs uppercase tracking-widest px-10 shadow-xl"
-              >
-                <Download className="w-4 h-4 mr-3" /> Forge to Disk
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  onClick={handleDownload}
+                  className="flex-1 h-14 rounded-2xl bg-foreground text-background hover:scale-105 transition-all font-black text-xs uppercase tracking-widest px-10 shadow-xl"
+                >
+                  <Download className="w-4 h-4 mr-3" /> Forge to Disk
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={handleVaultToCloud}
+                  disabled={isVaulting}
+                  className="flex-1 h-14 rounded-2xl border-foreground/10 hover:bg-primary hover:text-white transition-all font-black text-xs uppercase tracking-widest px-8"
+                >
+                  <Cloud className="w-4 h-4 mr-3" /> {isVaulting ? "Vaulting..." : "Vault to Cloud"}
+                </Button>
+              </div>
             </div>
           </div>
         </div>

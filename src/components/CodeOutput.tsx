@@ -17,8 +17,8 @@ import {
   ChevronRight
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import { useUser, useFirestore } from "@/firebase"
-import { collection, addDoc, serverTimestamp } from "firebase/firestore"
+import { useUser, useFirestore, addDocumentNonBlocking } from "@/firebase"
+import { collection, serverTimestamp } from "firebase/firestore"
 import { formatBase64Code, downloadTextFile, type ProcessedAsset } from "@/lib/image-utils"
 import { cn } from "@/lib/utils"
 
@@ -52,8 +52,8 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
     setTimeout(() => setCopied(null), 2000)
   }
 
-  const handleSaveToCloud = async () => {
-    if (!user) {
+  const handleSaveToCloud = () => {
+    if (!user || !db) {
       toast({
         title: "Auth Required",
         description: "Sign in to vault your assets to the cloud.",
@@ -62,29 +62,24 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
     }
 
     setIsSaving(true)
-    try {
-      const snippetsRef = collection(db, 'users', user.uid, 'conversionSnippets')
-      await addDoc(snippetsRef, {
-        userId: user.uid,
-        fileName: asset.name,
-        base64String: asset.base64.substring(0, 10000), // Larger limit for better utility while respecting DB
-        mimeType: asset.format,
-        outputFormat: 'data-uri',
-        createdAt: serverTimestamp()
-      })
-      toast({
-        title: "Asset Vaulted",
-        description: "Synced to your secure cloud history.",
-      })
-    } catch (e) {
-      toast({
-        variant: "destructive",
-        title: "Sync Failed",
-        description: "Could not save to cloud vault.",
-      })
-    } finally {
-      setIsSaving(false)
-    }
+    const snippetsRef = collection(db, 'users', user.uid, 'conversionSnippets')
+    
+    addDocumentNonBlocking(snippetsRef, {
+      userId: user.uid,
+      fileName: asset.name,
+      base64String: asset.base64,
+      mimeType: asset.format,
+      outputFormat: 'data-uri',
+      createdAt: serverTimestamp()
+    });
+
+    toast({
+      title: "Sync Initiated",
+      description: "Asset is being vaulted to your cloud history.",
+    })
+    
+    // Optimistic UI reset
+    setTimeout(() => setIsSaving(false), 1000)
   }
 
   const handleDownload = (type: typeof formats[number]["id"]) => {

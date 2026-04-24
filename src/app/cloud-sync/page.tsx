@@ -69,6 +69,15 @@ export default function CloudSyncPage() {
     }
   }
 
+  const formatSyncTime = (timestamp: any) => {
+    if (!timestamp || !timestamp.toDate) return 'Syncing...'
+    return new Date(timestamp.toDate()).toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    })
+  }
+
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -112,8 +121,8 @@ export default function CloudSyncPage() {
               </div>
               <div className="flex gap-4">
                 <div className="bg-foreground/5 px-6 py-4 rounded-3xl border border-foreground/5 text-center">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Vault Limit</p>
-                  <p className="text-2xl font-black tracking-tighter">{snippets?.length || 0} / 10</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Vault Capacity</p>
+                  <p className="text-2xl font-black tracking-tighter">{snippets?.length || 0} / 50</p>
                 </div>
               </div>
             </div>
@@ -131,7 +140,7 @@ export default function CloudSyncPage() {
                       <div className="flex items-start justify-between">
                         <div className="space-y-1">
                           <span className="px-2 py-0.5 rounded-md bg-secondary/10 text-secondary text-[9px] font-black uppercase tracking-widest border border-secondary/20">
-                            {snippet.mimeType.split('/')[1]}
+                            {snippet.mimeType?.split('/')[1] || 'asset'}
                           </span>
                           <h4 className="font-black text-lg tracking-tight truncate max-w-[180px]">{snippet.fileName}</h4>
                         </div>
@@ -143,11 +152,11 @@ export default function CloudSyncPage() {
                       <div className="grid grid-cols-2 gap-4">
                         <div className="bg-foreground/[0.03] p-3 rounded-2xl">
                           <p className="text-[8px] font-black uppercase tracking-widest text-muted-foreground mb-1">MIME TYPE</p>
-                          <p className="text-[11px] font-bold truncate">{snippet.mimeType}</p>
+                          <p className="text-[11px] font-bold truncate">{snippet.mimeType || 'unknown'}</p>
                         </div>
                         <div className="bg-foreground/[0.03] p-3 rounded-2xl">
                           <p className="text-[8px] font-black uppercase tracking-widest text-muted-foreground mb-1">SYNCED AT</p>
-                          <p className="text-[11px] font-bold">{new Date(snippet.createdAt?.toDate()).toLocaleDateString()}</p>
+                          <p className="text-[11px] font-bold">{formatSyncTime(snippet.createdAt)}</p>
                         </div>
                       </div>
                     </div>
@@ -180,7 +189,7 @@ export default function CloudSyncPage() {
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-2xl font-black tracking-tight">VAULT IS EMPTY</h3>
-                  <p className="text-muted-foreground font-medium max-w-xs">Forge your first asset and "Vault to Cloud" to begin your developer history.</p>
+                  <p className="text-muted-foreground font-medium max-w-xs">Forge or Decode an asset and "Vault to Cloud" to begin your developer history.</p>
                 </div>
                 <Button asChild className="rounded-2xl h-12 px-8 font-black uppercase tracking-widest text-[10px]">
                   <Link href="/">Open Workbench</Link>
