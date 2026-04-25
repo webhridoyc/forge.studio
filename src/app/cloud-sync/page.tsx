@@ -301,7 +301,7 @@ export default function CloudSyncPage() {
                     ].map((item, i) => (
                       <div key={i} className="bg-foreground/5 p-6 rounded-2xl border border-foreground/5 text-center space-y-3">
                         <item.icon className="w-6 h-6 mx-auto text-secondary" />
-                        <h3 className="text-[10px] font-black uppercase tracking-widest">{item.title}</h3>
+                        <item.title className="text-[10px] font-black uppercase tracking-widest" />
                         <p className="text-[9px] text-muted-foreground font-bold leading-tight">{item.desc}</p>
                       </div>
                     ))}
