@@ -8,7 +8,6 @@ import { DecoderTool } from "@/components/DecoderTool"
 import { SEOIntro, FAQSection } from "@/components/SEOSections"
 import { AuthUI } from "@/components/AuthModal"
 import { optimizeImage, type ProcessedAsset, type OutputFormat } from "@/lib/image-utils"
-import { Toaster } from "@/components/ui/toaster"
 import { useToast } from "@/hooks/use-toast"
 import { useUser, useFirestore, useMemoFirebase, useCollection } from "@/firebase"
 import { collection, query, orderBy, limit } from "firebase/firestore"
@@ -84,7 +83,6 @@ export default function Home() {
     const newAssets: ProcessedAsset[] = []
     
     for (const file of filesToProcess) {
-      // Memory warning for large files in original mode
       if (qualityMode === 'original' && file.size > 2 * 1024 * 1024) {
         toast({
           title: "Large Asset Detected",
@@ -374,8 +372,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      <Toaster />
     </div>
   )
 }

@@ -56,14 +56,22 @@ export default function CloudSyncPage() {
   const { data: snippets, isLoading: isDataLoading } = useCollection(snippetsQuery)
 
   const handleCopy = (id: string, base64: string, format: 'uri' | 'raw' | 'html' | 'css') => {
-    const code = formatBase64Code(base64, format)
-    navigator.clipboard.writeText(code)
-    setCopiedId(`${id}-${format}`)
-    toast({
-      title: "Reconciled & Copied",
-      description: `Optimized ${format.toUpperCase()} payload from cloud vault.`,
-    })
-    setTimeout(() => setCopiedId(null), 2000)
+    try {
+      const code = formatBase64Code(base64, format)
+      navigator.clipboard.writeText(code)
+      setCopiedId(`${id}-${format}`)
+      toast({
+        title: "Reconciled & Copied",
+        description: `Optimized ${format.toUpperCase()} payload from cloud vault.`,
+      })
+      setTimeout(() => setCopiedId(null), 2000)
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Copy Failed",
+        description: "Could not synthesize payload to clipboard.",
+      })
+    }
   }
 
   const handleDelete = async (id: string) => {
@@ -182,34 +190,34 @@ export default function CloudSyncPage() {
                             className="flex-1 rounded-2xl h-12 bg-background border border-foreground/10 hover:bg-primary hover:text-white transition-all font-black text-[10px] uppercase tracking-widest"
                           >
                             <Copy className="w-4 h-4 mr-2" />
-                            Copy Payload <ChevronDown className="w-3 h-3 ml-2 opacity-50" />
+                            {copiedId?.startsWith(snippet.id) ? "Copied!" : "Copy Payload"} <ChevronDown className="w-3 h-3 ml-2 opacity-50" />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56 p-2 rounded-[1.5rem] glass-card border-white/10 shadow-2xl z-[200]">
                           <DropdownMenuLabel className="text-[9px] font-black uppercase tracking-widest text-muted-foreground px-4 py-2">Select Export Format</DropdownMenuLabel>
                           <DropdownMenuItem 
-                            onClick={() => handleCopy(snippet.id, snippet.base64String, 'uri')}
+                            onSelect={() => handleCopy(snippet.id, snippet.base64String, 'uri')}
                             className="rounded-xl py-3 px-4 cursor-pointer focus:bg-primary/10 transition-colors group"
                           >
                             <ExternalLink className="w-3.5 h-3.5 mr-3 text-primary group-hover:scale-110 transition-transform" />
                             <span className="text-[10px] font-bold uppercase tracking-widest">Data URI</span>
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handleCopy(snippet.id, snippet.base64String, 'raw')}
+                            onSelect={() => handleCopy(snippet.id, snippet.base64String, 'raw')}
                             className="rounded-xl py-3 px-4 cursor-pointer focus:bg-primary/10 transition-colors group"
                           >
                             <FileCode className="w-3.5 h-3.5 mr-3 text-accent group-hover:scale-110 transition-transform" />
                             <span className="text-[10px] font-bold uppercase tracking-widest">Raw String</span>
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handleCopy(snippet.id, snippet.base64String, 'html')}
+                            onSelect={() => handleCopy(snippet.id, snippet.base64String, 'html')}
                             className="rounded-xl py-3 px-4 cursor-pointer focus:bg-primary/10 transition-colors group"
                           >
                             <Globe className="w-3.5 h-3.5 mr-3 text-secondary group-hover:scale-110 transition-transform" />
                             <span className="text-[10px] font-bold uppercase tracking-widest">HTML Tag</span>
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handleCopy(snippet.id, snippet.base64String, 'css')}
+                            onSelect={() => handleCopy(snippet.id, snippet.base64String, 'css')}
                             className="rounded-xl py-3 px-4 cursor-pointer focus:bg-primary/10 transition-colors group"
                           >
                             <Braces className="w-3.5 h-3.5 mr-3 text-primary group-hover:scale-110 transition-transform" />
@@ -292,7 +300,9 @@ export default function CloudSyncPage() {
                 </h2>
                 <div className="space-y-4 text-muted-foreground leading-relaxed font-medium">
                   <div className="flex gap-4 items-start p-6 bg-accent/5 rounded-3xl border border-accent/10">
-                    <Info className="w-6 h-6 text-accent shrink-0" />
+                    <div className="flex items-center justify-center w-6 h-6">
+                      <Info className="w-6 h-6 text-accent shrink-0" />
+                    </div>
                     <p className="text-sm">To maintain extreme performance, Forge utilizes <strong>Delta Syncing</strong>. We sync primary bitstreams and metadata separately to ensure your UI thread remains unblocked (120Hz performance).</p>
                   </div>
                   <ul className="space-y-3 pt-2">
@@ -314,7 +324,7 @@ export default function CloudSyncPage() {
 
       <footer className="w-full py-12 px-8 border-t border-foreground/5 bg-background/80 backdrop-blur-3xl">
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">© 2026 FORGE STUDIOS. SYNCED GLOBALLY.</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground text-center md:text-left">© 2026 FORGE STUDIOS. SYNCED GLOBALLY.</p>
           <div className="flex gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
             <Link href="/cloud-sync" className="text-primary">Sync</Link>
             <Link href="/usage-specs" className="hover:text-foreground">Specs</Link>
