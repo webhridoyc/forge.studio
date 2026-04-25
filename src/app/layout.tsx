@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type {Metadata} from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { FirebaseClientProvider } from '@/firebase';
@@ -6,11 +6,12 @@ import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   display: 'swap',
   variable: '--font-inter',
 });
 
-const baseUrl = 'https://base64-forge.vercel.app';
+const baseUrl = 'https://forge.studio';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     default: 'Free Base64 Converter & Image Encoder | Forge Studios',
     template: '%s | Forge Studios',
   },
-  description: 'Professional-grade Base64 converter and image synthesis studio. Convert PNG, JPEG, WebP, and SVG to Base64 strings or Data URIs instantly. Optimized for high-performance developer workflows and lossless encoding.',
+  description: 'Free online Base64 converter and image encoder. Convert PNG, JPEG, WebP, SVG to Base64 Data URI instantly. Fast Base64 decoder, CSS/HTML image encoder, and lossless asset pipeline for developers.',
   keywords: [
     'Base64 converter',
     'Image to Base64',
@@ -39,23 +40,23 @@ export const metadata: Metadata = {
     'SVG to Base64',
     'CSS image encoder',
     'HTML image encoder',
-    'Base64 string generator'
+    'Base64 string generator',
   ],
   authors: [{ name: 'Forge Studios' }],
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'FORGE. | Professional Image Encoder & Base64 Studio',
-    description: 'Industrial-grade Base64 encoding and decoding for modern developers. Optimized PNG, JPEG, WebP, and SVG synthesis.',
+    title: 'Free Base64 Converter & Image Encoder | Forge Studios',
+    description: 'Convert PNG, JPEG, WebP and SVG images to Base64 Data URIs instantly. Fast, free, and lossless — the developer-grade Base64 encoder and decoder.',
     url: baseUrl,
     siteName: 'Forge Studios',
     images: [
       {
-        url: '/og-image.png',
+        url: `${baseUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: 'Forge Studios Synthesis Workbench',
+        alt: 'Forge Studios — Free Base64 Converter & Image Encoder',
       },
     ],
     locale: 'en_US',
@@ -63,9 +64,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FORGE. | Industrial Base64 Converter',
-    description: 'High-performance Base64 encoding and decoding engine for developers.',
-    images: ['/og-image.png'],
+    title: 'Free Base64 Converter & Image Encoder | Forge Studios',
+    description: 'Convert PNG, JPEG, WebP and SVG to Base64 Data URIs. Fast, free online Base64 encoder and decoder for developers.',
+    images: [`${baseUrl}/og-image.png`],
   },
   robots: {
     index: true,
@@ -80,7 +81,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: '/favicon.svg',
-  }
+  },
 };
 
 export default function RootLayout({
@@ -88,39 +89,30 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const softwareSchema = {
+  const appJsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Forge Studios",
+    "name": "Forge Studios — Free Base64 Converter",
     "url": baseUrl,
     "operatingSystem": "Web",
     "applicationCategory": "DeveloperApplication",
-    "description": "Industrial-grade Base64 synthesis engine. Convert images to Base64 strings and decode back to images with zero-latency. Includes cloud-synced history for members.",
+    "description": "Free online Base64 converter and image encoder. Convert PNG, JPEG, WebP, SVG to Base64 Data URI strings and decode Base64 back to images instantly. Fast, lossless, and private.",
     "offers": {
       "@type": "Offer",
       "price": "0",
       "priceCurrency": "USD"
     },
     "featureList": [
-      "Base64 Encoding",
-      "Base64 Decoding",
-      "Image Optimization",
-      "Cloud Sync History",
-      "Multi-Format Support (WebP, PNG, JPG, SVG)",
-      "CSS Image Encoder",
-      "HTML Image Encoder",
-      "Data URI Generator"
+      "Base64 Encoding — PNG to Base64, JPEG to Base64, WebP to Base64, SVG to Base64",
+      "Base64 Decoding — restore Base64 strings back to original images",
+      "Data URI Generator — ready-to-use CSS and HTML image encoder output",
+      "Lossless Base64 conversion with image optimization",
+      "Cloud Sync History for registered members",
+      "Multi-Format Support: WebP, PNG, JPG, SVG, GIF"
     ]
   };
 
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Forge Studios",
-    "url": baseUrl
-  };
-
-  const faqSchema = {
+  const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -129,7 +121,7 @@ export default function RootLayout({
         "name": "What is the 33% overhead rule for Base64?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Base64 encoding increases file size by approximately 33% because it uses 4 characters to represent every 3 bytes of binary data. We recommend using Forge only for assets under 10KB where the elimination of an HTTP request outweighs the size increase."
+          "text": "Base64 encoding increases file size by approximately 33% because it uses 4 characters to represent every 3 bytes of binary data. We recommend using Forge only for assets under 10KB (like icons or logos) where the elimination of an HTTP request outweighs the size increase."
         }
       },
       {
@@ -142,21 +134,29 @@ export default function RootLayout({
       },
       {
         "@type": "Question",
-        "name": "Is batch processing limited in the Forge?",
+        "name": "Is batch Base64 conversion limited?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No, but browser memory is. We recommend processing batches of 10-20 assets at a time to maintain UI smoothness (120Hz performance)."
+          "text": "No, but browser memory is. We recommend processing batches of 10–20 assets at a time to maintain UI smoothness (120Hz performance). The Base64 string generator supports PNG, JPEG, WebP, SVG, and GIF in a single batch."
         }
       },
       {
         "@type": "Question",
-        "name": "How does this Base64 tool impact SEO?",
+        "name": "How does Base64 encoding impact SEO?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "By reducing HTTP requests, your page's First Contentful Paint (FCP) can improve. However, overusing large Base64 strings can bloat your HTML and delay overall parsing."
+          "text": "By reducing HTTP requests, your page's First Contentful Paint (FCP) can improve, which is a key Core Web Vital for Google ranking. However, overusing large Base64 strings can bloat your HTML and delay overall parsing."
         }
       }
     ]
+  };
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Forge Studios",
+    "url": baseUrl,
+    "description": "Free online Base64 converter, image encoder, and Data URI generator for developers.",
   };
 
   return (
@@ -164,18 +164,18 @@ export default function RootLayout({
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className="font-body antialiased">
+      <body className={`${inter.className} font-body antialiased`}>
         <FirebaseClientProvider>
           {children}
           <Toaster />

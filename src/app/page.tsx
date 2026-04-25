@@ -159,14 +159,14 @@ export default function Home() {
           </div>
           
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-[10rem] lg:text-[12rem] font-black text-foreground tracking-tighter leading-[0.8] select-none text-center uppercase">
+            <h1 className="text-5xl md:text-[10rem] lg:text-[12rem] font-black text-foreground tracking-tighter leading-[0.8] select-none text-center uppercase">
               Base64 <br />
               <span className="text-gradient">Converter.</span>
             </h1>
-            <h2 className="text-xl md:text-5xl font-black tracking-tighter text-muted-foreground/40 uppercase">Image Encoder & Data URI Generator.</h2>
+            <h2 className="text-2xl md:text-5xl font-black tracking-tighter text-muted-foreground/40 uppercase">Image Encoder &amp; Data URI Generator.</h2>
           </div>
-          <p className="text-sm md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-medium px-4">
-            Unified dual-pipeline to encode, decode, and optimize assets. Convert PNG, JPEG, WebP, and SVG to Base64 strings or Data URIs instantly with industrial-grade lossless synthesis.
+          <p className="text-base md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium px-4">
+            Free online Base64 converter and image encoder. Convert PNG, JPEG, WebP and SVG to Base64 Data URI strings — or decode Base64 back to images — instantly in your browser with zero-latency and cloud-synced history.
           </p>
         </section>
 
@@ -318,10 +318,10 @@ export default function Home() {
             <ForgeLogo />
             <div className="space-y-6">
               <p className="text-muted-foreground max-w-md leading-relaxed text-lg md:text-xl font-medium">
-                Architecting high-performance asset pipelines with advanced WebP, PNG, JPEG, and SVG to Base64 conversion.
+                Free online Base64 converter and image encoder for developers. Convert PNG, JPEG, WebP, SVG to Base64 Data URI and decode Base64 back to images instantly.
               </p>
               <p className="text-primary/60 max-w-md leading-relaxed text-sm font-semibold italic">
-                Looking for a fast Base64 converter? Our tool provides Data URI, Raw Strings, and ready-to-use HTML/CSS tags instantly.
+                The fastest Base64 string generator online — supports PNG to Base64, JPEG to Base64, WebP to Base64, SVG to Base64, CSS image encoder, HTML image encoder, and lossless Data URI generation.
               </p>
             </div>
             <div className="flex items-center gap-6">
