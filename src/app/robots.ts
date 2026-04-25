@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-const baseUrl = 'https://forge.studio'
+const baseUrl = 'https://base64-forge.vercel.app'
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -12,6 +12,5 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
   }
 }

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-const baseUrl = 'https://forge.studio'
+const baseUrl = 'https://base64-forge.vercel.app'
 const LAST_MODIFIED = '2026-04-25'
 
 export default function sitemap(): MetadataRoute.Sitemap {

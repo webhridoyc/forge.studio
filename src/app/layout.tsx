@@ -11,7 +11,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const baseUrl = 'https://forge.studio';
+const baseUrl = 'https://base64-forge.vercel.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     siteName: 'Forge Studios',
     images: [
       {
-        url: `${baseUrl}/og-image.png`,
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Forge Studios — Free Base64 Converter & Image Encoder',
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Free Base64 Converter & Image Encoder | Forge Studios',
     description: 'Convert PNG, JPEG, WebP and SVG to Base64 Data URIs. Fast, free online Base64 encoder and decoder for developers.',
-    images: [`${baseUrl}/og-image.png`],
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -78,9 +78,6 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
-  },
-  icons: {
-    icon: '/favicon.svg',
   },
 };
 

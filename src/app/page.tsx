@@ -146,7 +146,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="container mx-auto px-2 md:px-6 pt-32 md:pt-48 pb-32 flex flex-col items-center relative z-10 overflow-x-hidden">
+      <main className="container mx-auto px-2 md:px-6 pt-32 md:pt-48 pb-32 flex flex-col items-center relative z-10 max-w-full overflow-x-hidden">
         <section className="text-center max-w-6xl mb-24 md:mb-40 space-y-10 md:space-y-16 animate-in fade-in slide-in-from-top-12 duration-1000">
           <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
             <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-accent/5 border border-accent/20 animate-pulse">
