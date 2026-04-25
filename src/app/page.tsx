@@ -157,11 +157,6 @@ export default function Home() {
               </div>
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">Studio Live Now</span>
             </div>
-
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/20 backdrop-blur-md text-primary text-[10px] font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(var(--primary),0.1)]">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Unlimited Member Access</span>
-            </div>
           </div>
           
           <div className="space-y-4">
