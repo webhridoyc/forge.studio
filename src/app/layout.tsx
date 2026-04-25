@@ -4,9 +4,9 @@ import { FirebaseClientProvider } from '@/firebase';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'FORGE. | All-in-One Image Encoder & Decoder',
-  description: 'Professional-grade Base64 studio. Convert images to code and decode Base64 back to images instantly. Optimized for performance and organic search.',
-  keywords: ['Base64 converter', 'Image to Base64', 'Data URI generator', 'Base64 decoder', 'Image optimization', 'Web performance tool'],
+  title: 'FORGE. | Industrial Image Synthesis Studio',
+  description: 'Professional-grade Base64 studio. Convert images to code and decode Base64 back to images instantly. Optimized for high-performance developer workflows.',
+  keywords: ['Base64 converter', 'Image to Base64', 'Data URI generator', 'Base64 decoder', 'Image optimization', 'Web performance tool', 'Forge Studios'],
   authors: [{ name: 'Forge Studios' }],
   openGraph: {
     title: 'FORGE. | Professional Image Synthesis',
@@ -24,6 +24,9 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
+  icons: {
+    icon: '/favicon.svg', // Suggesting use of an SVG favicon for modern browsers
+  }
 };
 
 export default function RootLayout({

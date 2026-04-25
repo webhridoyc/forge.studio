@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -7,12 +6,12 @@ import { CodeOutput } from "@/components/CodeOutput"
 import { DecoderTool } from "@/components/DecoderTool"
 import { SEOIntro, FAQSection } from "@/components/SEOSections"
 import { AuthUI } from "@/components/AuthModal"
+import { ForgeLogo } from "@/components/ForgeLogo"
 import { optimizeImage, type ProcessedAsset, type OutputFormat } from "@/lib/image-utils"
 import { useToast } from "@/hooks/use-toast"
 import { useUser, useFirestore, useMemoFirebase, useCollection } from "@/firebase"
 import { collection, query, orderBy, limit } from "firebase/firestore"
 import { 
-  Code2, 
   Sparkles, 
   ShieldCheck, 
   Zap, 
@@ -115,6 +114,10 @@ export default function Home() {
     setAssets([])
   }
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <div className="min-h-screen relative overflow-x-hidden selection:bg-primary/20 transition-colors duration-700">
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-background">
@@ -126,12 +129,9 @@ export default function Home() {
         "fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] transition-all",
         isAuthOpen && "hidden"
       )}>
-        <div className="flex items-center gap-2 md:gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <div className="bg-gradient-to-br from-primary to-secondary p-1.5 md:p-2 rounded-xl shadow-lg group-hover:scale-110 transition-all">
-            <Code2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
-          </div>
-          <span className="text-xl md:text-2xl font-black tracking-tighter">FORGE.</span>
-        </div>
+        <button onClick={scrollToTop} className="focus:outline-none">
+          <ForgeLogo />
+        </button>
         
         <div className="flex items-center gap-4 md:gap-6">
           <nav className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
@@ -312,12 +312,7 @@ export default function Home() {
       <footer className="w-full py-16 md:py-32 px-6 md:px-8 border-t border-foreground/5 bg-background/80 backdrop-blur-3xl">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-24">
           <div className="md:col-span-2 space-y-10 md:space-y-12">
-            <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-br from-primary to-secondary p-2.5 rounded-xl shadow-lg">
-                <Code2 className="w-6 h-6 md:w-7 md:h-7 text-white" />
-              </div>
-              <span className="text-3xl md:text-4xl font-black tracking-tighter">FORGE.</span>
-            </div>
+            <ForgeLogo />
             <div className="space-y-6">
               <p className="text-muted-foreground max-w-md leading-relaxed text-lg md:text-xl font-medium">
                 Architecting high-performance asset pipelines for modern developers. Optimized for speed, engineered for quality.
