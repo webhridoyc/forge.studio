@@ -332,7 +332,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-6">
               {[
-                { icon: Github, href: "#" },
+                { icon: Github, href: "https://github.com/webhridoyc/forge.studio" },
                 { icon: Twitter, href: "#" },
                 { icon: Linkedin, href: "#" },
                 { icon: MessageCircle, href: "#" }
@@ -340,6 +340,8 @@ export default function Home() {
                 <a 
                   key={i}
                   href={social.href} 
+                  target={social.icon === Github ? "_blank" : undefined}
+                  rel={social.icon === Github ? "noopener noreferrer" : undefined}
                   className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-foreground/5 border border-foreground/10 flex items-center justify-center text-muted-foreground hover:text-primary transition-all duration-300"
                 >
                   <social.icon className="w-5 h-5 md:w-6 md:h-6" />

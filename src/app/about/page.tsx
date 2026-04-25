@@ -5,6 +5,7 @@ import * as React from "react"
 import { Code2, Sparkles, ShieldCheck, Zap, Globe, Github, MessageCircle } from "lucide-react"
 import { AuthUI } from "@/components/AuthModal"
 import { cn } from "@/lib/utils"
+import { ForgeLogo } from "@/components/ForgeLogo"
 
 export default function AboutPage() {
   const [isAuthOpen, setIsAuthOpen] = React.useState(false)
@@ -20,11 +21,8 @@ export default function AboutPage() {
         "fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-sm transition-all",
         isAuthOpen && "hidden"
       )}>
-        <a href="/" className="flex items-center gap-2 md:gap-3 group">
-          <div className="bg-gradient-to-br from-primary to-secondary p-1.5 md:p-2 rounded-xl shadow-lg group-hover:scale-110 transition-all">
-            <Code2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
-          </div>
-          <span className="text-xl md:text-2xl font-black tracking-tighter">FORGE.</span>
+        <a href="/" className="focus:outline-none">
+          <ForgeLogo />
         </a>
         <div className="flex items-center gap-4">
           <nav className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mr-6">
@@ -85,16 +83,16 @@ export default function AboutPage() {
               <h2 className="text-3xl font-black tracking-tighter uppercase">Connect with the Studio</h2>
               <div className="flex justify-center gap-6">
                 {[
-                  { icon: Github, label: "Open Source" },
-                  { icon: MessageCircle, label: "Support" },
-                  { icon: Globe, label: "Status" }
+                  { icon: Github, label: "Open Source", href: "https://github.com/webhridoyc/forge.studio" },
+                  { icon: MessageCircle, label: "Support", href: "/contact" },
+                  { icon: Globe, label: "Status", href: "/performance" }
                 ].map((social, i) => (
-                  <div key={i} className="flex flex-col items-center gap-3 group cursor-pointer">
+                  <a key={i} href={social.href} className="flex flex-col items-center gap-3 group cursor-pointer" target={social.icon === Github ? "_blank" : undefined} rel={social.icon === Github ? "noopener noreferrer" : undefined}>
                     <div className="w-14 h-14 rounded-2xl bg-foreground/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                       <social.icon className="w-6 h-6 text-primary" />
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-widest opacity-50">{social.label}</span>
-                  </div>
+                  </a>
                 ))}
               </div>
             </section>
