@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -149,6 +150,14 @@ export default function Home() {
       <main className="container mx-auto px-4 md:px-6 pt-32 md:pt-48 pb-32 flex flex-col items-center relative z-10">
         <section className="text-center max-w-6xl mb-24 md:mb-40 space-y-10 md:space-y-16 animate-in fade-in slide-in-from-top-12 duration-1000">
           <div className="inline-flex flex-col items-center gap-6">
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-accent/5 border border-accent/20 animate-pulse">
+              <div className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">Studio Live Now</span>
+            </div>
+
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/20 backdrop-blur-md text-primary text-[10px] font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(var(--primary),0.1)]">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Unlimited Member Access</span>
