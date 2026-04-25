@@ -16,7 +16,8 @@ import {
   DialogContent, 
   DialogHeader, 
   DialogTitle, 
-  DialogTrigger
+  DialogTrigger,
+  DialogDescription
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -46,7 +47,8 @@ import {
   MessageCircle,
   Zap,
   Code,
-  Settings
+  Settings,
+  ShieldAlert
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
@@ -149,7 +151,6 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-80 p-2 rounded-[2.5rem] glass-card border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-300 z-[200]" align="end" sideOffset={8}>
-          {/* Section 3: User Status & Capacity (The "3" of 3/6 Ratio) */}
           <DropdownMenuLabel className="font-normal px-5 py-5 bg-foreground/[0.02] rounded-[2rem] mb-1">
             <div className="flex flex-col space-y-3">
               <div className="flex items-center justify-between">
@@ -175,7 +176,6 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           
           <DropdownMenuSeparator className="bg-foreground/5 mx-2" />
           
-          {/* Section 6: Navigation Tools (The "6" of 3/6 Ratio) */}
           <div className="p-1 space-y-0.5">
             <DropdownMenuItem asChild className="rounded-2xl cursor-pointer py-3 px-4 transition-colors hover:bg-foreground/5">
               <Link href="/api-reference">
@@ -236,89 +236,110 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           <LogIn className="w-4 h-4 mr-2 hidden sm:inline" /> Sign In
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[95vw] max-w-[450px] rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-12 border-none bg-white dark:bg-zinc-950 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] overflow-y-auto max-h-[90vh] z-[200]">
-        <DialogHeader className="space-y-6 text-center">
-          <div className="mx-auto w-16 h-16 md:w-20 md:h-20 rounded-[2rem] bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-2xl rotate-3 transform hover:rotate-0 transition-transform duration-500">
-            <UserIcon className="w-8 h-8 md:w-10 md:h-10 text-white" />
-          </div>
-          <div className="space-y-2">
-            <DialogTitle className="text-3xl md:text-5xl font-black tracking-tighter uppercase text-zinc-900 dark:text-zinc-100">
-              {isSignUp ? "Join Forge" : "Welcome"}
-            </DialogTitle>
-            <p className="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm font-medium leading-relaxed max-w-[280px] mx-auto">
-              {isSignUp 
-                ? "Secure your assets in the cloud and access them from any device."
-                : "Enter the studio to sync your conversion history globally."}
-            </p>
-          </div>
-        </DialogHeader>
-
-        <form onSubmit={handleEmailAuth} className="space-y-5 pt-8">
-          <div className="space-y-2">
-            <Label className="text-[10px] uppercase tracking-[0.3em] font-black text-zinc-600 dark:text-zinc-500 ml-2">
-              Email Address
-            </Label>
-            <div className="relative group">
-              <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
-              <Input 
-                type="email" 
-                placeholder="architect@forge.studio" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="rounded-2xl h-14 md:h-16 pl-14 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 focus:ring-primary focus:border-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-sm transition-all"
-              />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label className="text-[10px] uppercase tracking-[0.3em] font-black text-zinc-600 dark:text-zinc-500 ml-2">
-              Secure Password
-            </Label>
-            <div className="relative group">
-              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
-              <Input 
-                type="password" 
-                placeholder="••••••••" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="rounded-2xl h-14 md:h-16 pl-14 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 focus:ring-primary focus:border-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-sm transition-all"
-              />
-            </div>
-          </div>
-          <Button 
-            type="submit" 
-            disabled={isLoading}
-            className="w-full h-14 md:h-16 rounded-2xl bg-foreground text-background hover:bg-primary hover:text-white font-black text-[11px] uppercase tracking-widest shadow-xl active:scale-95 transition-all mt-4"
-          >
-            {isLoading ? "Synthesizing..." : (isSignUp ? "Establish Account" : "Access Studio")}
-          </Button>
-        </form>
-
-        <div className="relative my-10">
-          <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-zinc-100 dark:border-zinc-800" /></div>
-          <div className="relative flex justify-center text-[9px] uppercase tracking-[0.4em] font-black">
-            <span className="bg-white dark:bg-zinc-950 px-6 text-zinc-500">OR</span>
-          </div>
+      <DialogContent className="w-[95vw] max-w-[500px] rounded-[3rem] md:rounded-[4rem] p-0 border-none bg-white dark:bg-zinc-950 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.25)] overflow-hidden z-[200]">
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[80px] rounded-full" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/20 blur-[80px] rounded-full" />
         </div>
 
-        <div className="space-y-5">
-          <Button 
-            onClick={handleGoogleLogin} 
-            variant="outline" 
-            disabled={isLoading}
-            className="w-full h-14 md:h-16 rounded-2xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-transparent hover:bg-zinc-50 dark:hover:bg-white/5 transition-all font-bold text-xs text-zinc-900 dark:text-zinc-100 shadow-sm"
-          >
-            <Chrome className="w-5 h-5 mr-3 text-primary" /> Continue with Google
-          </Button>
-          
-          <button 
-            type="button"
-            onClick={() => setIsSignUp(!isSignUp)}
-            className="w-full text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] hover:text-primary transition-colors"
-          >
-            {isSignUp ? "Already a member? Sign in" : "New architect? Create account"}
-          </button>
+        <div className="relative z-10 p-8 md:p-14 space-y-10">
+          <DialogHeader className="space-y-6 text-center">
+            <div className="mx-auto w-20 h-20 md:w-24 md:h-24 rounded-[2.5rem] bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-2xl rotate-6 transform hover:rotate-0 transition-all duration-700 p-0.5">
+              <div className="w-full h-full bg-white dark:bg-zinc-950 rounded-[2.3rem] flex items-center justify-center">
+                <LogIn className="w-8 h-8 md:w-10 md:h-10 text-primary animate-pulse" />
+              </div>
+            </div>
+            <div className="space-y-3">
+              <DialogTitle className="text-4xl md:text-5xl font-black tracking-tighter uppercase text-zinc-900 dark:text-zinc-100">
+                {isSignUp ? "Forge Your Vault" : "Studio Access"}
+              </DialogTitle>
+              <DialogDescription className="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm font-medium leading-relaxed max-w-[320px] mx-auto">
+                {isSignUp 
+                  ? "Architect your professional pipeline. Secure your assets in the cloud for cross-device synthesis."
+                  : "Welcome back to the forge. Synchronize your conversion history across your developer ecosystem."}
+              </DialogDescription>
+            </div>
+          </DialogHeader>
+
+          <form onSubmit={handleEmailAuth} className="space-y-6">
+            <div className="space-y-2.5">
+              <Label className="text-[10px] uppercase tracking-[0.4em] font-black text-zinc-400 dark:text-zinc-500 ml-3">
+                Member Email
+              </Label>
+              <div className="relative group">
+                <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 group-focus-within:text-primary transition-colors" />
+                <Input 
+                  type="email" 
+                  placeholder="architect@forge.studio" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="rounded-3xl h-16 md:h-18 pl-14 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 focus:border-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-inner transition-all"
+                />
+              </div>
+            </div>
+            <div className="space-y-2.5">
+              <Label className="text-[10px] uppercase tracking-[0.4em] font-black text-zinc-400 dark:text-zinc-500 ml-3">
+                Secure Credentials
+              </Label>
+              <div className="relative group">
+                <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 group-focus-within:text-primary transition-colors" />
+                <Input 
+                  type="password" 
+                  placeholder="••••••••" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="rounded-3xl h-16 md:h-18 pl-14 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 focus:border-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-inner transition-all"
+                />
+              </div>
+            </div>
+            <Button 
+              type="submit" 
+              disabled={isLoading}
+              className="w-full h-16 md:h-18 rounded-3xl bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-primary hover:text-white font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all mt-4"
+            >
+              {isLoading ? "Synthesizing..." : (isSignUp ? "Establish Vault" : "Authorize Access")}
+            </Button>
+          </form>
+
+          <div className="relative my-12">
+            <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-zinc-100 dark:border-zinc-800" /></div>
+            <div className="relative flex justify-center text-[9px] uppercase tracking-[0.5em] font-black">
+              <span className="bg-white dark:bg-zinc-950 px-8 text-zinc-400">Collaborative Logic</span>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <Button 
+              onClick={handleGoogleLogin} 
+              variant="outline" 
+              disabled={isLoading}
+              className="w-full h-16 md:h-18 rounded-3xl border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 hover:bg-zinc-50 dark:hover:bg-white/5 transition-all font-black text-[10px] uppercase tracking-widest text-zinc-900 dark:text-zinc-100 shadow-sm"
+            >
+              <Chrome className="w-5 h-5 mr-4 text-primary" /> Continue with Google
+            </Button>
+            
+            <div className="flex flex-col items-center gap-4 pt-4">
+              <button 
+                type="button"
+                onClick={() => setIsSignUp(!isSignUp)}
+                className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em] hover:text-primary transition-colors"
+              >
+                {isSignUp ? "Already a member? Sign in" : "New architect? Create account"}
+              </button>
+              
+              <div className="flex items-center gap-6 pt-4 border-t border-zinc-100 dark:border-zinc-800 w-full justify-center">
+                <Link href="/privacy" className="flex items-center gap-2 text-[9px] font-bold text-zinc-400 hover:text-primary transition-colors uppercase tracking-widest">
+                  <ShieldAlert className="w-3 h-3" /> Privacy Policy
+                </Link>
+                <div className="w-1 h-1 rounded-full bg-zinc-200 dark:bg-zinc-800" />
+                <Link href="/docs" className="text-[9px] font-bold text-zinc-400 hover:text-primary transition-colors uppercase tracking-widest">
+                  Terms of Service
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

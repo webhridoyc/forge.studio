@@ -6,6 +6,24 @@ import { Toaster } from '@/components/ui/toaster';
 export const metadata: Metadata = {
   title: 'FORGE. | All-in-One Image Encoder & Decoder',
   description: 'Professional-grade Base64 studio. Convert images to code and decode Base64 back to images instantly. Optimized for performance and organic search.',
+  keywords: ['Base64 converter', 'Image to Base64', 'Data URI generator', 'Base64 decoder', 'Image optimization', 'Web performance tool'],
+  authors: [{ name: 'Forge Studios' }],
+  openGraph: {
+    title: 'FORGE. | Professional Image Synthesis',
+    description: 'Industrial-grade Base64 encoding and decoding for modern developers.',
+    url: 'https://forge.studio',
+    siteName: 'Forge Studios',
+    images: [
+      {
+        url: 'https://picsum.photos/seed/forge-og/1200/630',
+        width: 1200,
+        height: 630,
+        alt: 'Forge Studios Workbench',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({
