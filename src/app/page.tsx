@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -274,12 +275,19 @@ export default function Home() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4">
                 {cloudHistory.map((snippet) => (
-                  <div key={snippet.id} className="glass-card p-8 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-primary">{snippet.mimeType.split('/')[1]}</span>
-                      <span className="text-[10px] font-bold text-muted-foreground">{new Date(snippet.createdAt?.toDate()).toLocaleDateString()}</span>
+                  <div key={snippet.id} className="glass-card p-8 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-6 flex flex-col">
+                    <div className="flex items-start justify-between gap-4 flex-1">
+                      <div className="space-y-4 min-w-0 flex-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-primary">{snippet.mimeType.split('/')[1]}</span>
+                          <span className="text-[10px] font-bold text-muted-foreground">{new Date(snippet.createdAt?.toDate()).toLocaleDateString()}</span>
+                        </div>
+                        <h4 className="font-bold truncate text-base">{snippet.fileName}</h4>
+                      </div>
+                      <div className="h-16 w-16 rounded-2xl bg-foreground/5 p-1 border border-foreground/5 overflow-hidden shrink-0 shadow-inner mt-1">
+                        <img src={snippet.base64String} alt={snippet.fileName} className="w-full h-full object-contain" />
+                      </div>
                     </div>
-                    <h4 className="font-bold truncate text-base">{snippet.fileName}</h4>
                     <Button asChild variant="outline" className="w-full rounded-2xl text-[10px] font-black uppercase tracking-widest h-12">
                       <Link href="/cloud-sync">View Details</Link>
                     </Button>
