@@ -149,18 +149,21 @@ export default function Home() {
       <main className="container mx-auto px-4 md:px-6 pt-32 md:pt-48 pb-32 flex flex-col items-center relative z-10">
         <section className="text-center max-w-6xl mb-24 md:mb-40 space-y-10 md:space-y-16 animate-in fade-in slide-in-from-top-12 duration-1000">
           <div className="inline-flex flex-col items-center gap-6">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em]">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/20 backdrop-blur-md text-primary text-[10px] font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(var(--primary),0.1)]">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Unlimited Member Access</span>
             </div>
           </div>
           
-          <h1 className="text-5xl md:text-[10rem] lg:text-[12rem] font-black text-foreground tracking-tighter leading-[0.8] select-none text-center uppercase">
-            Dual <br />
-            <span className="text-gradient">Pipeline</span>
-          </h1>
+          <div className="space-y-4">
+            <h1 className="text-5xl md:text-[10rem] lg:text-[12rem] font-black text-foreground tracking-tighter leading-[0.8] select-none text-center uppercase">
+              Data <br />
+              <span className="text-gradient">Synthesis.</span>
+            </h1>
+            <h2 className="text-2xl md:text-5xl font-black tracking-tighter text-muted-foreground/40 uppercase">Beyond Base64.</h2>
+          </div>
           <p className="text-base md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium px-4">
-            Unified Base64 synthesis. Encode, decode, and optimize with zero-latency cloud history.
+            Unified dual-pipeline to encode, decode, and optimize. Experience zero-latency synthesis with industrial-grade memory safety and cloud-synced history.
           </p>
         </section>
 
