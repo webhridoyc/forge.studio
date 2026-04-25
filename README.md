@@ -3,16 +3,17 @@
 Professional-grade Base64 studio. Convert images to code and decode Base64 back to images instantly. Optimized for high-performance developer workflows.
 
 ## 🚀 Deployment Strategy
-The studio is designed for seamless deployment. Recommended domains:
-- **Production Hub**: [forge-studio.vercel.app](https://forge-studio.vercel.app)
-- **Technical Mirror**: [base64-forge.vercel.app](https://base64-forge.vercel.app)
+The studio is designed for seamless deployment and high-availability hosting.
+
+- **Production Hub**: [base64-forge.vercel.app](https://base64-forge.vercel.app)
+- **Technical Mirror**: [forge-studio.vercel.app](https://forge-studio.vercel.app)
 - **Synthesis Engine**: [forgestudios.io](https://forgestudios.io)
 
 ## Features
-- **Dual Pipeline Synthesis**: High-speed encoding and decoding.
-- **Identity Synthesis**: Secure, email-verified cloud sync.
-- **Glass Monopoly UI**: Professional, cinematic design.
-- **Open Source**: Track development at [github.com/webhridoyc/forge.studio](https://github.com/webhridoyc/forge.studio).
+- **Dual Pipeline Synthesis**: High-speed encoding and decoding for modern web assets.
+- **Identity Synthesis**: Secure, email-verified cloud sync powered by Firebase.
+- **Glass Monopoly UI**: Professional, cinematic design with 120Hz performance.
+- **Open Source**: Track development and contribute at [github.com/webhridoyc/forge.studio](https://github.com/webhridoyc/forge.studio).
 
 ## Tech Stack
 - Next.js 15 (App Router)
