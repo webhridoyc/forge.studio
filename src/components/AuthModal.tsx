@@ -236,24 +236,24 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           <LogIn className="w-4 h-4 mr-2 hidden sm:inline" /> Sign In
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[95vw] max-w-[500px] rounded-[3rem] md:rounded-[4rem] p-0 border-none bg-white dark:bg-zinc-950 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.25)] overflow-hidden z-[200]">
+      <DialogContent className="w-[95vw] max-w-[440px] rounded-[3rem] md:rounded-[4rem] p-0 border-none bg-white dark:bg-zinc-950 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.25)] overflow-hidden z-[200]">
         <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
           <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[80px] rounded-full" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/20 blur-[80px] rounded-full" />
         </div>
 
-        <div className="relative z-10 p-8 md:p-14 space-y-10">
-          <DialogHeader className="space-y-6 text-center">
-            <div className="mx-auto w-20 h-20 md:w-24 md:h-24 rounded-[2.5rem] bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-2xl rotate-6 transform hover:rotate-0 transition-all duration-700 p-0.5">
-              <div className="w-full h-full bg-white dark:bg-zinc-950 rounded-[2.3rem] flex items-center justify-center">
-                <LogIn className="w-8 h-8 md:w-10 md:h-10 text-primary animate-pulse" />
+        <div className="relative z-10 p-6 md:p-10 space-y-8">
+          <DialogHeader className="space-y-4 text-center">
+            <div className="mx-auto w-16 h-16 md:w-20 md:h-20 rounded-[2rem] bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-2xl rotate-6 transform hover:rotate-0 transition-all duration-700 p-0.5">
+              <div className="w-full h-full bg-white dark:bg-zinc-950 rounded-[1.8rem] flex items-center justify-center">
+                <LogIn className="w-6 h-6 md:w-8 md:h-8 text-primary animate-pulse" />
               </div>
             </div>
-            <div className="space-y-3">
-              <DialogTitle className="text-4xl md:text-5xl font-black tracking-tighter uppercase text-zinc-900 dark:text-zinc-100">
+            <div className="space-y-2">
+              <DialogTitle className="text-3xl md:text-4xl font-black tracking-tighter uppercase text-zinc-900 dark:text-zinc-100">
                 {isSignUp ? "Forge Your Vault" : "Studio Access"}
               </DialogTitle>
-              <DialogDescription className="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm font-medium leading-relaxed max-w-[320px] mx-auto">
+              <DialogDescription className="text-zinc-500 dark:text-zinc-400 text-[11px] md:text-xs font-medium leading-relaxed max-w-[280px] mx-auto">
                 {isSignUp 
                   ? "Architect your professional pipeline. Secure your assets in the cloud for cross-device synthesis."
                   : "Welcome back to the forge. Synchronize your conversion history across your developer ecosystem."}
@@ -261,9 +261,9 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
             </div>
           </DialogHeader>
 
-          <form onSubmit={handleEmailAuth} className="space-y-6">
-            <div className="space-y-2.5">
-              <Label className="text-[10px] uppercase tracking-[0.4em] font-black text-zinc-400 dark:text-zinc-500 ml-3">
+          <form onSubmit={handleEmailAuth} className="space-y-4">
+            <div className="space-y-2">
+              <Label className="text-[9px] uppercase tracking-[0.4em] font-black text-zinc-400 dark:text-zinc-500 ml-3">
                 Member Email
               </Label>
               <div className="relative group">
@@ -274,12 +274,12 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="rounded-3xl h-16 md:h-18 pl-14 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 focus:border-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-inner transition-all"
+                  className="rounded-3xl h-14 md:h-16 pl-14 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 focus:border-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-inner transition-all"
                 />
               </div>
             </div>
-            <div className="space-y-2.5">
-              <Label className="text-[10px] uppercase tracking-[0.4em] font-black text-zinc-400 dark:text-zinc-500 ml-3">
+            <div className="space-y-2">
+              <Label className="text-[9px] uppercase tracking-[0.4em] font-black text-zinc-400 dark:text-zinc-500 ml-3">
                 Secure Credentials
               </Label>
               <div className="relative group">
@@ -290,51 +290,51 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="rounded-3xl h-16 md:h-18 pl-14 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 focus:border-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-inner transition-all"
+                  className="rounded-3xl h-14 md:h-16 pl-14 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 focus:ring-2 focus:ring-primary/20 focus:border-primary text-zinc-900 dark:text-zinc-100 text-sm shadow-inner transition-all"
                 />
               </div>
             </div>
             <Button 
               type="submit" 
               disabled={isLoading}
-              className="w-full h-16 md:h-18 rounded-3xl bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-primary hover:text-white font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all mt-4"
+              className="w-full h-14 md:h-16 rounded-3xl bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-primary hover:text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all mt-2"
             >
               {isLoading ? "Synthesizing..." : (isSignUp ? "Establish Vault" : "Authorize Access")}
             </Button>
           </form>
 
-          <div className="relative my-12">
+          <div className="relative my-8">
             <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-zinc-100 dark:border-zinc-800" /></div>
-            <div className="relative flex justify-center text-[9px] uppercase tracking-[0.5em] font-black">
-              <span className="bg-white dark:bg-zinc-950 px-8 text-zinc-400">Collaborative Logic</span>
+            <div className="relative flex justify-center text-[8px] uppercase tracking-[0.4em] font-black">
+              <span className="bg-white dark:bg-zinc-950 px-6 text-zinc-400">Collaborative Logic</span>
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             <Button 
               onClick={handleGoogleLogin} 
               variant="outline" 
               disabled={isLoading}
-              className="w-full h-16 md:h-18 rounded-3xl border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 hover:bg-zinc-50 dark:hover:bg-white/5 transition-all font-black text-[10px] uppercase tracking-widest text-zinc-900 dark:text-zinc-100 shadow-sm"
+              className="w-full h-14 md:h-16 rounded-3xl border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 hover:bg-zinc-50 dark:hover:bg-white/5 transition-all font-black text-[9px] uppercase tracking-widest text-zinc-900 dark:text-zinc-100 shadow-sm"
             >
-              <Chrome className="w-5 h-5 mr-4 text-primary" /> Continue with Google
+              <Chrome className="w-4 h-4 mr-3 text-primary" /> Continue with Google
             </Button>
             
-            <div className="flex flex-col items-center gap-4 pt-4">
+            <div className="flex flex-col items-center gap-2 pt-2">
               <button 
                 type="button"
                 onClick={() => setIsSignUp(!isSignUp)}
-                className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em] hover:text-primary transition-colors"
+                className="text-[9px] font-black text-zinc-400 uppercase tracking-[0.2em] hover:text-primary transition-colors"
               >
                 {isSignUp ? "Already a member? Sign in" : "New architect? Create account"}
               </button>
               
-              <div className="flex items-center gap-6 pt-4 border-t border-zinc-100 dark:border-zinc-800 w-full justify-center">
-                <Link href="/privacy" className="flex items-center gap-2 text-[9px] font-bold text-zinc-400 hover:text-primary transition-colors uppercase tracking-widest">
-                  <ShieldAlert className="w-3 h-3" /> Privacy Policy
+              <div className="flex items-center gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800 w-full justify-center">
+                <Link href="/privacy" className="flex items-center gap-1.5 text-[8px] font-bold text-zinc-400 hover:text-primary transition-colors uppercase tracking-widest">
+                  <ShieldAlert className="w-2.5 h-2.5" /> Privacy Policy
                 </Link>
-                <div className="w-1 h-1 rounded-full bg-zinc-200 dark:bg-zinc-800" />
-                <Link href="/docs" className="text-[9px] font-bold text-zinc-400 hover:text-primary transition-colors uppercase tracking-widest">
+                <div className="w-0.5 h-0.5 rounded-full bg-zinc-200 dark:bg-zinc-800" />
+                <Link href="/docs" className="text-[8px] font-bold text-zinc-400 hover:text-primary transition-colors uppercase tracking-widest">
                   Terms of Service
                 </Link>
               </div>
