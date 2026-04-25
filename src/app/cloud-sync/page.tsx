@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -19,7 +18,9 @@ import {
   ChevronDown,
   Globe,
   FileCode,
-  Braces
+  Braces,
+  AlertTriangle,
+  ShieldAlert
 } from "lucide-react"
 import { AuthUI } from "@/components/AuthModal"
 import { useUser, useFirestore, useMemoFirebase, useCollection } from "@/firebase"
@@ -27,6 +28,7 @@ import { collection, query, orderBy, deleteDoc, doc } from "firebase/firestore"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -44,6 +46,8 @@ export default function CloudSyncPage() {
   const db = useFirestore()
   const [copiedId, setCopiedId] = React.useState<string | null>(null)
   const [isAuthOpen, setIsAuthOpen] = React.useState(false)
+
+  const isVerified = user?.emailVerified || user?.providerData.some(p => p.providerId === 'google.com');
 
   const snippetsQuery = useMemoFirebase(() => {
     if (!db || !user) return null
@@ -148,6 +152,18 @@ export default function CloudSyncPage() {
                 </div>
               </div>
             </div>
+
+            {!isVerified && (
+              <Alert variant="destructive" className="rounded-[2rem] border-destructive/20 bg-destructive/5 p-8 flex items-center gap-6">
+                <ShieldAlert className="h-10 w-10 text-destructive" />
+                <div className="space-y-1">
+                  <AlertTitle className="text-lg font-black uppercase tracking-tight">Security Restriction Active</AlertTitle>
+                  <AlertDescription className="text-sm font-medium opacity-80">
+                    Your account is pending email verification. New cloud sync operations are suspended until your identity is synthesized. Please check your inbox for the activation link.
+                  </AlertDescription>
+                </div>
+              </Alert>
+            )}
 
             {isDataLoading ? (
               <div className="py-32 flex flex-col items-center gap-4 opacity-50">

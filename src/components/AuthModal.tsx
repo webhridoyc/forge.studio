@@ -8,7 +8,9 @@ import {
   GoogleAuthProvider, 
   signOut,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  reload
 } from "firebase/auth"
 import { 
   Dialog, 
@@ -31,6 +33,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { 
   LogOut, 
   User as UserIcon, 
@@ -47,7 +50,9 @@ import {
   Zap,
   Code,
   Settings,
-  ShieldAlert
+  ShieldAlert,
+  AlertTriangle,
+  RefreshCw
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
@@ -66,6 +71,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
   const [email, setEmail] = React.useState("")
   const [password, setPassword] = React.useState("")
   const [isLoading, setIsLoading] = React.useState(false)
+  const [isVerifying, setIsVerifying] = React.useState(false)
 
   React.useEffect(() => {
     const root = window.document.documentElement
@@ -93,13 +99,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
       handleOpenChange(false)
       toast({ title: "Welcome back!", description: "Successfully signed in with Google." })
     } catch (error: any) {
-      let message = error.message;
-      if (error.code === 'auth/unauthorized-domain') {
-        message = "Unauthorized Domain: Please add this workstation URL to 'Authorized Domains' in your Firebase Console.";
-      } else if (error.code === 'auth/popup-closed-by-user') {
-        message = "Login Interrupted: The auth window was closed before completion. Please try again.";
-      }
-      toast({ variant: "destructive", title: "Auth Error", description: message })
+      toast({ variant: "destructive", title: "Auth Error", description: error.message })
     } finally {
       setIsLoading(false)
     }
@@ -112,11 +112,15 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
     setIsLoading(true)
     try {
       if (isSignUp) {
-        await createUserWithEmailAndPassword(auth, email, password)
-        toast({ title: "Account Created", description: "Welcome to the Forge." })
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+        await sendEmailVerification(userCredential.user)
+        toast({ 
+          title: "Vault Established", 
+          description: "Verification link sent. Please check your inbox to activate cloud sync." 
+        })
       } else {
         await signInWithEmailAndPassword(auth, email, password)
-        toast({ title: "Welcome back!", description: "Signed in successfully." })
+        toast({ title: "Authorized", description: "Successfully logged into your workspace." })
       }
       handleOpenChange(false)
     } catch (error: any) {
@@ -126,14 +130,42 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
     }
   }
 
+  const handleResendVerification = async () => {
+    if (!user) return
+    try {
+      setIsVerifying(true)
+      await sendEmailVerification(user)
+      toast({ title: "Link Dispatched", description: "A new verification link has been sent to your email." })
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Action Failed", description: error.message })
+    } finally {
+      setIsVerifying(false)
+    }
+  }
+
+  const handleRefreshStatus = async () => {
+    if (!user) return
+    try {
+      setIsVerifying(true)
+      await reload(user)
+      toast({ title: "Status Synchronized", description: "Identity state has been refreshed." })
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Refresh Failed", description: error.message })
+    } finally {
+      setIsVerifying(false)
+    }
+  }
+
   const handleSignOut = () => {
     signOut(auth)
-    toast({ title: "Signed Out", description: "Come back soon!" })
+    toast({ title: "Signed Out", description: "Studio session terminated safely." })
   }
 
   if (isUserLoading) return <div className="w-10 h-10 rounded-full bg-foreground/5 animate-pulse" />
 
   if (user) {
+    const isVerified = user.emailVerified || user.providerData.some(p => p.providerId === 'google.com');
+
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -144,28 +176,64 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
                 {user.displayName?.charAt(0) || user.email?.charAt(0).toUpperCase() || <UserIcon className="w-4 h-4" />}
               </AvatarFallback>
             </Avatar>
-            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-background flex items-center justify-center shadow-md">
-              <Zap className="w-2.5 h-2.5 text-white" />
+            <div className={cn(
+              "absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-background flex items-center justify-center shadow-md",
+              isVerified ? "bg-primary" : "bg-destructive"
+            )}>
+              {isVerified ? <Zap className="w-2.5 h-2.5 text-white" /> : <AlertTriangle className="w-2.5 h-2.5 text-white" />}
             </div>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-80 p-2 rounded-[2.5rem] glass-card border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-300 z-[200]" align="end" sideOffset={8}>
           <DropdownMenuLabel className="font-normal px-5 py-5 bg-foreground/[0.02] rounded-[2rem] mb-1">
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex flex-col space-y-0.5">
-                  <p className="text-[13px] font-black leading-tight tracking-tight text-foreground truncate max-w-[140px]">{user.displayName || "Forge Member"}</p>
+                  <p className="text-[13px] font-black leading-tight tracking-tight text-foreground truncate max-w-[140px]">{user.displayName || "Studio Member"}</p>
                   <p className="text-[9px] text-muted-foreground font-bold truncate max-w-[140px]">{user.email}</p>
                 </div>
-                <div className="bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20 flex items-center gap-1">
-                  <ShieldCheck className="w-2.5 h-2.5 text-primary" />
-                  <span className="text-[8px] font-black uppercase text-primary tracking-widest">PRO</span>
+                <div className={cn(
+                  "px-2.5 py-1 rounded-full border flex items-center gap-1",
+                  isVerified ? "bg-primary/10 border-primary/20 text-primary" : "bg-destructive/10 border-destructive/20 text-destructive"
+                )}>
+                  {isVerified ? <ShieldCheck className="w-2.5 h-2.5" /> : <ShieldAlert className="w-2.5 h-2.5" />}
+                  <span className="text-[8px] font-black uppercase tracking-widest">{isVerified ? "VERIFIED" : "PENDING"}</span>
                 </div>
               </div>
               
+              {!isVerified && (
+                <div className="space-y-3">
+                  <Alert variant="destructive" className="py-2 px-3 rounded-xl border-destructive/20 bg-destructive/5">
+                    <AlertTriangle className="h-3 w-3" />
+                    <AlertDescription className="text-[9px] font-bold uppercase leading-tight">
+                      Email verification required for cloud synchronization.
+                    </AlertDescription>
+                  </Alert>
+                  <div className="flex gap-2">
+                    <Button 
+                      size="sm" 
+                      onClick={handleResendVerification}
+                      disabled={isVerifying}
+                      className="flex-1 h-8 rounded-lg text-[8px] font-black uppercase tracking-widest"
+                    >
+                      Resend Link
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={handleRefreshStatus}
+                      disabled={isVerifying}
+                      className="h-8 w-8 rounded-lg p-0"
+                    >
+                      <RefreshCw className={cn("h-3 w-3", isVerifying && "animate-spin")} />
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-1.5 pt-1">
                 <div className="flex items-center justify-between text-[7px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-                  <span>Forge Capacity</span>
+                  <span>Vault Capacity</span>
                   <span className="text-primary font-black">Unlimited Member</span>
                 </div>
                 <Progress value={100} className="h-1 bg-foreground/5" />
@@ -235,7 +303,7 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
           <LogIn className="w-4 h-4 mr-2 hidden sm:inline" /> Sign In
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[90vw] max-w-[440px] rounded-[3rem] md:rounded-[4rem] p-0 border-none bg-white dark:bg-zinc-950 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.25)] overflow-hidden z-[200]">
+      <DialogContent className="w-[90vw] max-w-[440px] rounded-[3rem] p-0 border-none bg-white dark:bg-zinc-950 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.25)] overflow-hidden z-[200]">
         <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
           <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[80px] rounded-full" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/20 blur-[80px] rounded-full" />
@@ -330,11 +398,11 @@ export function AuthUI({ onOpenChange }: AuthUIProps) {
               
               <div className="flex items-center gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800 w-full justify-center">
                 <Link href="/privacy" className="flex items-center gap-1.5 text-[8px] font-bold text-zinc-400 hover:text-primary transition-colors uppercase tracking-widest">
-                  <ShieldAlert className="w-2.5 h-2.5" /> Privacy Policy
+                  <ShieldAlert className="w-2.5 h-2.5" /> Privacy Protocol
                 </Link>
                 <div className="w-0.5 h-0.5 rounded-full bg-zinc-200 dark:bg-zinc-800" />
                 <Link href="/docs" className="text-[8px] font-bold text-zinc-400 hover:text-primary transition-colors uppercase tracking-widest">
-                  Terms of Service
+                  Studio Documentation
                 </Link>
               </div>
             </div>
