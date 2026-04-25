@@ -147,7 +147,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 md:px-6 pt-32 md:pt-48 pb-32 flex flex-col items-center relative z-10">
+      <main className="container mx-auto px-2 md:px-6 pt-32 md:pt-48 pb-32 flex flex-col items-center relative z-10 overflow-x-hidden">
         <section className="text-center max-w-6xl mb-24 md:mb-40 space-y-10 md:space-y-16 animate-in fade-in slide-in-from-top-12 duration-1000">
           <div className="inline-flex flex-col items-center gap-6">
             <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-accent/5 border border-accent/20 animate-pulse">
@@ -165,63 +165,63 @@ export default function Home() {
           </div>
           
           <div className="space-y-4">
-            <h1 className="text-5xl md:text-[10rem] lg:text-[12rem] font-black text-foreground tracking-tighter leading-[0.8] select-none text-center uppercase">
+            <h1 className="text-4xl md:text-[10rem] lg:text-[12rem] font-black text-foreground tracking-tighter leading-[0.8] select-none text-center uppercase">
               Data <br />
               <span className="text-gradient">Synthesis.</span>
             </h1>
-            <h2 className="text-2xl md:text-5xl font-black tracking-tighter text-muted-foreground/40 uppercase">Beyond Base64.</h2>
+            <h2 className="text-xl md:text-5xl font-black tracking-tighter text-muted-foreground/40 uppercase">Beyond Base64.</h2>
           </div>
-          <p className="text-base md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium px-4">
+          <p className="text-sm md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium px-4">
             Unified dual-pipeline to encode, decode, and optimize. Experience zero-latency synthesis with industrial-grade memory safety and cloud-synced history.
           </p>
         </section>
 
         <section id="workbench" className="w-full max-w-6xl flex flex-col items-center gap-8 md:gap-16 scroll-mt-32">
           <Tabs defaultValue="encoder" className="w-full">
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-16">
-              <TabsList className="bg-foreground/5 p-1.5 rounded-2xl border border-foreground/5 h-auto w-full max-w-xs md:max-w-md">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 mb-16">
+              <TabsList className="bg-foreground/5 p-1.5 rounded-2xl border border-foreground/5 h-auto w-full max-w-[320px] md:max-w-md">
                 <TabsTrigger 
                   value="encoder" 
-                  className="flex-1 rounded-xl px-4 md:px-8 py-4 font-black text-[11px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
+                  className="flex-1 rounded-xl px-4 md:px-8 py-3 md:py-4 font-black text-[10px] md:text-[11px] uppercase tracking-[0.15em] md:tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
                 >
-                  <Zap className="w-4 h-4 mr-2" /> Encoder
+                  <Zap className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" /> Encoder
                 </TabsTrigger>
                 <TabsTrigger 
                   value="decoder"
-                  className="flex-1 rounded-xl px-4 md:px-8 py-4 font-black text-[11px] uppercase tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
+                  className="flex-1 rounded-xl px-4 md:px-8 py-3 md:py-4 font-black text-[10px] md:text-[11px] uppercase tracking-[0.15em] md:tracking-[0.2em] data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
                 >
-                  <ArrowRightLeft className="w-4 h-4 mr-2" /> Decoder
+                  <ArrowRightLeft className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" /> Decoder
                 </TabsTrigger>
               </TabsList>
 
               <div className="h-10 w-px bg-foreground/10 hidden md:block" />
 
-              <div className="flex items-center gap-2 bg-foreground/5 p-1.5 rounded-2xl border border-foreground/5">
+              <div className="flex items-center gap-1.5 md:gap-2 bg-foreground/5 p-1.5 rounded-2xl border border-foreground/5">
                 <Button
                   variant="ghost"
                   onClick={() => setQualityMode('optimized')}
                   className={cn(
-                    "rounded-xl px-4 py-3 font-black text-[9px] uppercase tracking-widest transition-all",
+                    "rounded-xl px-3 md:px-4 py-2 md:py-3 font-black text-[8px] md:text-[9px] uppercase tracking-widest transition-all",
                     qualityMode === 'optimized' ? "bg-background text-primary shadow-sm" : "text-muted-foreground"
                   )}
                 >
-                  <Zap className="w-3 h-3 mr-1.5" /> Optimized
+                  <Zap className="w-2.5 h-2.5 md:w-3 md:h-3 mr-1 md:mr-1.5" /> Optimized
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={() => setQualityMode('original')}
                   className={cn(
-                    "rounded-xl px-4 py-3 font-black text-[9px] uppercase tracking-widest transition-all",
+                    "rounded-xl px-3 md:px-4 py-2 md:py-3 font-black text-[8px] md:text-[9px] uppercase tracking-widest transition-all",
                     qualityMode === 'original' ? "bg-background text-accent shadow-sm" : "text-muted-foreground"
                   )}
                 >
-                  <Settings2 className="w-3 h-3 mr-1.5" /> 1:1 Original
+                  <Settings2 className="w-2.5 h-2.5 md:w-3 md:h-3 mr-1 md:mr-1.5" /> 1:1 Original
                 </Button>
               </div>
             </div>
 
             <TabsContent value="encoder" className="mt-0 outline-none">
-              <div className="w-full relative glass-card rounded-[2.5rem] md:rounded-[4rem] p-4 md:p-8 shadow-2xl overflow-hidden border-white/10">
+              <div className="w-full relative glass-card rounded-[2rem] md:rounded-[4rem] p-3 md:p-8 shadow-2xl overflow-hidden border-white/10">
                 <FileUploader 
                   onFilesSelect={handleFilesSelect} 
                   onClear={clearAll}
@@ -239,16 +239,16 @@ export default function Home() {
 
                 {assets.length > 0 && (
                   <div className="mt-8 md:mt-12 space-y-16 md:space-y-24 w-full">
-                    <div className="flex items-center justify-between border-b border-foreground/5 pb-8 px-4">
-                      <h2 className="text-lg md:text-2xl font-black tracking-tighter flex items-center gap-4 uppercase opacity-50">
+                    <div className="flex items-center justify-between border-b border-foreground/5 pb-8 px-2 md:px-4">
+                      <h2 className="text-sm md:text-2xl font-black tracking-tighter flex items-center gap-2 md:gap-4 uppercase opacity-50">
                         Forged Assets ({assets.length} / 10)
                       </h2>
                       <Button 
                         variant="ghost" 
                         onClick={clearAll}
-                        className="rounded-2xl text-[10px] font-bold uppercase tracking-widest text-destructive hover:bg-destructive/10"
+                        className="rounded-xl h-10 px-3 text-[9px] font-bold uppercase tracking-widest text-destructive hover:bg-destructive/10"
                       >
-                        <Trash2 className="w-4 h-4 mr-2" /> Clear All
+                        <Trash2 className="w-3.5 h-3.5 mr-1.5" /> Clear
                       </Button>
                     </div>
                     
@@ -265,7 +265,7 @@ export default function Home() {
             </TabsContent>
 
             <TabsContent value="decoder" className="mt-0 outline-none">
-              <div className="relative glass-card rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-16 shadow-2xl overflow-hidden border-white/10">
+              <div className="relative glass-card rounded-[2rem] md:rounded-[4rem] p-6 md:p-16 shadow-2xl overflow-hidden border-white/10">
                 <DecoderTool 
                   onDecode={() => {}}
                 />
@@ -278,9 +278,9 @@ export default function Home() {
               <h2 className="text-xl md:text-2xl font-black tracking-tighter flex items-center gap-3 uppercase text-muted-foreground px-4">
                 <History className="w-5 h-5" /> Recent Cloud Vaults
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4">
                 {cloudHistory.map((snippet) => (
-                  <div key={snippet.id} className="glass-card p-8 rounded-[2.5rem] border-white/10 space-y-6">
+                  <div key={snippet.id} className="glass-card p-8 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-6">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-black uppercase tracking-widest text-primary">{snippet.mimeType.split('/')[1]}</span>
                       <span className="text-[10px] font-bold text-muted-foreground">{new Date(snippet.createdAt?.toDate()).toLocaleDateString()}</span>
@@ -312,7 +312,7 @@ export default function Home() {
           ))}
         </div>
 
-        <div id="guide" className="w-full mt-32 md:mt-48">
+        <div id="guide" className="w-full mt-32 md:mt-48 px-2 md:px-0">
           <SEOIntro />
           <FAQSection />
         </div>

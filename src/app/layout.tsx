@@ -19,7 +19,17 @@ export const metadata: Metadata = {
     'Forge Studios',
     'Bitstream synthesis',
     'Developer utility',
-    'Asset pipeline'
+    'Asset pipeline',
+    'Online Base64 tool',
+    'Fast Base64 converter',
+    'Lossless Base64',
+    'WebP to Base64',
+    'PNG to Base64',
+    'JPEG to Base64',
+    'SVG to Base64',
+    'CSS image encoder',
+    'HTML image encoder',
+    'Base64 string generator'
   ],
   authors: [{ name: 'Forge Studios' }],
   alternates: {
