@@ -1,7 +1,12 @@
 {
-  "name": "nextn",
-  "version": "0.1.0",
+  "name": "forge-studio",
+  "version": "1.0.0",
   "private": true,
+  "description": "Industrial-grade Base64 synthesis studio for modern developers.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webhridoyc/forge.studio"
+  },
   "scripts": {
     "dev": "next dev --turbopack -p 9002",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
