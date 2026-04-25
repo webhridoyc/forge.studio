@@ -126,13 +126,13 @@ export default function ApiRefPage() {
           </aside>
 
           {/* Main Content */}
-          <div className="space-y-16 md:space-y-24">
+          <div className="space-y-16 md:space-y-24 max-w-full">
             <section className="space-y-4 md:space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-widest">
                 <Braces className="w-3.5 h-3.5" />
                 V1.0.0 Stable
               </div>
-              <h1 className="text-3xl md:text-7xl font-black tracking-tighter leading-tight uppercase">Technical <br /><span className="text-gradient">API Reference</span></h1>
+              <h1 className="text-4xl md:text-7xl font-black tracking-tighter leading-tight uppercase break-words">Technical <br className="hidden md:block" /><span className="text-gradient">API Reference</span></h1>
               <p className="text-sm md:text-xl text-muted-foreground font-medium max-w-2xl leading-relaxed">
                 Seamlessly integrate the Forge synthesis engine into your developer workstation or server-side pipelines.
               </p>
@@ -145,11 +145,11 @@ export default function ApiRefPage() {
                 </div>
                 <h2 className="text-2xl md:text-3xl font-black tracking-tight uppercase">Authentication</h2>
               </div>
-              <div className="glass-card p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-6">
+              <div className="glass-card p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-6 overflow-hidden">
                 <p className="text-xs md:text-sm text-muted-foreground font-medium leading-relaxed">
                   All Forge API requests must include a secret key in the request header. You can manage your access tokens within the <Link href="/usage-specs" className="text-primary hover:underline">Usage Specs</Link> portal.
                 </p>
-                <div className="p-4 md:p-6 bg-zinc-950 rounded-2xl md:rounded-3xl border border-white/5 font-code text-[11px] md:text-sm overflow-x-auto whitespace-nowrap group relative custom-scrollbar">
+                <div className="p-4 md:p-6 bg-zinc-950 rounded-2xl md:rounded-3xl border border-white/5 font-code text-[11px] md:text-sm overflow-x-auto whitespace-nowrap group relative custom-scrollbar max-w-full">
                   <span className="text-zinc-500">Header:</span> <span className="text-accent font-bold">X-Forge-API-Key</span> <span className="text-zinc-500">:</span> <span className="text-zinc-300">your_secret_token_here</span>
                   <Button
                     size="icon"
@@ -199,7 +199,7 @@ export default function ApiRefPage() {
 
                   <div className="space-y-4">
                     <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground block mb-2">Real-time Response</label>
-                    <div className="bg-zinc-950 rounded-[1.5rem] p-6 border border-white/5 min-h-[200px] font-code text-xs overflow-x-auto custom-scrollbar">
+                    <div className="bg-zinc-950 rounded-[1.5rem] p-6 border border-white/5 min-h-[200px] font-code text-xs overflow-x-auto custom-scrollbar max-w-full">
                       {sandboxResult ? (
                         <pre className="text-green-400 whitespace-pre-wrap break-all leading-relaxed animate-in fade-in slide-in-from-top-2">
                           {JSON.stringify(sandboxResult, null, 2)}
@@ -233,14 +233,16 @@ export default function ApiRefPage() {
                 </p>
 
                 <Tabs defaultValue="js" className="w-full">
-                  <TabsList className="bg-foreground/5 p-1 rounded-xl md:rounded-2xl border border-foreground/5 mb-6 w-full md:w-fit flex overflow-x-auto custom-scrollbar">
-                    <TabsTrigger value="js" className="flex-1 md:flex-none rounded-lg md:rounded-xl px-4 md:px-6 py-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest">JavaScript</TabsTrigger>
-                    <TabsTrigger value="curl" className="flex-1 md:flex-none rounded-lg md:rounded-xl px-4 md:px-6 py-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest">cURL</TabsTrigger>
-                    <TabsTrigger value="python" className="flex-1 md:flex-none rounded-lg md:rounded-xl px-4 md:px-6 py-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest">Python</TabsTrigger>
-                  </TabsList>
+                  <div className="overflow-x-auto pb-2 custom-scrollbar">
+                    <TabsList className="bg-foreground/5 p-1 rounded-xl md:rounded-2xl border border-foreground/5 mb-6 w-full md:w-fit flex min-w-max">
+                      <TabsTrigger value="js" className="rounded-lg md:rounded-xl px-4 md:px-6 py-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest">JavaScript</TabsTrigger>
+                      <TabsTrigger value="curl" className="rounded-lg md:rounded-xl px-4 md:px-6 py-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest">cURL</TabsTrigger>
+                      <TabsTrigger value="python" className="rounded-lg md:rounded-xl px-4 md:px-6 py-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest">Python</TabsTrigger>
+                    </TabsList>
+                  </div>
                   
                   <TabsContent value="js" className="mt-0 group relative">
-                    <pre className="p-6 md:p-8 bg-zinc-950 text-zinc-300 rounded-[1.5rem] md:rounded-[2rem] font-code text-[10px] md:text-xs lg:text-sm overflow-x-auto leading-relaxed border border-white/5 custom-scrollbar">
+                    <pre className="p-6 md:p-8 bg-zinc-950 text-zinc-300 rounded-[1.5rem] md:rounded-[2rem] font-code text-[10px] md:text-xs lg:text-sm overflow-x-auto leading-relaxed border border-white/5 custom-scrollbar max-w-full">
                       <code>{`const response = await fetch('https://api.forge.studio/v1/encode', {
   method: 'POST',
   headers: {
@@ -266,7 +268,7 @@ console.log(data.uri);`}</code>
                   </TabsContent>
 
                   <TabsContent value="curl" className="mt-0 group relative">
-                    <pre className="p-6 md:p-8 bg-zinc-950 text-zinc-300 rounded-[1.5rem] md:rounded-[2rem] font-code text-[10px] md:text-xs lg:text-sm overflow-x-auto leading-relaxed border border-white/5 custom-scrollbar">
+                    <pre className="p-6 md:p-8 bg-zinc-950 text-zinc-300 rounded-[1.5rem] md:rounded-[2rem] font-code text-[10px] md:text-xs lg:text-sm overflow-x-auto leading-relaxed border border-white/5 custom-scrollbar max-w-full">
                       <code>{`curl -X POST https://api.forge.studio/v1/encode \\
   -H "X-Forge-API-Key: YOUR_KEY" \\
   -H "Content-Type: application/json" \\
