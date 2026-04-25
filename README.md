@@ -2,6 +2,12 @@
 
 Professional-grade Base64 studio. Convert images to code and decode Base64 back to images instantly. Optimized for high-performance developer workflows.
 
+## 🚀 Deployment Strategy
+The studio is designed for seamless deployment. Recommended domains:
+- **Production Hub**: [forge-studio.vercel.app](https://forge-studio.vercel.app)
+- **Technical Mirror**: [base64-forge.vercel.app](https://base64-forge.vercel.app)
+- **Synthesis Engine**: [forgestudios.io](https://forgestudios.io)
+
 ## Features
 - **Dual Pipeline Synthesis**: High-speed encoding and decoding.
 - **Identity Synthesis**: Secure, email-verified cloud sync.
