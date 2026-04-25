@@ -96,15 +96,15 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
   const sizeIncrease = Math.round(((asset.optimizedSize - asset.originalSize) / asset.originalSize) * 100)
 
   return (
-    <div className="w-full relative group overflow-x-hidden">
+    <div className="w-full relative group overflow-hidden">
       <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-6 px-2 md:px-4">
-        <div className="flex items-center gap-4 md:gap-6 w-full md:w-auto">
+        <div className="flex items-center gap-4 md:gap-6 w-full md:w-auto min-w-0">
           <div className="h-16 w-16 md:h-20 md:w-20 rounded-2xl md:rounded-3xl overflow-hidden bg-foreground/5 p-1 border border-foreground/5 shadow-inner shrink-0 transition-transform">
             <img src={asset.base64} alt={asset.name} className="w-full h-full object-contain" />
           </div>
           <div className="min-w-0 flex-1">
             <h3 className="text-base md:text-2xl font-black tracking-tight flex flex-wrap items-center gap-2">
-              <span className="truncate max-w-[120px] md:max-w-none">{asset.name}</span>
+              <span className="truncate max-w-[150px] md:max-w-[300px]">{asset.name}</span>
               <span className="px-2 py-0.5 rounded-full bg-primary/10 text-[8px] md:text-[10px] text-primary uppercase border border-primary/20">
                 {asset.format.split('/')[1]}
               </span>
@@ -144,7 +144,7 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
           <div key={i} className="bg-foreground/[0.02] border border-foreground/5 rounded-xl md:rounded-[2rem] p-3 md:p-6 flex flex-col items-center text-center">
             <stat.icon className={cn("w-3.5 h-3.5 md:w-5 md:h-5 mb-1.5 md:mb-3 opacity-40", stat.color)} />
             <p className="text-[7px] md:text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-0.5 md:mb-1">{stat.label}</p>
-            <p className={cn("text-xs md:text-xl font-black tabular-nums tracking-tighter", stat.color)}>{stat.value}</p>
+            <p className={cn("text-[10px] md:text-xl font-black tabular-nums tracking-tighter", stat.color)}>{stat.value}</p>
           </div>
         ))}
       </div>
