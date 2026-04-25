@@ -10,7 +10,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const baseUrl = 'https://forge.studio';
+const baseUrl = 'https://base64-forge.vercel.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),

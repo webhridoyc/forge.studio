@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://forge.studio';
+  const baseUrl = 'https://base64-forge.vercel.app';
   const lastModified = new Date();
 
   const routes = [

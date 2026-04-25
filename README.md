@@ -7,7 +7,7 @@ The studio is designed for seamless deployment and high-availability hosting.
 
 - **Production Hub**: [base64-forge.vercel.app](https://base64-forge.vercel.app)
 - **Technical Mirror**: [forge-studio.vercel.app](https://forge-studio.vercel.app)
-- **Synthesis Engine**: [forgestudios.io](https://forgestudios.io)
+- **Synthesis Engine**: [base64-forge.vercel.app](https://base64-forge.vercel.app)
 
 ## Features
 - **Dual Pipeline Synthesis**: High-speed encoding and decoding for modern web assets.

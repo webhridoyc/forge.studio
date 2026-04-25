@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/preferences', '/billing', '/cloud-sync'],
     },
-    sitemap: 'https://forge.studio/sitemap.xml',
+    sitemap: 'https://base64-forge.vercel.app/sitemap.xml',
   };
 }
