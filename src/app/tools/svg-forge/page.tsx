@@ -15,37 +15,74 @@ import {
   ExternalLink,
   Code2,
   Monitor,
-  Braces
+  Braces,
+  Download,
+  Settings2
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 
 export default function SvgForgePage() {
   const { toast } = useToast()
   const [input, setInput] = React.useState("")
   const [copied, setCopied] = React.useState<string | null>(null)
-  const [view, setView] = React.useState<'editor' | 'preview'>('editor')
+  const [isCleaned, setIsCleaned] = React.useState(true)
+
+  const processSvg = (raw: string) => {
+    if (!isCleaned) return raw.trim()
+    
+    // Industrial grade basic cleaning
+    return raw.trim()
+      .replace(/<\?xml.*?\?>/g, '')
+      .replace(/<!--.*?-->/g, '')
+      .replace(/xmlns:xlink=".*?"/g, '')
+      .replace(/xml:space=".*?"/g, '')
+      .replace(/version=".*?"/g, '')
+      .replace(/\s+/g, ' ')
+      .replace(/>\s+</g, '><')
+  }
 
   const handleCopy = (type: 'data-uri' | 'raw' | 'react') => {
-    let output = input.trim()
+    let output = processSvg(input)
     if (type === 'data-uri') {
-      output = `data:image/svg+xml;base64,${btoa(input)}`
+      output = `data:image/svg+xml;base64,${btoa(output)}`
     } else if (type === 'react') {
-      // Basic React conversion (camelCase props)
-      output = input.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+      const camel = output
         .replace(/fill-rule/g, 'fillRule')
         .replace(/clip-rule/g, 'clipRule')
         .replace(/stroke-width/g, 'strokeWidth')
-      output = `export const Icon = () => (\n  ${output}\n);`
+        .replace(/stroke-linecap/g, 'strokeLinecap')
+        .replace(/stroke-linejoin/g, 'strokeLinejoin')
+      output = `export const ForgedIcon = () => (\n  ${camel}\n);`
     }
     
     navigator.clipboard.writeText(output)
     setCopied(type)
     toast({
-      title: "SVG Synthesized",
-      description: `Copied ${type.toUpperCase()} to clipboard.`,
+      title: "Synthesis Dispatched",
+      description: `Copied ${type.toUpperCase()} to workstation.`,
     })
     setTimeout(() => setCopied(null), 2000)
+  }
+
+  const handleDownload = () => {
+    const component = `
+import React from 'react';
+
+export const ForgedIcon = () => (
+  ${processSvg(input).replace(/fill-rule/g, 'fillRule').replace(/clip-rule/g, 'clipRule')}
+);
+    `.trim();
+    
+    const blob = new Blob([component], { type: 'text/typescript' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'forged-icon.tsx';
+    a.click();
+    toast({ title: "Asset Dispatched", description: "React component saved to disk." });
   }
 
   const isSvg = input.trim().startsWith('<svg')
@@ -63,13 +100,13 @@ export default function SvgForgePage() {
         <section className="text-center space-y-8 mb-24 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-widest mx-auto">
             <FileCode className="w-3.5 h-3.5" />
-            Vector Orchestration
+            Vector Orchestration Pro
           </div>
           <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-none uppercase">
-            SVG <br /><span className="text-gradient">Studio Pro.</span>
+            SVG <br /><span className="text-gradient">Studio Architect.</span>
           </h1>
           <p className="text-lg text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed">
-            Professional vector-to-code synthesis. Clean path data and generate optimized React components or Data URIs instantly.
+            Professional vector-to-code synthesis. Orchestrate clean paths, generate components, and optimize Data URIs.
           </p>
         </section>
 
@@ -77,30 +114,30 @@ export default function SvgForgePage() {
           <div className="glass-card p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] border-white/10 space-y-8">
             <div className="space-y-4">
               <div className="flex items-center justify-between px-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground">
-                  Source Vector Code
-                </label>
-                <div className="flex gap-2">
-                  <Button variant="ghost" size="icon" onClick={() => setInput("")} className="h-8 w-8 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive">
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </Button>
+                <div className="flex items-center gap-4">
+                  <label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground">Source Vector</label>
+                  <div className="flex items-center gap-2">
+                    <Switch checked={isCleaned} onCheckedChange={setIsCleaned} id="clean-mode" />
+                    <Label htmlFor="clean-mode" className="text-[9px] font-black uppercase tracking-widest opacity-60">Clean Synthesis</Label>
+                  </div>
                 </div>
+                <Button variant="ghost" size="icon" onClick={() => setInput("")} className="h-8 w-8 rounded-lg text-muted-foreground hover:text-destructive">
+                  <Trash2 className="w-3.5 h-3.5" />
+                </Button>
               </div>
-              <div className="relative">
-                <Textarea 
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="<svg ...>...</svg>"
-                  className="min-h-[400px] rounded-[2rem] bg-foreground/5 border-foreground/10 focus:ring-secondary p-8 text-[13px] font-code transition-all custom-scrollbar"
-                />
-              </div>
+              <Textarea 
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="<svg ...>...</svg>"
+                className="min-h-[400px] rounded-[2rem] bg-foreground/5 border-foreground/10 focus:ring-secondary p-8 text-[13px] font-code transition-all custom-scrollbar"
+              />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Button 
                 onClick={() => handleCopy('data-uri')}
                 disabled={!isSvg}
-                className="h-14 rounded-2xl bg-secondary text-white hover:scale-105 transition-all font-black text-[10px] uppercase tracking-widest px-4 shadow-xl shadow-secondary/20"
+                className="h-14 rounded-2xl bg-secondary text-white hover:scale-105 transition-all font-black text-[10px] uppercase tracking-widest px-4 shadow-xl"
               >
                 {copied === 'data-uri' ? <Check className="w-3.5 h-3.5 mr-2" /> : <ExternalLink className="w-3.5 h-3.5 mr-2" />}
                 Data URI
@@ -112,16 +149,15 @@ export default function SvgForgePage() {
                 className="h-14 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[10px] uppercase tracking-widest px-4"
               >
                 {copied === 'react' ? <Check className="w-3.5 h-3.5 mr-2" /> : <Braces className="w-3.5 h-3.5 mr-2" />}
-                React component
+                React Code
               </Button>
               <Button 
                 variant="outline"
-                onClick={() => handleCopy('raw')}
+                onClick={handleDownload}
                 disabled={!isSvg}
-                className="h-14 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[10px] uppercase tracking-widest px-4"
+                className="h-14 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[10px] uppercase tracking-widest px-4 sm:col-span-2"
               >
-                {copied === 'raw' ? <Check className="w-3.5 h-3.5 mr-2" /> : <Code2 className="w-3.5 h-3.5 mr-2" />}
-                Clean code
+                <Download className="w-3.5 h-3.5 mr-2" /> Download .tsx Component
               </Button>
             </div>
           </div>
@@ -136,7 +172,7 @@ export default function SvgForgePage() {
               <div className="w-full flex flex-col items-center gap-12 animate-in zoom-in duration-500">
                 <div 
                   className="w-48 h-48 flex items-center justify-center p-4 bg-foreground/5 rounded-3xl border border-foreground/5 shadow-inner"
-                  dangerouslySetInnerHTML={{ __html: input }}
+                  dangerouslySetInnerHTML={{ __html: processSvg(input) }}
                 />
                 <div className="space-y-2">
                   <h3 className="text-xl font-black uppercase tracking-tight">Render Validated</h3>
