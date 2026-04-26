@@ -20,12 +20,26 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 
+const DEFAULT_SAMPLE = {
+  "studio": "Forge Studios",
+  "synthesis_engine": "V8 Industrial",
+  "version": "7.0.0",
+  "is_active": true,
+  "config": {
+    "optimization_level": "maximum",
+    "supported_formats": ["Base64", "WebP", "SVG", "JSON", "TS"]
+  },
+  "metrics": {
+    "uptime": 99.99
+  }
+}
+
 export default function JsonSynthPage() {
   const { toast } = useToast()
-  const [input, setInput] = React.useState("")
-  const [output, setOutput] = React.useState("")
+  const [input, setInput] = React.useState(JSON.stringify(DEFAULT_SAMPLE, null, 2))
+  const [output, setOutput] = React.useState(JSON.stringify(DEFAULT_SAMPLE, null, 2))
   const [copied, setCopied] = React.useState(false)
-  const [mode, setMode] = React.useState<"json" | "ts">("json")
+  const [mode, setMode] = React.useState<"json" | "ts" | "raw">("json")
 
   const handleFormat = () => {
     try {
@@ -106,8 +120,9 @@ export default function JsonSynthPage() {
   }
 
   const handleCopyOutput = () => {
-    if (!output) return
-    navigator.clipboard.writeText(output)
+    const textToCopy = output || input
+    if (!textToCopy) return
+    navigator.clipboard.writeText(textToCopy)
     setCopied(true)
     toast({ title: "Synthesis Dispatched", description: "Result copied to workstation." })
     setTimeout(() => setCopied(false), 2000)
@@ -116,25 +131,20 @@ export default function JsonSynthPage() {
   const handleClear = () => {
     setInput("")
     setOutput("")
+    setMode("raw")
   }
 
   const handleLoadSample = () => {
-    const sample = {
-      "studio": "Forge Studios",
-      "synthesis_engine": "V8 Industrial",
-      "version": "7.0.0",
-      "is_active": true,
-      "config": {
-        "optimization_level": "maximum",
-        "supported_formats": ["Base64", "WebP", "SVG", "JSON"]
-      },
-      "metrics": {
-        "uptime": 99.99
-      }
-    }
-    setInput(JSON.stringify(sample, null, 2))
+    const sampleStr = JSON.stringify(DEFAULT_SAMPLE, null, 2)
+    setInput(sampleStr)
+    setOutput(sampleStr)
+    setMode("json")
     toast({ title: "Sample Loaded", description: "Industrial test bitstream ready." })
   }
+
+  // Determine what to display in the preview window
+  const displayValue = output || input
+  const isUsingInputAsPreview = !output && input.length > 0
 
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
@@ -181,7 +191,10 @@ export default function JsonSynthPage() {
               <div className="relative group">
                 <Textarea 
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={(e) => {
+                    setInput(e.target.value)
+                    if (output) setOutput("") // Reset output to show input preview if they start typing again
+                  }}
                   placeholder='{ "studio": "Forge Studios", "engine": "V8", "active": true }'
                   className="min-h-[450px] rounded-[2rem] bg-foreground/5 border-foreground/10 focus:ring-primary p-8 text-[13px] font-code transition-all custom-scrollbar shadow-inner resize-none"
                 />
@@ -220,19 +233,21 @@ export default function JsonSynthPage() {
                   <span className="text-[11px] font-black uppercase tracking-widest">Result Portal</span>
                 </div>
               </div>
-              {output && (
+              {displayValue && (
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/5 border border-primary/10 animate-pulse">
                   <Database className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-[9px] font-black uppercase tracking-widest text-primary">{mode === 'ts' ? 'TypeScript' : 'JSON'} Validated</span>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-primary">
+                    {mode === 'ts' ? 'TypeScript Validated' : isUsingInputAsPreview ? 'Input Preview' : 'JSON Validated'}
+                  </span>
                 </div>
               )}
             </div>
 
             <div className="flex-1 relative group flex flex-col min-h-0">
-              {output ? (
+              {displayValue ? (
                 <div className="animate-in zoom-in-95 duration-500 h-full flex flex-col space-y-6 flex-1">
                   <div className="flex-1 bg-zinc-950 rounded-[2rem] p-8 border border-white/5 font-code text-[12px] md:text-[13px] leading-relaxed text-green-400 overflow-auto custom-scrollbar shadow-inner min-h-[400px]">
-                    <pre className="whitespace-pre-wrap break-all">{output}</pre>
+                    <pre className="whitespace-pre-wrap break-all">{displayValue}</pre>
                   </div>
                   <Button 
                     onClick={handleCopyOutput}
