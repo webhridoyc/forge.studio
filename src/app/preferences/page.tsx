@@ -1,9 +1,8 @@
-
 "use client"
 
 import * as React from "react"
-import { Code2, Settings, Moon, Sun, Monitor, Bell, Shield, Sliders, Zap, Copy, Trash2, Globe, Check } from "lucide-react"
-import { AuthUI } from "@/components/AuthModal"
+import { Settings, Moon, Sun, Monitor, Shield, Sliders, Zap, Trash2, Globe } from "lucide-react"
+import { NavigationHeader } from "@/components/NavigationHeader"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
@@ -14,7 +13,6 @@ import Link from "next/link"
 
 export default function PreferencesPage() {
   const { toast } = useToast()
-  const [isAuthOpen, setIsAuthOpen] = React.useState(false)
   const [isPurging, setIsPurging] = React.useState(false)
 
   const handlePurge = () => {
@@ -36,27 +34,9 @@ export default function PreferencesPage() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-accent/5 blur-[150px] rounded-full" />
       </div>
 
-      <header className={cn(
-        "fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-sm transition-all",
-        isAuthOpen && "hidden"
-      )}>
-        <Link href="/" className="flex items-center gap-2 md:gap-3 group">
-          <div className="bg-gradient-to-br from-primary to-secondary p-1.5 md:p-2 rounded-xl shadow-lg group-hover:scale-110 transition-all">
-            <Code2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
-          </div>
-          <span className="text-xl md:text-2xl font-black tracking-tighter">FORGE.</span>
-        </Link>
-        <div className="flex items-center gap-4">
-          <nav className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mr-6">
-            <Link href="/docs" className="hover:text-foreground transition-colors">Documentation</Link>
-            <Link href="/performance" className="hover:text-foreground transition-colors">Performance</Link>
-            <Link href="/api-reference" className="hover:text-foreground transition-colors">API</Link>
-          </nav>
-          <AuthUI onOpenChange={setIsAuthOpen} />
-        </div>
-      </header>
+      <NavigationHeader />
 
-      <main className="container mx-auto px-4 pt-32 pb-32 relative z-10 max-w-4xl">
+      <main className="container mx-auto px-4 pt-32 md:pt-48 pb-32 relative z-10 max-w-4xl">
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest">
@@ -70,7 +50,6 @@ export default function PreferencesPage() {
           </div>
 
           <div className="grid gap-8">
-            {/* Synthesis Defaults */}
             <section className="glass-card p-8 md:p-12 rounded-[2.5rem] border-white/10 space-y-8">
               <h2 className="text-2xl font-black tracking-tight flex items-center gap-3 uppercase">
                 <Sliders className="w-6 h-6 text-primary" />
@@ -115,7 +94,6 @@ export default function PreferencesPage() {
               </div>
             </section>
 
-            {/* Interface Customization */}
             <section className="glass-card p-8 md:p-12 rounded-[2.5rem] border-white/10 space-y-8">
               <h2 className="text-2xl font-black tracking-tight flex items-center gap-3 uppercase">
                 <Monitor className="w-6 h-6 text-accent" />
@@ -156,7 +134,6 @@ export default function PreferencesPage() {
               </div>
             </section>
 
-            {/* Privacy & Data */}
             <section className="glass-card p-8 md:p-12 rounded-[2.5rem] border-white/10 space-y-8">
               <h2 className="text-2xl font-black tracking-tight flex items-center gap-3 uppercase">
                 <Shield className="w-6 h-6 text-secondary" />

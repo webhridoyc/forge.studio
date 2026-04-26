@@ -7,11 +7,10 @@ import {
   Zap, 
   ChevronDown, 
   Image as ImageIcon, 
-  Code2, 
   FileCode, 
   Braces, 
   Layers,
-  Sparkles
+  LayoutGrid
 } from "lucide-react"
 import { ForgeLogo } from "@/components/ForgeLogo"
 import { AuthUI } from "@/components/AuthModal"
@@ -75,7 +74,7 @@ export function NavigationHeader() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-foreground/5 transition-all text-[10px] font-black uppercase tracking-[0.2em] outline-none group">
-                <Layers className="w-3.5 h-3.5 text-primary" />
+                <LayoutGrid className="w-3.5 h-3.5 text-primary" />
                 Studio Tools
                 <ChevronDown className="w-3 h-3 opacity-50 group-data-[state=open]:rotate-180 transition-transform" />
               </button>
@@ -89,7 +88,7 @@ export function NavigationHeader() {
                     <Link 
                       href={tool.disabled ? "#" : tool.href}
                       className={cn(
-                        "flex items-start gap-4 p-4 rounded-2xl cursor-pointer transition-all duration-300",
+                        "flex items-start gap-4 p-4 rounded-2xl cursor-pointer transition-all duration-300 outline-none",
                         pathname === tool.href ? "bg-primary/10" : "hover:bg-foreground/5"
                       )}
                     >

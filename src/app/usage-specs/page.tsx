@@ -1,14 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { Code2, BarChart3, Zap, Info, ShieldAlert, Layers } from "lucide-react"
-import { AuthUI } from "@/components/AuthModal"
-import { cn } from "@/lib/utils"
+import { BarChart3, Layers, ShieldAlert } from "lucide-react"
+import { NavigationHeader } from "@/components/NavigationHeader"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import Link from "next/link"
 
 export default function UsageSpecsPage() {
-  const [isAuthOpen, setIsAuthOpen] = React.useState(false)
-
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -16,27 +14,9 @@ export default function UsageSpecsPage() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-secondary/5 blur-[150px] rounded-full" />
       </div>
 
-      <header className={cn(
-        "fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-sm transition-all",
-        isAuthOpen && "hidden"
-      )}>
-        <a href="/" className="flex items-center gap-2 md:gap-3 group">
-          <div className="bg-gradient-to-br from-primary to-secondary p-1.5 md:p-2 rounded-xl shadow-lg group-hover:scale-110 transition-all">
-            <Code2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
-          </div>
-          <span className="text-xl md:text-2xl font-black tracking-tighter">FORGE.</span>
-        </a>
-        <div className="flex items-center gap-4">
-          <nav className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mr-6">
-            <a href="/docs" className="hover:text-foreground transition-colors">Documentation</a>
-            <a href="/performance" className="hover:text-foreground transition-colors">Performance</a>
-            <a href="/api-reference" className="hover:text-foreground transition-colors">API</a>
-          </nav>
-          <AuthUI onOpenChange={setIsAuthOpen} />
-        </div>
-      </header>
+      <NavigationHeader />
 
-      <main className="container mx-auto px-4 pt-32 pb-32 relative z-10 max-w-4xl">
+      <main className="container mx-auto px-4 pt-32 md:pt-48 pb-32 relative z-10 max-w-4xl">
         <article className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] font-black uppercase tracking-widest">
@@ -106,9 +86,9 @@ export default function UsageSpecsPage() {
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">© 2024 FORGE STUDIOS. SPECIFIED FOR PERFORMANCE.</p>
           <div className="flex gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
-            <a href="/cloud-sync" className="hover:text-foreground">Sync</a>
-            <a href="/usage-specs" className="text-primary">Specs</a>
-            <a href="/contact" className="hover:text-foreground">Contact</a>
+            <Link href="/cloud-sync" className="hover:text-foreground">Sync</Link>
+            <Link href="/usage-specs" className="text-primary">Specs</Link>
+            <Link href="/contact" className="hover:text-foreground">Contact</Link>
           </div>
         </div>
       </footer>
