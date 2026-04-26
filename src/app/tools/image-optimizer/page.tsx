@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -12,13 +11,11 @@ import {
   Download, 
   Trash2, 
   Loader2,
-  ArrowRight,
   Maximize2,
-  Settings2,
-  Layers,
   Activity,
   Maximize,
   ShieldCheck,
+  Layers,
   ChevronRight
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -92,30 +89,34 @@ export default function ImageOptimizerPage() {
         </section>
 
         <section className="space-y-12">
-          <div className="glass-card p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] border-white/10 space-y-10 shadow-2xl overflow-hidden">
+          <div className="glass-card p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] border-white/10 space-y-10 shadow-2xl overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-8 opacity-50 hidden md:block">
+              <Activity className="w-12 h-12 text-accent/20" />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-b border-foreground/5 pb-10">
               <div className="space-y-4">
                 <Label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground ml-2 flex items-center gap-2">
                   Quality ({Math.round(quality[0] * 100)}%) <Zap className="w-3 h-3 text-accent" />
                 </Label>
-                <Slider value={quality} onValueChange={setQuality} max={1} step={0.05} />
+                <Slider value={quality} onValueChange={setQuality} max={1} step={0.05} className="py-4" />
               </div>
 
               <div className="space-y-4">
                 <Label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground ml-2 flex items-center gap-2">
                   Resolution Scale ({Math.round(scale[0] * 100)}%) <Maximize2 className="w-3 h-3 text-primary" />
                 </Label>
-                <Slider value={scale} onValueChange={setScale} min={0.1} max={2.0} step={0.1} />
+                <Slider value={scale} onValueChange={setScale} min={0.1} max={2.0} step={0.1} className="py-4" />
               </div>
 
               <div className="space-y-4">
                 <Label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground ml-2">Output Pipeline</Label>
                 <Select value={targetFormat} onValueChange={(v: any) => setTargetFormat(v)}>
-                  <SelectTrigger className="h-12 rounded-xl bg-background border-foreground/10 font-black text-[10px] uppercase tracking-widest">
+                  <SelectTrigger className="h-14 rounded-2xl bg-background border-foreground/10 font-black text-[10px] uppercase tracking-widest px-6">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
-                    <SelectItem value="image/webp" className="font-bold text-[10px] uppercase tracking-widest">WebP (Smallest)</SelectItem>
+                    <SelectItem value="image/webp" className="font-bold text-[10px] uppercase tracking-widest">WebP (Optimized)</SelectItem>
                     <SelectItem value="image/jpeg" className="font-bold text-[10px] uppercase tracking-widest">JPEG (Universal)</SelectItem>
                     <SelectItem value="image/png" className="font-bold text-[10px] uppercase tracking-widest">PNG (Lossless)</SelectItem>
                   </SelectContent>
@@ -140,15 +141,15 @@ export default function ImageOptimizerPage() {
 
             {assets.length > 0 && (
               <div className="space-y-12 pt-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
-                <div className="flex items-center justify-between px-4">
-                   <div className="flex items-center gap-6 bg-accent/5 px-8 py-4 rounded-[1.5rem] border border-accent/10 shadow-inner">
-                    <Activity className="w-5 h-5 text-accent animate-pulse" />
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-4">
+                   <div className="flex items-center gap-6 bg-accent/5 px-8 py-6 rounded-[2rem] border border-accent/10 shadow-inner w-full md:w-auto">
+                    <Activity className="w-6 h-6 text-accent animate-pulse" />
                     <div>
                       <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">Efficiency Index</p>
-                      <p className="text-2xl font-black text-accent tracking-tighter">{totalSavings > 0 ? `-${totalSavings}% Reduction` : 'Lossless Synthesis'}</p>
+                      <p className="text-3xl font-black text-accent tracking-tighter">{totalSavings > 0 ? `-${totalSavings}% Reduction` : 'Lossless Synthesis'}</p>
                     </div>
                   </div>
-                  <Button variant="ghost" onClick={() => setAssets([])} className="text-[10px] font-black uppercase tracking-widest text-destructive hover:bg-destructive/10 h-12 rounded-xl px-6">
+                  <Button variant="ghost" onClick={() => setAssets([])} className="text-[10px] font-black uppercase tracking-widest text-destructive hover:bg-destructive/10 h-14 rounded-2xl px-8 w-full md:w-auto">
                     <Trash2 className="w-4 h-4 mr-2" /> Reset Batch
                   </Button>
                 </div>
@@ -157,14 +158,14 @@ export default function ImageOptimizerPage() {
                   {assets.map((asset) => (
                     <div key={asset.id} className="glass-card group rounded-[2.5rem] border-white/10 overflow-hidden flex flex-col hover:translate-y-[-4px] transition-all duration-300 shadow-xl">
                       <div className="p-8 space-y-8 flex-1">
-                        <div className="flex items-start justify-between">
-                          <div className="space-y-1">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="space-y-1 min-w-0 flex-1">
                             <span className="px-2 py-0.5 rounded-md bg-accent/10 text-accent text-[9px] font-black uppercase tracking-widest border border-accent/20">
                               {asset.format.split('/')[1]}
                             </span>
-                            <h4 className="font-black text-xl tracking-tight truncate max-w-[200px] uppercase mt-2">{asset.name}</h4>
+                            <h4 className="font-black text-xl tracking-tight truncate uppercase mt-2">{asset.name}</h4>
                           </div>
-                          <div className="h-24 w-24 rounded-2xl bg-foreground/5 p-1 border border-foreground/5 overflow-hidden group-hover:scale-110 transition-transform shadow-2xl relative">
+                          <div className="h-24 w-24 rounded-3xl bg-foreground/5 p-1 border border-foreground/5 overflow-hidden group-hover:scale-110 transition-transform shadow-2xl relative shrink-0">
                             <img src={asset.base64} alt={asset.name} className="w-full h-full object-contain" />
                             <div className="absolute inset-0 bg-accent/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                               <Maximize className="w-6 h-6 text-white" />
@@ -173,13 +174,13 @@ export default function ImageOptimizerPage() {
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
-                          <div className="bg-foreground/[0.03] p-4 rounded-2xl border border-foreground/5">
+                          <div className="bg-foreground/[0.03] p-5 rounded-[1.5rem] border border-foreground/5">
                             <p className="text-[8px] font-black uppercase tracking-widest text-muted-foreground mb-1">ORIGINAL</p>
-                            <p className="text-sm font-black tabular-nums">{(asset.originalSize / 1024).toFixed(1)} KB</p>
+                            <p className="text-base font-black tabular-nums">{(asset.originalSize / 1024).toFixed(1)} KB</p>
                           </div>
-                          <div className="bg-accent/5 p-4 rounded-2xl border border-accent/5">
+                          <div className="bg-accent/5 p-5 rounded-[1.5rem] border border-accent/5">
                             <p className="text-[8px] font-black uppercase tracking-widest text-accent mb-1">SYNTHESIZED</p>
-                            <p className="text-sm font-black text-accent tabular-nums">{(asset.optimizedSize / 1024).toFixed(1)} KB</p>
+                            <p className="text-base font-black text-accent tabular-nums">{(asset.optimizedSize / 1024).toFixed(1)} KB</p>
                           </div>
                         </div>
 
@@ -193,9 +194,9 @@ export default function ImageOptimizerPage() {
 
                       <Button 
                         onClick={() => handleDownload(asset)}
-                        className="w-full h-14 bg-accent text-white hover:bg-accent/90 transition-all font-black text-[10px] uppercase tracking-widest rounded-none border-t border-white/5"
+                        className="w-full h-16 bg-accent text-white hover:bg-accent/90 transition-all font-black text-[11px] uppercase tracking-widest rounded-none border-t border-white/5 group"
                       >
-                        <Download className="w-4 h-4 mr-2" /> Download Optimized Asset
+                        <Download className="w-4 h-4 mr-2 group-hover:translate-y-0.5 transition-transform" /> Download Optimized Asset
                       </Button>
                     </div>
                   ))}

@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -17,7 +16,9 @@ import {
   Sparkles,
   Terminal,
   ChevronRight,
-  Database
+  Database,
+  Layers,
+  Zap
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
@@ -112,7 +113,7 @@ export default function JsonSynthPage() {
     navigator.clipboard.writeText(output)
     setCopied(true)
     toast({ title: "Synthesis Dispatched", description: "Result copied to workstation." })
-    setTimeout(() => setCopied(null), 2000)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   const handleClear = () => {
@@ -144,7 +145,11 @@ export default function JsonSynthPage() {
         </section>
 
         <section className="grid lg:grid-cols-2 gap-8 items-start animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-200">
-          <div className="glass-card p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] border-white/10 space-y-8 shadow-2xl">
+          <div className="glass-card p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] border-white/10 space-y-8 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
+               <Database className="w-24 h-24 text-primary" />
+            </div>
+
             <div className="space-y-4">
               <div className="flex items-center justify-between px-2">
                 <label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground">Input Bitstream</label>
@@ -154,11 +159,11 @@ export default function JsonSynthPage() {
                 <Textarea 
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder='{ "status": "awaiting_input" }'
-                  className="min-h-[450px] rounded-[2rem] bg-foreground/5 border-foreground/10 focus:ring-primary p-8 text-[13px] font-code transition-all custom-scrollbar shadow-inner"
+                  placeholder='{ "status": "awaiting_input", "priority": "high" }'
+                  className="min-h-[450px] rounded-[2rem] bg-foreground/5 border-foreground/10 focus:ring-primary p-8 text-[13px] font-code transition-all custom-scrollbar shadow-inner resize-none"
                 />
                 {input && (
-                  <Button variant="ghost" size="icon" onClick={handleClear} className="absolute top-6 right-6 rounded-xl text-muted-foreground hover:text-destructive">
+                  <Button variant="ghost" size="icon" onClick={handleClear} className="absolute top-6 right-6 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all">
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 )}
@@ -166,55 +171,62 @@ export default function JsonSynthPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <Button onClick={handleFormat} disabled={!input} className="h-14 rounded-2xl bg-foreground text-background hover:scale-105 transition-all font-black text-[10px] uppercase tracking-widest shadow-xl">
-                <Maximize2 className="w-3.5 h-3.5 mr-2" /> Format
+              <Button onClick={handleFormat} disabled={!input} className="h-16 rounded-2xl bg-foreground text-background hover:scale-[1.02] transition-all font-black text-[11px] uppercase tracking-widest shadow-xl">
+                <Maximize2 className="w-4 h-4 mr-2" /> Format
               </Button>
-              <Button onClick={handleSort} disabled={!input} variant="outline" className="h-14 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[10px] uppercase tracking-widest">
-                <ArrowDownAz className="w-4 h-4 mr-2" /> Sort Keys
+              <Button onClick={handleSort} disabled={!input} variant="outline" className="h-16 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[11px] uppercase tracking-widest">
+                <ArrowDownAz className="w-5 h-5 mr-2" /> Sort Keys
               </Button>
-              <Button onClick={handleGenerateTs} disabled={!input} variant="outline" className="h-14 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[10px] uppercase tracking-widest">
-                <Code2 className="w-4 h-4 mr-2" /> JSON to TS
+              <Button onClick={handleGenerateTs} disabled={!input} variant="outline" className="h-16 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[11px] uppercase tracking-widest">
+                <Code2 className="w-5 h-5 mr-2" /> JSON to TS
               </Button>
-              <Button onClick={handleMinify} disabled={!input} variant="outline" className="h-14 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[10px] uppercase tracking-widest">
-                <Minimize2 className="w-4 h-4 mr-2" /> Minify
+              <Button onClick={handleMinify} disabled={!input} variant="outline" className="h-16 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[11px] uppercase tracking-widest">
+                <Minimize2 className="w-5 h-5 mr-2" /> Minify
               </Button>
             </div>
           </div>
 
-          <div className="glass-card p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] border-white/10 min-h-[500px] lg:sticky lg:top-32 flex flex-col space-y-8">
+          <div className="glass-card p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] border-white/10 min-h-[500px] lg:sticky lg:top-32 flex flex-col space-y-8 shadow-2xl">
             <div className="flex items-center justify-between px-2">
-              <div className="flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-primary" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Synthesis Result</span>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Terminal className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground block leading-none mb-1">Synthesis</span>
+                  <span className="text-[11px] font-black uppercase tracking-widest">Result Portal</span>
+                </div>
               </div>
               {output && (
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10">
-                  <Database className="w-3 h-3 text-primary" />
-                  <span className="text-[8px] font-black uppercase tracking-widest text-primary">{mode === 'ts' ? 'TypeScript' : 'JSON'} Validated</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/5 border border-primary/10 animate-pulse">
+                  <Database className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-[9px] font-black uppercase tracking-widest text-primary">{mode === 'ts' ? 'TypeScript' : 'JSON'} Validated</span>
                 </div>
               )}
             </div>
 
-            <div className="flex-1 relative group">
+            <div className="flex-1 relative group flex flex-col min-h-0">
               {output ? (
-                <div className="animate-in zoom-in duration-500 h-full flex flex-col space-y-6">
-                  <div className="flex-1 bg-zinc-950 rounded-[2rem] p-8 border border-white/5 font-code text-[12px] leading-relaxed text-green-400 overflow-auto custom-scrollbar shadow-2xl min-h-[400px]">
+                <div className="animate-in zoom-in-95 duration-500 h-full flex flex-col space-y-6 flex-1">
+                  <div className="flex-1 bg-zinc-950 rounded-[2rem] p-8 border border-white/5 font-code text-[12px] md:text-[13px] leading-relaxed text-green-400 overflow-auto custom-scrollbar shadow-inner min-h-[400px]">
                     <pre className="whitespace-pre-wrap break-all">{output}</pre>
                   </div>
                   <Button 
                     onClick={handleCopyOutput}
-                    className="w-full h-14 rounded-2xl bg-primary text-white hover:scale-[1.02] transition-all font-black text-[10px] uppercase tracking-widest shadow-xl shadow-primary/20"
+                    className="w-full h-16 rounded-2xl bg-primary text-white hover:scale-[1.02] transition-all font-black text-[11px] uppercase tracking-[0.15em] shadow-xl shadow-primary/20 group"
                   >
-                    {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+                    {copied ? <Check className="w-5 h-5 mr-2" /> : <Copy className="w-5 h-5 mr-2 group-hover:translate-y-[-2px] transition-transform" />}
                     Copy Synthesis
                   </Button>
                 </div>
               ) : (
-                <div className="h-full min-h-[450px] flex flex-col items-center justify-center text-center space-y-6 opacity-20 select-none">
-                  <Sparkles className="w-16 h-16 text-primary" />
-                  <div className="space-y-1">
-                    <p className="text-sm font-black uppercase tracking-[0.3em]">Awaiting Input</p>
-                    <p className="text-[10px] font-bold uppercase tracking-widest">Synthesis module standby</p>
+                <div className="flex-1 min-h-[450px] flex flex-col items-center justify-center text-center space-y-8 opacity-20 select-none bg-foreground/5 rounded-[2.5rem] border border-dashed border-foreground/10">
+                  <div className="w-24 h-24 rounded-full bg-foreground/5 flex items-center justify-center">
+                    <Sparkles className="w-12 h-12 text-primary" />
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-xl font-black uppercase tracking-[0.3em]">Awaiting Input</p>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em]">Synthesis module standby</p>
                   </div>
                 </div>
               )}
