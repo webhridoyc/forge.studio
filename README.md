@@ -6,27 +6,27 @@ Professional-grade developer utility studio. Convert images to code, optimize as
 The studio is live and synchronized across the production pipeline.
 
 - **Production Hub**: [base64-forge.vercel.app](https://base64-forge.vercel.app)
-- **Technical Mirror**: [forge-studio.vercel.app](https://forge-studio.vercel.app)
+- **V1 API Endpoint**: `/api/v1/encode`
 
 ## 🛠️ The Synthesis Suite
 Forge Studios now features multiple niche tools for modern developers:
 - **Base64 Forge**: Advanced binary-to-text image synthesis.
-- **Image Optimizer**: High-performance WebP compression and resizing.
-- **SVG Studio**: Vector cleaning and Data URI orchestration.
+- **Image Optimizer**: High-performance WebP compression and resolution scaling.
+- **SVG Studio**: Vector cleaning and React component orchestration.
 - **JSON Synthesizer**: Industrial-grade data structure optimization and TS generation.
-- **Member Vault**: Secure, email-verified cloud sync for your entire pipeline.
+- **CSS Architect**: (Coming Soon) Utility-first styling orchestration.
 
 ## Features
 - **Dual Pipeline Synthesis**: High-speed encoding and decoding for modern web assets.
 - **Identity Synthesis**: Secure, cloud sync powered by Firebase (Firestore & Auth).
 - **Glass Monopoly UI**: Professional, cinematic design with 120Hz performance.
-- **Open Source**: Track development and contribute at [github.com/webhridoyc/forge.studio](https://github.com/webhridoyc/forge.studio).
+- **Real-time API**: Seamless workstation integration for high-volume pipelines.
 
 ## Tech Stack
 - Next.js 15 (App Router)
 - Firebase (Firestore & Auth)
 - Tailwind CSS & Shadcn/UI
-- Genkit AI
+- Genkit AI (Advanced Synthesis)
 
 ---
 © 2026 FORGE STUDIOS. Distributed Securely.
