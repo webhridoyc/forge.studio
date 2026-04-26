@@ -10,14 +10,10 @@ import {
   Copy, 
   Check, 
   Trash2, 
-  Zap, 
-  FileCode,
-  LayoutGrid,
   Minimize2,
   Maximize2,
   Code2,
-  GitCompare,
-  ArrowDownWideArrow
+  ArrowDownAz
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
@@ -156,7 +152,7 @@ export default function JsonSynthPage() {
                 <Maximize2 className="w-4 h-4 mr-2" /> Format
               </Button>
               <Button onClick={handleSort} disabled={!input} variant="outline" className="h-14 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[10px] uppercase tracking-widest px-6">
-                <ArrowDownWideArrow className="w-4 h-4 mr-2" /> Sort Keys
+                <ArrowDownAz className="w-4 h-4 mr-2" /> Sort Keys
               </Button>
               <Button onClick={handleGenerateTs} disabled={!input} variant="outline" className="h-14 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[10px] uppercase tracking-widest px-6">
                 <Code2 className="w-4 h-4 mr-2" /> JSON to TS
