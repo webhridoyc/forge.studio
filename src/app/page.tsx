@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -6,8 +5,8 @@ import { FileUploader } from "@/components/FileUploader"
 import { CodeOutput } from "@/components/CodeOutput"
 import { DecoderTool } from "@/components/DecoderTool"
 import { SEOIntro, FAQSection } from "@/components/SEOSections"
-import { AuthUI } from "@/components/AuthModal"
 import { ForgeLogo } from "@/components/ForgeLogo"
+import { NavigationHeader } from "@/components/NavigationHeader"
 import { optimizeImage, type ProcessedAsset, type OutputFormat } from "@/lib/image-utils"
 import { useToast } from "@/hooks/use-toast"
 import { useUser, useFirestore, useMemoFirebase, useCollection } from "@/firebase"
@@ -39,8 +38,7 @@ export default function Home() {
   const [isProcessing, setIsProcessing] = React.useState(false)
   const [qualityMode, setQualityMode] = React.useState<'optimized' | 'original'>('optimized')
   const [currentYear, setCurrentYear] = React.useState<number | null>(null)
-  const [isAuthOpen, setIsAuthOpen] = React.useState(false)
-  
+
   const historyQuery = useMemoFirebase(() => {
     if (!db || !user) return null
     return query(
@@ -83,13 +81,6 @@ export default function Home() {
     const newAssets: ProcessedAsset[] = []
     
     for (const file of filesToProcess) {
-      if (qualityMode === 'original' && file.size > 2 * 1024 * 1024) {
-        toast({
-          title: "Large Asset Detected",
-          description: "Original mode for files >2MB may impact UI performance.",
-        })
-      }
-
       try {
         const targetFormat: OutputFormat = qualityMode === 'original' ? 'original' : 'image/webp'
         const asset = await optimizeImage(file, targetFormat)
@@ -115,10 +106,6 @@ export default function Home() {
     setAssets([])
   }
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
   return (
     <div className="min-h-screen relative overflow-x-hidden selection:bg-primary/20 transition-colors duration-700">
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-background">
@@ -126,39 +113,10 @@ export default function Home() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-secondary/5 blur-[150px] animate-pulse delay-1000 rounded-full" />
       </div>
 
-      <header className={cn(
-        "fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] transition-all",
-        isAuthOpen && "hidden"
-      )}>
-        <button onClick={scrollToTop} className="focus:outline-none">
-          <ForgeLogo />
-        </button>
-        
-        <div className="flex items-center gap-4 md:gap-6">
-          <nav className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
-            <a href="#workbench" className="hover:text-primary transition-colors">Workbench</a>
-            <a href="#security" className="hover:text-foreground transition-colors">Security</a>
-            <a href="#guide" className="hover:text-foreground transition-colors">Guide</a>
-          </nav>
-          <div className="h-6 w-px bg-foreground/10 hidden md:block" />
-          <div className="flex items-center gap-4">
-            <AuthUI onOpenChange={setIsAuthOpen} />
-          </div>
-        </div>
-      </header>
+      <NavigationHeader />
 
       <main className="container mx-auto px-2 md:px-6 pt-32 md:pt-48 pb-32 flex flex-col items-center relative z-10 max-w-full overflow-x-hidden">
         <section className="text-center max-w-6xl mb-24 md:mb-40 space-y-10 md:space-y-16 animate-in fade-in slide-in-from-top-12 duration-1000">
-          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-accent/5 border border-accent/20 animate-pulse">
-              <div className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">Studio Live Now</span>
-            </div>
-          </div>
-          
           <div className="space-y-4">
             <h1 className="text-5xl md:text-[10rem] lg:text-[12rem] font-black text-foreground tracking-tighter leading-[0.8] select-none text-center uppercase">
               Base64 <br />
@@ -167,7 +125,7 @@ export default function Home() {
             <h2 className="text-2xl md:text-5xl font-black tracking-tighter text-muted-foreground/40 uppercase">Image Encoder &amp; Data URI Generator.</h2>
           </div>
           <p className="text-base md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium px-4">
-            Free online Base64 converter and image encoder. Convert PNG, JPEG, WebP and SVG to Base64 Data URI strings — or decode Base64 back to images — instantly in your browser with zero-latency and cloud-synced history.
+            Professional image-to-text synthesis. Part of the Forge Studios developer suite. Convert PNG, JPEG, WebP and SVG to Base64 strings with zero-latency.
           </p>
         </section>
 
@@ -326,10 +284,7 @@ export default function Home() {
             <ForgeLogo />
             <div className="space-y-6">
               <p className="text-muted-foreground max-w-md leading-relaxed text-lg md:text-xl font-medium">
-                Free online Base64 converter and image encoder for developers. Convert PNG, JPEG, WebP, SVG to Base64 Data URI and decode Base64 back to images instantly.
-              </p>
-              <p className="text-primary/60 max-w-md leading-relaxed text-sm font-semibold italic">
-                The fastest Base64 string generator online — supports PNG to Base64, JPEG to Base64, WebP to Base64, SVG to Base64, CSS image encoder, HTML image encoder, and lossless Data URI generation.
+                Professional-grade developer utility studio. Fastest online Base64 synthesis, image optimization, and SVG orchestration.
               </p>
             </div>
             <div className="flex items-center gap-6">
@@ -377,9 +332,9 @@ export default function Home() {
           <div className="flex items-center gap-8">
             <span className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              LIVE DEPLOYMENT READY
+              MULTI-TOOL ECOSYSTEM READY
             </span>
-            <span className="opacity-50">V6.0.0</span>
+            <span className="opacity-50">V7.0.0</span>
           </div>
         </div>
       </footer>
