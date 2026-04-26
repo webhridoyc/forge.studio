@@ -8,7 +8,8 @@ import {
   Image as ImageIcon, 
   FileCode, 
   Braces, 
-  CircleDot
+  CircleDot,
+  Terminal
 } from "lucide-react"
 import { ForgeLogo } from "@/components/ForgeLogo"
 import { AuthUI } from "@/components/AuthModal"
@@ -42,6 +43,12 @@ export function NavigationHeader() {
       href: "/tools/json-synth", 
       icon: Braces, 
       color: "text-primary"
+    },
+    {
+      name: "Code Architect",
+      href: "/tools/code-architect",
+      icon: Terminal,
+      color: "text-accent"
     }
   ]
 

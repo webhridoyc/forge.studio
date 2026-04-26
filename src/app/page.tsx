@@ -24,7 +24,10 @@ import {
   History,
   ArrowRightLeft,
   Settings2,
-  CircleDot
+  Terminal,
+  ImageIcon,
+  FileCode,
+  Braces
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -226,6 +229,22 @@ export default function Home() {
               </div>
             </TabsContent>
           </Tabs>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full mt-24">
+            {[
+              { name: "Image Optimizer", icon: ImageIcon, href: "/tools/image-optimizer", color: "text-accent" },
+              { name: "SVG Studio", icon: FileCode, href: "/tools/svg-forge", color: "text-secondary" },
+              { name: "JSON Synth", icon: Braces, href: "/tools/json-synth", color: "text-primary" },
+              { name: "Code Architect", icon: Terminal, href: "/tools/code-architect", color: "text-accent" }
+            ].map((tool, i) => (
+              <Link key={i} href={tool.href} className="glass-card p-6 md:p-8 rounded-[2rem] border-white/10 flex flex-col items-center gap-4 hover:translate-y-[-8px] transition-all group">
+                <div className={cn("w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-foreground/5 flex items-center justify-center transition-transform group-hover:scale-110", tool.color)}>
+                  <tool.icon className="w-6 h-6 md:w-8 md:h-8" />
+                </div>
+                <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-center">{tool.name}</span>
+              </Link>
+            ))}
+          </div>
 
           {user && cloudHistory && cloudHistory.length > 0 && assets.length === 0 && (
             <div className="mt-20 md:mt-32 space-y-12 md:space-y-16 w-full animate-in fade-in duration-1000 px-4">
