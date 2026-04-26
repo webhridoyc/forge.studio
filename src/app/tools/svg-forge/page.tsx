@@ -19,29 +19,51 @@ import {
   Settings2,
   Layers,
   Activity,
-  Maximize
+  Maximize,
+  Grid3X3,
+  Search,
+  ShieldCheck,
+  Cpu,
+  Info
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 export default function SvgForgePage() {
   const { toast } = useToast()
   const [input, setInput] = React.useState("")
   const [copied, setCopied] = React.useState<string | null>(null)
   const [isCleaned, setIsCleaned] = React.useState(true)
+  const [showGrid, setShowGrid] = React.useState(true)
+  const [metrics, setMetrics] = React.useState({ size: 0, paths: 0, complexity: 'low' })
+
+  const calculateMetrics = (raw: string) => {
+    const size = raw.length
+    const paths = (raw.match(/<path|<circle|<rect|<line/g) || []).length
+    let complexity = 'Low'
+    if (paths > 20) complexity = 'High'
+    else if (paths > 5) complexity = 'Medium'
+    
+    setMetrics({ size, paths, complexity })
+  }
+
+  React.useEffect(() => {
+    calculateMetrics(input)
+  }, [input])
 
   const processSvg = (raw: string) => {
     if (!isCleaned) return raw.trim()
     
-    // Industrial grade basic cleaning
     return raw.trim()
       .replace(/<\?xml.*?\?>/g, '')
       .replace(/<!--.*?-->/g, '')
       .replace(/xmlns:xlink=".*?"/g, '')
       .replace(/xml:space=".*?"/g, '')
       .replace(/version=".*?"/g, '')
+      .replace(/id=".*?"/g, '') // Strip IDs for generic components
       .replace(/\s+/g, ' ')
       .replace(/>\s+</g, '><')
   }
@@ -57,7 +79,8 @@ export default function SvgForgePage() {
         .replace(/stroke-width/g, 'strokeWidth')
         .replace(/stroke-linecap/g, 'strokeLinecap')
         .replace(/stroke-linejoin/g, 'strokeLinejoin')
-      output = `export const ForgedIcon = () => (\n  ${camel}\n);`
+        .replace(/stroke-miterlimit/g, 'strokeMiterlimit')
+      output = `export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (\n  ${camel.replace('<svg', '<svg {...props}')}\n);`
     }
     
     navigator.clipboard.writeText(output)
@@ -73,8 +96,18 @@ export default function SvgForgePage() {
     const component = `
 import React from 'react';
 
-export const ForgedIcon = () => (
-  ${processSvg(input).replace(/fill-rule/g, 'fillRule').replace(/clip-rule/g, 'clipRule')}
+/**
+ * Synthesized by Forge Studios SVG Architect
+ * @returns {JSX.Element} Optimized React Vector Component
+ */
+export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  ${processSvg(input)
+    .replace(/fill-rule/g, 'fillRule')
+    .replace(/clip-rule/g, 'clipRule')
+    .replace(/stroke-width/g, 'strokeWidth')
+    .replace(/stroke-linecap/g, 'strokeLinecap')
+    .replace(/stroke-linejoin/g, 'strokeLinejoin')
+    .replace('<svg', '<svg {...props}')}
 );
     `.trim();
     
@@ -98,19 +131,37 @@ export const ForgedIcon = () => (
 
       <NavigationHeader />
 
-      <main className="container mx-auto px-4 pt-32 md:pt-48 pb-32 relative z-10 max-w-6xl">
+      <main className="container mx-auto px-4 pt-32 md:pt-48 pb-32 relative z-10 max-w-7xl">
         <section className="text-center space-y-8 mb-24 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-widest mx-auto">
             <FileCode className="w-3.5 h-3.5" />
-            Vector Orchestration Pro
+            Vector Orchestration Architect
           </div>
           <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-none uppercase">
-            SVG <br /><span className="text-gradient">Studio Architect.</span>
+            SVG <br /><span className="text-gradient">Studio Pro.</span>
           </h1>
           <p className="text-lg text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed">
-            Professional vector-to-code synthesis. Orchestrate clean paths, generate components, and optimize Data URIs.
+            Professional vector-to-code workstation. Orchestrate clean paths, generate industrial-grade React components, and optimize Data URIs with live path validation.
           </p>
         </section>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-in fade-in duration-1000 delay-150">
+          {[
+            { label: "Vector Size", value: `${metrics.size} Bytes`, icon: Layers, color: "text-secondary" },
+            { label: "Path Segments", value: `${metrics.paths} Elements`, icon: Cpu, color: "text-primary" },
+            { label: "Complexity Index", value: metrics.complexity, icon: Activity, color: "text-accent" },
+          ].map((stat, i) => (
+            <div key={i} className="glass-card p-6 rounded-[2rem] border-white/10 flex items-center gap-6 group hover:translate-y-[-4px] transition-all">
+              <div className={cn("w-14 h-14 rounded-2xl bg-foreground/5 flex items-center justify-center shrink-0", stat.color)}>
+                <stat.icon className="w-7 h-7" />
+              </div>
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-1">{stat.label}</p>
+                <p className="text-xl font-black tabular-nums uppercase">{stat.value}</p>
+              </div>
+            </div>
+          ))}
+        </div>
 
         <section className="grid lg:grid-cols-2 gap-8 items-start animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-200">
           <div className="glass-card p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] border-white/10 space-y-8 shadow-2xl relative">
@@ -119,22 +170,24 @@ export const ForgedIcon = () => (
                 <div className="flex items-center gap-6">
                   <div className="space-y-0.5">
                     <label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground block">Source Vector</label>
-                    <p className="text-[11px] font-black uppercase tracking-widest text-primary">Bitstream Input</p>
+                    <p className="text-[11px] font-black uppercase tracking-widest text-primary">Raw Bitstream</p>
                   </div>
                   <div className="flex items-center gap-3 bg-secondary/5 px-4 py-2 rounded-xl border border-secondary/10">
                     <Switch checked={isCleaned} onCheckedChange={setIsCleaned} id="clean-mode" />
                     <Label htmlFor="clean-mode" className="text-[9px] font-black uppercase tracking-widest opacity-60 cursor-pointer">Clean Synthesis</Label>
                   </div>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => setInput("")} className="h-10 w-10 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all">
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                {input && (
+                  <Button variant="ghost" size="icon" onClick={() => setInput("")} className="h-10 w-10 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all">
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                )}
               </div>
               <Textarea 
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="<svg xmlns='http://www.w3.org/2000/svg' ...>...</svg>"
-                className="min-h-[400px] rounded-[2rem] bg-foreground/5 border-foreground/10 focus:ring-secondary p-8 text-[13px] font-code transition-all custom-scrollbar resize-none shadow-inner"
+                className="min-h-[450px] rounded-[2rem] bg-foreground/5 border-foreground/10 focus:ring-secondary p-8 text-[13px] font-code transition-all custom-scrollbar resize-none shadow-inner"
               />
             </div>
 
@@ -168,18 +221,20 @@ export const ForgedIcon = () => (
           </div>
 
           <div className="glass-card p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] border-white/10 min-h-[500px] lg:sticky lg:top-32 flex flex-col items-center justify-center text-center space-y-12 shadow-2xl overflow-hidden relative">
-            <div className="absolute top-8 left-8 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
-                 <Monitor className="w-5 h-5 text-secondary" />
+            <div className="absolute top-8 left-8 flex items-center justify-between w-[calc(100%-4rem)]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+                   <Monitor className="w-5 h-5 text-secondary" />
+                </div>
+                <div className="text-left">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground block leading-none mb-1">Synthesis</span>
+                  <span className="text-[11px] font-black uppercase tracking-widest">Preview Monitor</span>
+                </div>
               </div>
-              <div className="text-left">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground block leading-none mb-1">Live</span>
-                <span className="text-[11px] font-black uppercase tracking-widest">Synthesis Preview</span>
+              <div className="flex items-center gap-3 bg-foreground/5 px-3 py-1.5 rounded-full border border-foreground/5">
+                <Grid3X3 className="w-3.5 h-3.5 text-muted-foreground" />
+                <Switch checked={showGrid} onCheckedChange={setShowGrid} id="grid-mode" />
               </div>
-            </div>
-
-            <div className="absolute top-8 right-8 opacity-20 pointer-events-none hidden md:block">
-               <Layers className="w-16 h-16 text-secondary" />
             </div>
             
             {input && isSvg ? (
@@ -187,17 +242,20 @@ export const ForgedIcon = () => (
                 <div className="relative group">
                   <div className="absolute -inset-10 bg-secondary/10 blur-[60px] rounded-full opacity-50 group-hover:opacity-100 transition-opacity" />
                   <div 
-                    className="w-56 h-56 md:w-72 md:h-72 flex items-center justify-center p-8 bg-foreground/5 rounded-[3rem] border border-foreground/5 shadow-2xl relative z-10 transition-transform group-hover:scale-105 duration-500"
+                    className={cn(
+                      "w-64 h-64 md:w-80 md:h-80 flex items-center justify-center p-12 rounded-[3.5rem] border border-foreground/5 shadow-2xl relative z-10 transition-transform group-hover:scale-105 duration-500 overflow-hidden",
+                      showGrid ? "bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat opacity-90" : "bg-foreground/5"
+                    )}
                     dangerouslySetInnerHTML={{ __html: processSvg(input) }}
                   />
                 </div>
                 <div className="space-y-3">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-widest">
-                    <Zap className="w-3.5 h-3.5" />
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-widest">
+                    <ShieldCheck className="w-3.5 h-3.5" />
                     Path Validated
                   </div>
                   <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight">Render Secured</h3>
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] italic">Vector orchestration reconciled successfully.</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] italic">Vector reconciliation complete.</p>
                 </div>
               </div>
             ) : (
@@ -213,7 +271,79 @@ export const ForgedIcon = () => (
             )}
           </div>
         </section>
+
+        <section id="module-specs" className="mt-48 space-y-16 animate-in fade-in duration-1000">
+          <div className="text-center space-y-4">
+             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-widest mx-auto">
+              <Settings2 className="w-3.5 h-3.5" />
+              Module Capability
+            </div>
+            <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase">Vector Synthesis <br /><span className="text-gradient">Specifications</span></h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { icon: Maximize, title: "Clean Synthesis", desc: "Automatically purges legacy XML metadata, namespaces, and redundant attributes to ensure the smallest possible bitstream size." },
+              { icon: Braces, title: "React Orchestration", desc: "Synthesizes production-ready React components with full prop forwarding and camelCase attribute reconciliation." },
+              { icon: Grid3X3, title: "Studio Rendering", desc: "Real-time preview monitor with transparency grid support and path validation for industrial-grade accuracy." },
+            ].map((feature, i) => (
+              <div key={i} className="glass-card p-10 rounded-[2.5rem] space-y-6 hover:translate-y-[-8px] transition-all">
+                <div className="w-14 h-14 rounded-2xl bg-foreground/5 flex items-center justify-center text-secondary">
+                  <feature.icon className="w-7 h-7" />
+                </div>
+                <h3 className="text-xl font-black uppercase tracking-tight">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground font-medium leading-relaxed">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="faq" className="mt-32 pt-32 border-t border-foreground/5">
+           <h2 className="text-2xl md:text-3xl font-black text-center mb-16 tracking-tighter uppercase">Vector Architect — FAQ</h2>
+           <div className="max-w-4xl mx-auto">
+             <Accordion type="single" collapsible className="w-full space-y-4">
+                {[
+                  {
+                    q: "What does 'Clean Synthesis' actually do?",
+                    a: "It performs an industrial-grade sweep of your SVG code, removing xmlns:xlink, xml:space, version tags, and comments. It also minifies whitespace and optionally strips IDs to prevent collision in modern component-based architectures."
+                  },
+                  {
+                    q: "Why should I convert SVG to a React component?",
+                    a: "Converting to a React component allows you to treat icons as dynamic UI elements. You can pass props like 'color', 'size', or 'strokeWidth' directly to the component, enabling better synchronization with your application's design system."
+                  },
+                  {
+                    q: "Is it safe to use Data URIs for complex vectors?",
+                    a: "Data URIs are excellent for small-to-medium decorative vectors as they eliminate HTTP requests. However, for extremely complex illustrations, we recommend using the generated React components to keep your HTML bitstreams manageable."
+                  }
+                ].map((faq, idx) => (
+                  <AccordionItem 
+                    key={idx} 
+                    value={`item-${idx}`} 
+                    className="border-2 border-foreground/5 rounded-[1.5rem] md:rounded-[2rem] px-8 bg-foreground/[0.02] overflow-hidden data-[state=open]:border-secondary/20 transition-all"
+                  >
+                    <AccordionTrigger className="text-left font-bold hover:no-underline py-8 text-lg tracking-tight">
+                      {faq.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground pb-8 leading-relaxed font-medium">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+             </Accordion>
+           </div>
+        </section>
       </main>
+
+      <footer className="w-full py-12 px-8 border-t border-foreground/5 bg-background/80 backdrop-blur-3xl">
+        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">© 2026 FORGE STUDIOS. VECTOR ARCHITECTURE SECURED.</p>
+          <div className="flex gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+            <a href="/docs" className="hover:text-foreground">Docs</a>
+            <a href="/performance" className="hover:text-foreground">Audit</a>
+            <a href="/api-reference" className="hover:text-foreground">API</a>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
