@@ -259,7 +259,7 @@ export default function JsonSynthPage() {
                 {input && (
                   <Button variant="ghost" size="icon" onClick={handleClear} className="absolute top-6 right-6 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all">
                     <Trash2 className="w-4 h-4" />
-                  </button>
+                  </Button>
                 )}
               </div>
             </div>
