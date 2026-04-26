@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -11,8 +12,9 @@ import {
   Download, 
   Trash2, 
   Loader2,
-  Maximize2,
-  ArrowRight
+  ArrowRight,
+  ShieldCheck,
+  Activity
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
@@ -53,6 +55,10 @@ export default function ImageOptimizerPage() {
     link.click()
   }
 
+  const totalOriginal = assets.reduce((acc, a) => acc + a.originalSize, 0)
+  const totalOptimized = assets.reduce((acc, a) => acc + a.optimizedSize, 0)
+  const totalSavings = totalOriginal > 0 ? Math.round(((totalOriginal - totalOptimized) / totalOriginal) * 100) : 0
+
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -66,40 +72,49 @@ export default function ImageOptimizerPage() {
         <section className="text-center space-y-8 mb-24 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] font-black uppercase tracking-widest mx-auto">
             <ImageIcon className="w-3.5 h-3.5" />
-            Optimized Asset Delivery
+            Asset Delivery Suite
           </div>
           <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-none uppercase">
             Image <br /><span className="text-gradient">Optimizer.</span>
           </h1>
           <p className="text-lg text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed">
-            Lossless WebP synthesis with high-performance resizing. Reduce payload size by up to 80% while maintaining cinematic clarity.
+            High-performance WebP synthesis. Recalibrate your assets for peak LCP scores with lossless resizing.
           </p>
         </section>
 
         <section className="space-y-12">
-          <div className="glass-card p-8 md:p-12 rounded-[3rem] border-white/10 space-y-10">
+          <div className="glass-card p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] border-white/10 space-y-10 shadow-2xl">
             <div className="flex flex-col md:flex-row items-center justify-between gap-8 border-b border-foreground/5 pb-10">
-              <div className="space-y-4 w-full md:w-auto flex-1">
-                <Label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground ml-2">
-                  Compression Quality ({Math.round(quality[0] * 100)}%)
+              <div className="space-y-4 w-full md:w-auto flex-1 max-w-md">
+                <Label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground ml-2 flex items-center gap-2">
+                  Bitstream Quality ({Math.round(quality[0] * 100)}%) <Zap className="w-3 h-3 text-accent" />
                 </Label>
                 <Slider 
                   value={quality} 
                   onValueChange={setQuality} 
                   max={1} 
                   step={0.05} 
-                  className="w-full md:max-w-xs"
+                  className="w-full"
                 />
               </div>
-              <div className="flex items-center gap-4">
-                <Button 
-                  variant="ghost" 
-                  onClick={() => setAssets([])}
-                  className="rounded-xl h-12 px-6 text-[10px] font-black uppercase tracking-widest text-destructive hover:bg-destructive/10"
-                >
-                  <Trash2 className="w-4 h-4 mr-2" /> Reset Forge
-                </Button>
-              </div>
+              
+              {assets.length > 0 && (
+                <div className="flex items-center gap-4 bg-foreground/5 px-6 py-4 rounded-2xl border border-foreground/5 animate-in zoom-in duration-500">
+                  <Activity className="w-4 h-4 text-accent" />
+                  <div className="text-left">
+                    <p className="text-[8px] font-black uppercase tracking-widest text-muted-foreground">Efficiency Index</p>
+                    <p className="text-xl font-black text-accent">-{totalSavings}% Size</p>
+                  </div>
+                </div>
+              )}
+
+              <Button 
+                variant="ghost" 
+                onClick={() => setAssets([])}
+                className="rounded-xl h-12 px-6 text-[10px] font-black uppercase tracking-widest text-destructive hover:bg-destructive/10 shrink-0"
+              >
+                <Trash2 className="w-4 h-4 mr-2" /> Reset
+              </Button>
             </div>
 
             <FileUploader 
@@ -113,7 +128,7 @@ export default function ImageOptimizerPage() {
             {isProcessing && (
               <div className="flex flex-col items-center gap-4 py-12 animate-in fade-in">
                 <Loader2 className="w-10 h-10 text-accent animate-spin" />
-                <p className="text-[10px] font-black uppercase tracking-widest text-accent">Optimizing Bitstreams...</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-accent">Recalibrating Bitstreams...</p>
               </div>
             )}
 
@@ -121,7 +136,7 @@ export default function ImageOptimizerPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-12">
                 {assets.map((asset) => (
                   <div key={asset.id} className="glass-card p-6 rounded-[2rem] border-white/10 flex items-center gap-6 group hover:translate-y-[-4px] transition-all duration-300">
-                    <div className="w-20 h-20 rounded-2xl bg-foreground/5 p-1 border border-foreground/5 overflow-hidden shrink-0">
+                    <div className="w-20 h-20 rounded-2xl bg-foreground/5 p-1 border border-foreground/5 overflow-hidden shrink-0 shadow-inner">
                       <img src={asset.base64} alt={asset.name} className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
