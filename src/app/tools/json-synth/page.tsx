@@ -15,10 +15,7 @@ import {
   ArrowDownAz,
   Sparkles,
   Terminal,
-  ChevronRight,
-  Database,
-  Layers,
-  Zap
+  Database
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
@@ -121,6 +118,24 @@ export default function JsonSynthPage() {
     setOutput("")
   }
 
+  const handleLoadSample = () => {
+    const sample = {
+      "studio": "Forge Studios",
+      "synthesis_engine": "V8 Industrial",
+      "version": "7.0.0",
+      "is_active": true,
+      "config": {
+        "optimization_level": "maximum",
+        "supported_formats": ["Base64", "WebP", "SVG", "JSON"]
+      },
+      "metrics": {
+        "uptime": 99.99
+      }
+    }
+    setInput(JSON.stringify(sample, null, 2))
+    toast({ title: "Sample Loaded", description: "Industrial test bitstream ready." })
+  }
+
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -153,13 +168,21 @@ export default function JsonSynthPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between px-2">
                 <label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground">Input Bitstream</label>
-                {input && <span className="text-[10px] font-black text-primary uppercase tracking-widest">{input.length} Bytes</span>}
+                <div className="flex gap-4">
+                   <button 
+                    onClick={handleLoadSample}
+                    className="text-[9px] font-black text-primary uppercase tracking-widest hover:underline"
+                  >
+                    Load Sample
+                  </button>
+                  {input && <span className="text-[10px] font-black text-primary uppercase tracking-widest">{input.length} Bytes</span>}
+                </div>
               </div>
               <div className="relative group">
                 <Textarea 
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder='{ "status": "awaiting_input", "priority": "high" }'
+                  placeholder='{ "studio": "Forge Studios", "engine": "V8", "active": true }'
                   className="min-h-[450px] rounded-[2rem] bg-foreground/5 border-foreground/10 focus:ring-primary p-8 text-[13px] font-code transition-all custom-scrollbar shadow-inner resize-none"
                 />
                 {input && (
