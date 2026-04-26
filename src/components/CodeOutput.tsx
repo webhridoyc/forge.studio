@@ -77,7 +77,6 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
       description: "Asset is being vaulted to your cloud history.",
     })
     
-    // Optimistic UI reset
     setTimeout(() => setIsSaving(false), 1000)
   }
 
@@ -95,19 +94,21 @@ export function CodeOutput({ asset, onRemove }: CodeOutputProps) {
   const sizeIncrease = Math.round(((asset.optimizedSize - asset.originalSize) / asset.originalSize) * 100)
 
   return (
-    <div className="w-full relative group overflow-hidden max-w-full">
+    <div className="w-full relative group overflow-hidden max-w-full rounded-[2rem] md:rounded-[3rem]">
       <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-6 px-2 md:px-4">
         <div className="flex items-center gap-4 md:gap-6 w-full md:w-auto min-w-0">
           <div className="h-16 w-16 md:h-20 md:w-20 rounded-2xl md:rounded-3xl overflow-hidden bg-foreground/5 p-1 border border-foreground/5 shadow-inner shrink-0 transition-transform">
             <img src={asset.base64} alt={asset.name} className="w-full h-full object-contain" />
           </div>
           <div className="min-w-0 flex-1 overflow-hidden">
-            <h3 className="text-base md:text-2xl font-black tracking-tight flex flex-wrap items-center gap-2">
-              <span className="truncate max-w-[120px] md:max-w-[300px]">{asset.name}</span>
-              <span className="px-2 py-0.5 rounded-full bg-primary/10 text-[8px] md:text-[10px] text-primary uppercase border border-primary/20 shrink-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-base md:text-2xl font-black tracking-tight truncate max-w-full">
+                {asset.name}
+              </h3>
+              <span className="px-2 py-0.5 rounded-full bg-primary/10 text-[8px] md:text-[10px] text-primary uppercase border border-primary/20 shrink-0 font-black">
                 {asset.format.split('/')[1]}
               </span>
-            </h3>
+            </div>
             <p className="text-[10px] md:text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
               {asset.dimensions.width}px × {asset.dimensions.height}px
             </p>
