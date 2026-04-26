@@ -23,7 +23,8 @@ import {
   MessageCircle,
   History,
   ArrowRightLeft,
-  Settings2
+  Settings2,
+  CircleDot
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -116,20 +117,20 @@ export default function Home() {
       <NavigationHeader />
 
       <main className="container mx-auto px-4 md:px-6 pt-32 md:pt-48 pb-32 flex flex-col items-center relative z-10 max-w-full overflow-x-hidden">
-        <section className="text-center max-w-6xl mb-24 md:mb-40 space-y-8 md:space-y-16 animate-in fade-in slide-in-from-top-12 duration-1000">
+        <section className="text-center max-w-6xl mb-24 md:mb-40 space-y-8 md:space-y-16 animate-in fade-in slide-in-from-top-12 duration-1000 px-4">
           <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl md:text-[10rem] lg:text-[12rem] font-black text-foreground tracking-tighter leading-none md:leading-[0.8] select-none text-center uppercase">
+            <h1 className="text-4xl sm:text-5xl md:text-[8rem] lg:text-[10rem] font-black text-foreground tracking-tighter leading-none select-none text-center uppercase">
               Base64 <br />
               <span className="text-gradient">Converter.</span>
             </h1>
             <h2 className="text-lg sm:text-2xl md:text-5xl font-black tracking-tighter text-muted-foreground/40 uppercase">Image Encoder &amp; Data URI Generator.</h2>
           </div>
           <p className="text-sm sm:text-base md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium px-4">
-            Professional image-to-text synthesis. Part of the Forge Studios developer suite. Convert PNG, JPEG, WebP and SVG to Base64 strings with zero-latency.
+            Professional image-to-text synthesis. Part of the Forge Studios industrial suite. Convert PNG, JPEG, WebP and SVG to Base64 strings with zero-latency.
           </p>
         </section>
 
-        <section id="workbench" className="w-full max-w-6xl flex flex-col items-center gap-8 md:gap-16 scroll-mt-32">
+        <section id="workbench" className="w-full max-w-6xl flex flex-col items-center gap-8 md:gap-16 scroll-mt-32 px-2 md:px-0">
           <Tabs defaultValue="encoder" className="w-full">
             <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 mb-16">
               <TabsList className="bg-foreground/5 p-1.5 rounded-2xl border border-foreground/5 h-auto w-full max-w-[320px] md:max-w-md">
@@ -233,7 +234,7 @@ export default function Home() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 {cloudHistory.map((snippet) => (
-                  <div key={snippet.id} className="glass-card p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-6 flex flex-col">
+                  <div key={snippet.id} className="glass-card p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-6 flex flex-col hover:translate-y-[-8px] transition-all duration-300 group">
                     <div className="flex items-start justify-between gap-4 flex-1">
                       <div className="space-y-4 min-w-0 flex-1">
                         <div className="flex items-center justify-between">
@@ -242,7 +243,7 @@ export default function Home() {
                         </div>
                         <h4 className="font-bold truncate text-base">{snippet.fileName}</h4>
                       </div>
-                      <div className="h-14 w-14 md:h-16 md:w-16 rounded-2xl bg-foreground/5 p-1 border border-foreground/5 overflow-hidden shrink-0 shadow-inner mt-1">
+                      <div className="h-14 w-14 md:h-16 md:w-16 rounded-2xl bg-foreground/5 p-1 border border-foreground/5 overflow-hidden shrink-0 shadow-inner mt-1 group-hover:scale-110 transition-transform">
                         <img src={snippet.base64String} alt={snippet.fileName} className="w-full h-full object-contain" />
                       </div>
                     </div>
@@ -284,7 +285,7 @@ export default function Home() {
             <ForgeLogo />
             <div className="space-y-6">
               <p className="text-muted-foreground max-w-md leading-relaxed text-lg md:text-xl font-medium">
-                Professional-grade developer utility studio. Fastest online Base64 synthesis, image optimization, and SVG orchestration.
+                Professional-grade developer utility studio. Industrial Base64 synthesis, image optimization, and SVG orchestration suite.
               </p>
             </div>
             <div className="flex items-center gap-6">

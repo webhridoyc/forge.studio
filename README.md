@@ -13,6 +13,7 @@ Forge Studios now features multiple niche tools for modern developers:
 - **Base64 Forge**: Advanced binary-to-text image synthesis.
 - **Image Optimizer**: High-performance WebP compression and resizing.
 - **SVG Studio**: Vector cleaning and Data URI orchestration.
+- **JSON Synthesizer**: Industrial-grade data structure optimization and TS generation.
 - **Member Vault**: Secure, email-verified cloud sync for your entire pipeline.
 
 ## Features
