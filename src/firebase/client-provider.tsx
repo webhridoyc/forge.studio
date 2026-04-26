@@ -2,7 +2,7 @@
 
 import React, { useMemo, type ReactNode } from 'react';
 import { FirebaseProvider } from '@/firebase/provider';
-import { initializeFirebase } from '@/firebase';
+import { initializeFirebase } from './core'; // Import directly from core to break circular dependency with index.ts
 
 interface FirebaseClientProviderProps {
   children: ReactNode;
@@ -11,8 +11,9 @@ interface FirebaseClientProviderProps {
 export function FirebaseClientProvider({ children }: FirebaseClientProviderProps) {
   const firebaseServices = useMemo(() => {
     // Initialize Firebase on the client side, once per component mount.
+    // useMemo ensures this runs during hydration as well.
     return initializeFirebase();
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []); 
 
   return (
     <FirebaseProvider

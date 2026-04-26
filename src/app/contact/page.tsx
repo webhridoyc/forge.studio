@@ -1,18 +1,13 @@
-
 "use client"
 
 import * as React from "react"
-import { Code2, MessageCircle, Mail, Github, Twitter, Linkedin, ArrowRight } from "lucide-react"
-import { AuthUI } from "@/components/AuthModal"
-import { cn } from "@/lib/utils"
+import { MessageCircle, Mail, Github, Twitter, Linkedin, ArrowRight } from "lucide-react"
+import { NavigationHeader } from "@/components/NavigationHeader"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { ForgeLogo } from "@/components/ForgeLogo"
 
 export default function ContactPage() {
-  const [isAuthOpen, setIsAuthOpen] = React.useState(false)
-
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -20,24 +15,9 @@ export default function ContactPage() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-accent/5 blur-[150px] rounded-full" />
       </div>
 
-      <header className={cn(
-        "fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-sm transition-all",
-        isAuthOpen && "hidden"
-      )}>
-        <a href="/" className="focus:outline-none">
-          <ForgeLogo />
-        </a>
-        <div className="flex items-center gap-4">
-          <nav className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mr-6">
-            <a href="/docs" className="hover:text-foreground transition-colors">Documentation</a>
-            <a href="/performance" className="hover:text-foreground transition-colors">Performance</a>
-            <a href="/api-reference" className="hover:text-foreground transition-colors">API</a>
-          </nav>
-          <AuthUI onOpenChange={setIsAuthOpen} />
-        </div>
-      </header>
+      <NavigationHeader />
 
-      <main className="container mx-auto px-4 pt-32 pb-32 relative z-10 max-w-4xl">
+      <main className="container mx-auto px-4 pt-32 md:pt-48 pb-32 relative z-10 max-w-4xl">
         <div className="grid md:grid-cols-2 gap-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="space-y-8">
             <div className="space-y-4">

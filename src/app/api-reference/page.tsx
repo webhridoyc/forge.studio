@@ -1,15 +1,9 @@
-
 "use client"
 
 import * as React from "react"
 import { 
-  Code2, 
   Braces, 
   Terminal, 
-  Layers, 
-  Globe, 
-  Copy, 
-  Check, 
   Lock, 
   Zap, 
   Server, 
@@ -17,10 +11,11 @@ import {
   ChevronRight,
   Monitor,
   Play,
-  FileCode,
-  Loader2
+  Loader2,
+  Check,
+  Copy
 } from "lucide-react"
-import { AuthUI } from "@/components/AuthModal"
+import { NavigationHeader } from "@/components/NavigationHeader"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -28,7 +23,6 @@ import { optimizeImage } from "@/lib/image-utils"
 import Link from "next/link"
 
 export default function ApiRefPage() {
-  const [isAuthOpen, setIsAuthOpen] = React.useState(false)
   const [copied, setCopied] = React.useState<string | null>(null)
   const [isSimulating, setIsSimulating] = React.useState(false)
   const [sandboxResult, setSandboxResult] = React.useState<any>(null)
@@ -45,7 +39,6 @@ export default function ApiRefPage() {
 
     setIsSimulating(true)
     try {
-      // Simulate network latency
       await new Promise(resolve => setTimeout(resolve, 800))
       const result = await optimizeImage(file, 'image/webp')
       setSandboxResult({
@@ -79,29 +72,10 @@ export default function ApiRefPage() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-accent/5 blur-[150px] rounded-full" />
       </div>
 
-      <header className={cn(
-        "fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-sm transition-all",
-        isAuthOpen && "hidden"
-      )}>
-        <Link href="/" className="flex items-center gap-2 md:gap-3 group">
-          <div className="bg-gradient-to-br from-primary to-secondary p-1.5 md:p-2 rounded-xl shadow-lg group-hover:scale-110 transition-all">
-            <Code2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
-          </div>
-          <span className="text-xl md:text-2xl font-black tracking-tighter">FORGE.</span>
-        </Link>
-        <div className="flex items-center gap-4">
-          <nav className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mr-6">
-            <Link href="/docs" className="hover:text-foreground transition-colors">Documentation</Link>
-            <Link href="/performance" className="hover:text-foreground transition-colors">Performance</Link>
-            <Link href="/api-reference" className="text-primary">API</Link>
-          </nav>
-          <AuthUI onOpenChange={setIsAuthOpen} />
-        </div>
-      </header>
+      <NavigationHeader />
 
-      <main className="container mx-auto px-4 pt-28 md:pt-32 pb-32 relative z-10 max-w-6xl">
+      <main className="container mx-auto px-4 pt-32 md:pt-48 pb-32 relative z-10 max-w-6xl">
         <div className="grid lg:grid-cols-[250px_1fr] gap-8 md:gap-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-          {/* Sidebar Nav - Desktop Only */}
           <aside className="hidden lg:block space-y-8 sticky top-32 h-fit">
             <div className="space-y-2">
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground mb-4">API Navigation</p>
@@ -125,7 +99,6 @@ export default function ApiRefPage() {
             </div>
           </aside>
 
-          {/* Main Content */}
           <div className="space-y-16 md:space-y-24 max-w-full">
             <section className="space-y-4 md:space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-widest">
@@ -162,7 +135,6 @@ export default function ApiRefPage() {
               </div>
             </section>
 
-            {/* Live API Sandbox */}
             <section id="sandbox" className="scroll-mt-32 space-y-6 md:space-y-8">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-accent/10 flex items-center justify-center">

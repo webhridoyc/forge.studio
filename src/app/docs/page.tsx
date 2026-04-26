@@ -1,47 +1,25 @@
-
 "use client"
 
 import * as React from "react"
-import { Code2, BookOpen, Zap, ShieldCheck, ArrowRight, History } from "lucide-react"
-import { AuthUI } from "@/components/AuthModal"
-import { cn } from "@/lib/utils"
+import { BookOpen, Zap, ShieldCheck, History } from "lucide-react"
+import { NavigationHeader } from "@/components/NavigationHeader"
+import Link from "next/link"
 
 export default function DocsPage() {
-  const [isAuthOpen, setIsAuthOpen] = React.useState(false)
-
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
-      {/* Background Blurs */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-primary/5 blur-[150px] rounded-full" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-secondary/5 blur-[150px] rounded-full" />
       </div>
 
-      <header className={cn(
-        "fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-sm transition-all",
-        isAuthOpen && "hidden"
-      )}>
-        <a href="/" className="flex items-center gap-2 md:gap-3 group">
-          <div className="bg-gradient-to-br from-primary to-secondary p-1.5 md:p-2 rounded-xl shadow-lg group-hover:scale-110 transition-all">
-            <Code2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
-          </div>
-          <span className="text-xl md:text-2xl font-black tracking-tighter">FORGE.</span>
-        </a>
-        <div className="flex items-center gap-4">
-          <nav className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mr-6">
-            <a href="/docs" className="text-primary">Documentation</a>
-            <a href="/performance" className="hover:text-foreground transition-colors">Performance</a>
-            <a href="/api-reference" className="hover:text-foreground transition-colors">API</a>
-          </nav>
-          <AuthUI onOpenChange={setIsAuthOpen} />
-        </div>
-      </header>
+      <NavigationHeader />
 
-      <main className="container mx-auto px-4 pt-32 pb-32 relative z-10 max-w-4xl">
+      <main className="container mx-auto px-4 pt-32 md:pt-48 pb-32 relative z-10 max-w-4xl">
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest">
-              <BookOpen className="w-3.5 h-3.5" />
+              < BookOpen className="w-3.5 h-3.5" />
               Technical Guide
             </div>
             <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none">SYSTEM <br /><span className="text-gradient">DOCUMENTATION</span></h1>
@@ -115,9 +93,9 @@ export default function DocsPage() {
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">© 2024 FORGE STUDIOS. DISTRIBUTED SECURELY.</p>
           <div className="flex gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
-            <a href="/docs" className="text-primary">Docs</a>
-            <a href="/performance" className="hover:text-foreground">Audit</a>
-            <a href="/api-reference" className="hover:text-foreground">API</a>
+            <Link href="/docs" className="text-primary">Docs</Link>
+            <Link href="/performance" className="hover:text-foreground">Audit</Link>
+            <Link href="/api-reference" className="hover:text-foreground">API</Link>
           </div>
         </div>
       </footer>

@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { 
-  Code2, 
   Cloud, 
   ShieldCheck, 
   RefreshCw, 
@@ -10,7 +9,6 @@ import {
   Laptop, 
   Trash2, 
   Copy, 
-  Check, 
   ExternalLink,
   History,
   Zap,
@@ -19,13 +17,12 @@ import {
   Globe,
   FileCode,
   Braces,
-  AlertTriangle,
   ShieldAlert
 } from "lucide-react"
+import { NavigationHeader } from "@/components/NavigationHeader"
 import { AuthUI } from "@/components/AuthModal"
 import { useUser, useFirestore, useMemoFirebase, useCollection } from "@/firebase"
 import { collection, query, orderBy, deleteDoc, doc } from "firebase/firestore"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -34,18 +31,16 @@ import {
   DropdownMenuContent, 
   DropdownMenuItem, 
   DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuSeparator
+  DropdownMenuLabel
 } from "@/components/ui/dropdown-menu"
 import { formatBase64Code } from "@/lib/image-utils"
 import Link from "next/link"
 
 export default function CloudSyncPage() {
   const { toast } = useToast()
-  const { user, isUserLoading } = useUser()
+  const { user } = useUser()
   const db = useFirestore()
   const [copiedId, setCopiedId] = React.useState<string | null>(null)
-  const [isAuthOpen, setIsAuthOpen] = React.useState(false)
 
   const isVerified = user?.emailVerified || user?.providerData.some(p => p.providerId === 'google.com');
 
@@ -111,27 +106,9 @@ export default function CloudSyncPage() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-primary/5 blur-[150px] rounded-full" />
       </div>
 
-      <header className={cn(
-        "fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/10 bg-background/40 backdrop-blur-2xl px-4 md:px-12 h-20 flex items-center justify-between shadow-sm transition-all",
-        isAuthOpen && "hidden"
-      )}>
-        <Link href="/" className="flex items-center gap-2 md:gap-3 group">
-          <div className="bg-gradient-to-br from-primary to-secondary p-1.5 md:p-2 rounded-xl shadow-lg group-hover:scale-110 transition-all">
-            <Code2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
-          </div>
-          <span className="text-xl md:text-2xl font-black tracking-tighter">FORGE.</span>
-        </Link>
-        <div className="flex items-center gap-4">
-          <nav className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mr-6">
-            <Link href="/docs" className="hover:text-foreground transition-colors">Documentation</Link>
-            <Link href="/performance" className="hover:text-foreground transition-colors">Performance</Link>
-            <Link href="/api-reference" className="hover:text-foreground transition-colors">API</Link>
-          </nav>
-          <AuthUI onOpenChange={setIsAuthOpen} />
-        </div>
-      </header>
+      <NavigationHeader />
 
-      <main className="container mx-auto px-4 pt-32 pb-32 relative z-10 max-w-6xl">
+      <main className="container mx-auto px-4 pt-32 md:pt-48 pb-32 relative z-10 max-w-6xl">
         {user ? (
           <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-foreground/5 pb-12">
