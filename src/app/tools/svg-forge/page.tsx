@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -24,13 +25,19 @@ import {
   Search,
   ShieldCheck,
   Cpu,
-  Info
+  Info,
+  Play,
+  Palette,
+  Wind
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+
+type AnimationType = 'none' | 'spin' | 'pulse' | 'bounce' | 'float';
 
 export default function SvgForgePage() {
   const { toast } = useToast()
@@ -38,6 +45,8 @@ export default function SvgForgePage() {
   const [copied, setCopied] = React.useState<string | null>(null)
   const [isCleaned, setIsCleaned] = React.useState(true)
   const [showGrid, setShowGrid] = React.useState(true)
+  const [animation, setAnimation] = React.useState<AnimationType>('none')
+  const [colorMode, setColorMode] = React.useState<'original' | 'currentColor'>('original')
   const [metrics, setMetrics] = React.useState({ size: 0, paths: 0, complexity: 'low' })
 
   const calculateMetrics = (raw: string) => {
@@ -55,24 +64,46 @@ export default function SvgForgePage() {
   }, [input])
 
   const processSvg = (raw: string) => {
-    if (!isCleaned) return raw.trim()
+    let output = raw.trim()
     
-    return raw.trim()
-      .replace(/<\?xml.*?\?>/g, '')
-      .replace(/<!--.*?-->/g, '')
-      .replace(/xmlns:xlink=".*?"/g, '')
-      .replace(/xml:space=".*?"/g, '')
-      .replace(/version=".*?"/g, '')
-      .replace(/id=".*?"/g, '') // Strip IDs for generic components
-      .replace(/\s+/g, ' ')
-      .replace(/>\s+</g, '><')
+    if (isCleaned) {
+      output = output
+        .replace(/<\?xml.*?\?>/g, '')
+        .replace(/<!--.*?-->/g, '')
+        .replace(/xmlns:xlink=".*?"/g, '')
+        .replace(/xml:space=".*?"/g, '')
+        .replace(/version=".*?"/g, '')
+        .replace(/id=".*?"/g, '')
+        .replace(/\s+/g, ' ')
+        .replace(/>\s+</g, '><')
+    }
+
+    if (colorMode === 'currentColor') {
+      output = output
+        .replace(/fill="((?!none)[^"]+)"/g, 'fill="currentColor"')
+        .replace(/stroke="((?!none)[^"]+)"/g, 'stroke="currentColor"')
+    }
+    
+    return output
+  }
+
+  const getAnimationClass = (anim: AnimationType) => {
+    switch (anim) {
+      case 'spin': return 'animate-spin'
+      case 'pulse': return 'animate-pulse'
+      case 'bounce': return 'animate-bounce'
+      case 'float': return 'animate-float'
+      default: return ''
+    }
   }
 
   const handleCopy = (type: 'data-uri' | 'raw' | 'react') => {
     let output = processSvg(input)
+    
     if (type === 'data-uri') {
       output = `data:image/svg+xml;base64,${btoa(output)}`
     } else if (type === 'react') {
+      const animClass = getAnimationClass(animation)
       const camel = output
         .replace(/fill-rule/g, 'fillRule')
         .replace(/clip-rule/g, 'clipRule')
@@ -80,34 +111,37 @@ export default function SvgForgePage() {
         .replace(/stroke-linecap/g, 'strokeLinecap')
         .replace(/stroke-linejoin/g, 'strokeLinejoin')
         .replace(/stroke-miterlimit/g, 'strokeMiterlimit')
-      output = `export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (\n  ${camel.replace('<svg', '<svg {...props}')}\n);`
+      
+      output = `import { cn } from "@/lib/utils";\n\nexport const ForgedIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (\n  ${camel.replace('<svg', `<svg className={cn("${animClass}", className)} {...props}`)}\n);`
     }
     
     navigator.clipboard.writeText(output)
     setCopied(type)
     toast({
-      title: "Synthesis Dispatched",
-      description: `Copied ${type.toUpperCase()} to workstation.`,
+      title: "Orchestration Dispatched",
+      description: `Copied ${type.toUpperCase()} component to workstation.`,
     })
     setTimeout(() => setCopied(null), 2000)
   }
 
   const handleDownload = () => {
+    const animClass = getAnimationClass(animation)
     const component = `
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 /**
- * Synthesized by Forge Studios SVG Architect
- * @returns {JSX.Element} Optimized React Vector Component
+ * Synthesized by Forge Studios SVG Orchestrator
+ * Industrial-grade React Vector Component
  */
-export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
+export const ForgedIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
   ${processSvg(input)
     .replace(/fill-rule/g, 'fillRule')
     .replace(/clip-rule/g, 'clipRule')
     .replace(/stroke-width/g, 'strokeWidth')
     .replace(/stroke-linecap/g, 'strokeLinecap')
     .replace(/stroke-linejoin/g, 'strokeLinejoin')
-    .replace('<svg', '<svg {...props}')}
+    .replace('<svg', `<svg className={cn("${animClass}", className)} {...props}`)}
 );
     `.trim();
     
@@ -115,9 +149,9 @@ export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'forged-icon.tsx';
+    a.download = 'forged-component.tsx';
     a.click();
-    toast({ title: "Asset Dispatched", description: "React component saved to disk." });
+    toast({ title: "Asset Dispatched", description: "Orchestrated component saved to disk." });
   }
 
   const isSvg = input.trim().startsWith('<svg')
@@ -135,13 +169,13 @@ export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
         <section className="text-center space-y-8 mb-24 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-widest mx-auto">
             <FileCode className="w-3.5 h-3.5" />
-            Vector Orchestration Architect
+            Visual Developer Utility
           </div>
           <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-none uppercase">
-            SVG <br /><span className="text-gradient">Studio Pro.</span>
+            SVG <br /><span className="text-gradient">Orchestrator.</span>
           </h1>
           <p className="text-lg text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed">
-            Professional vector-to-code workstation. Orchestrate clean paths, generate industrial-grade React components, and optimize Data URIs with live path validation.
+            Professional vector-to-component synthesis. Transform raw SVG paths into responsive, animated React/Tailwind components optimized for industrial-grade workflows.
           </p>
         </section>
 
@@ -165,6 +199,41 @@ export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
         <section className="grid lg:grid-cols-2 gap-8 items-start animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-200">
           <div className="glass-card p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] border-white/10 space-y-8 shadow-2xl relative">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-foreground/5 pb-8">
+              <div className="space-y-3">
+                <Label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground flex items-center gap-2">
+                  <Wind className="w-3 h-3 text-secondary" /> Synthesis Animation
+                </Label>
+                <Select value={animation} onValueChange={(v: any) => setAnimation(v)}>
+                  <SelectTrigger className="h-12 rounded-xl bg-background border-foreground/10 font-bold text-[10px] uppercase tracking-widest">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-foreground/10">
+                    <SelectItem value="none" className="font-bold text-[10px] uppercase tracking-widest">Static</SelectItem>
+                    <SelectItem value="spin" className="font-bold text-[10px] uppercase tracking-widest">Spin (Icon)</SelectItem>
+                    <SelectItem value="pulse" className="font-bold text-[10px] uppercase tracking-widest">Pulse (Alert)</SelectItem>
+                    <SelectItem value="bounce" className="font-bold text-[10px] uppercase tracking-widest">Bounce (Call)</SelectItem>
+                    <SelectItem value="float" className="font-bold text-[10px] uppercase tracking-widest">Float (Ambient)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-3">
+                <Label className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground flex items-center gap-2">
+                  <Palette className="w-3 h-3 text-primary" /> Color Reconciliation
+                </Label>
+                <Select value={colorMode} onValueChange={(v: any) => setColorMode(v)}>
+                  <SelectTrigger className="h-12 rounded-xl bg-background border-foreground/10 font-bold text-[10px] uppercase tracking-widest">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-foreground/10">
+                    <SelectItem value="original" className="font-bold text-[10px] uppercase tracking-widest">Original HEX</SelectItem>
+                    <SelectItem value="currentColor" className="font-bold text-[10px] uppercase tracking-widest">Tailwind CurrentColor</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
             <div className="space-y-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between px-2 gap-4">
                 <div className="flex items-center gap-6">
@@ -174,7 +243,7 @@ export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
                   </div>
                   <div className="flex items-center gap-3 bg-secondary/5 px-4 py-2 rounded-xl border border-secondary/10">
                     <Switch checked={isCleaned} onCheckedChange={setIsCleaned} id="clean-mode" />
-                    <Label htmlFor="clean-mode" className="text-[9px] font-black uppercase tracking-widest opacity-60 cursor-pointer">Clean Synthesis</Label>
+                    <Label htmlFor="clean-mode" className="text-[9px] font-black uppercase tracking-widest opacity-60 cursor-pointer">Clean Metadata</Label>
                   </div>
                 </div>
                 {input && (
@@ -187,27 +256,27 @@ export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="<svg xmlns='http://www.w3.org/2000/svg' ...>...</svg>"
-                className="min-h-[450px] rounded-[2rem] bg-foreground/5 border-foreground/10 focus:ring-secondary p-8 text-[13px] font-code transition-all custom-scrollbar resize-none shadow-inner"
+                className="min-h-[350px] rounded-[2rem] bg-foreground/5 border-foreground/10 focus:ring-secondary p-8 text-[13px] font-code transition-all custom-scrollbar resize-none shadow-inner"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Button 
-                onClick={() => handleCopy('data-uri')}
+                onClick={() => handleCopy('react')}
                 disabled={!isSvg}
-                className="h-16 rounded-2xl bg-secondary text-white hover:scale-[1.02] transition-all font-black text-[11px] uppercase tracking-widest px-4 shadow-xl"
+                className="h-16 rounded-2xl bg-foreground text-background hover:scale-[1.02] transition-all font-black text-[11px] uppercase tracking-widest px-4 shadow-xl"
               >
-                {copied === 'data-uri' ? <Check className="w-4 h-4 mr-2" /> : <ExternalLink className="w-4 h-4 mr-2" />}
-                Data URI
+                {copied === 'react' ? <Check className="w-4 h-4 mr-2" /> : <Braces className="w-4 h-4 mr-2" />}
+                Copy React/Tailwind
               </Button>
               <Button 
                 variant="outline"
-                onClick={() => handleCopy('react')}
+                onClick={() => handleCopy('data-uri')}
                 disabled={!isSvg}
                 className="h-16 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[11px] uppercase tracking-widest px-4"
               >
-                {copied === 'react' ? <Check className="w-4 h-4 mr-2" /> : <Braces className="w-4 h-4 mr-2" />}
-                React Code
+                {copied === 'data-uri' ? <Check className="w-4 h-4 mr-2" /> : <ExternalLink className="w-4 h-4 mr-2" />}
+                Data URI
               </Button>
               <Button 
                 variant="outline"
@@ -215,7 +284,7 @@ export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
                 disabled={!isSvg}
                 className="h-16 rounded-2xl border-foreground/10 hover:bg-foreground hover:text-background transition-all font-black text-[11px] uppercase tracking-widest px-4 sm:col-span-2 group"
               >
-                <Download className="w-4 h-4 mr-2 group-hover:translate-y-0.5 transition-transform" /> Download .tsx Component
+                <Download className="w-4 h-4 mr-2 group-hover:translate-y-0.5 transition-transform" /> Download Component (.tsx)
               </Button>
             </div>
           </div>
@@ -243,8 +312,9 @@ export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
                   <div className="absolute -inset-10 bg-secondary/10 blur-[60px] rounded-full opacity-50 group-hover:opacity-100 transition-opacity" />
                   <div 
                     className={cn(
-                      "w-64 h-64 md:w-80 md:h-80 flex items-center justify-center p-12 rounded-[3.5rem] border border-foreground/5 shadow-2xl relative z-10 transition-transform group-hover:scale-105 duration-500 overflow-hidden",
-                      showGrid ? "bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat opacity-90" : "bg-foreground/5"
+                      "w-64 h-64 md:w-80 md:h-80 flex items-center justify-center p-12 rounded-[3.5rem] border border-foreground/5 shadow-2xl relative z-10 transition-all duration-500 overflow-hidden",
+                      showGrid ? "bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat opacity-90" : "bg-foreground/5",
+                      getAnimationClass(animation)
                     )}
                     dangerouslySetInnerHTML={{ __html: processSvg(input) }}
                   />
@@ -252,10 +322,10 @@ export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
                 <div className="space-y-3">
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-widest">
                     <ShieldCheck className="w-3.5 h-3.5" />
-                    Path Validated
+                    Motion Validated
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight">Render Secured</h3>
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] italic">Vector reconciliation complete.</p>
+                  <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight">Component Ready</h3>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] italic">Orchestration sequence complete.</p>
                 </div>
               </div>
             ) : (
@@ -278,14 +348,14 @@ export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
               <Settings2 className="w-3.5 h-3.5" />
               Module Capability
             </div>
-            <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase">Vector Synthesis <br /><span className="text-gradient">Specifications</span></h2>
+            <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase">Orchestration <br /><span className="text-gradient">Specifications</span></h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: Maximize, title: "Clean Synthesis", desc: "Automatically purges legacy XML metadata, namespaces, and redundant attributes to ensure the smallest possible bitstream size." },
-              { icon: Braces, title: "React Orchestration", desc: "Synthesizes production-ready React components with full prop forwarding and camelCase attribute reconciliation." },
-              { icon: Grid3X3, title: "Studio Rendering", desc: "Real-time preview monitor with transparency grid support and path validation for industrial-grade accuracy." },
+              { icon: Wind, title: "Motion Synthesis", desc: "Automatically injects Tailwind-driven animation sequences (Spin, Pulse, Bounce) into the component architecture for interactive UI states." },
+              { icon: Palette, title: "Tailwind Theming", desc: "Synthesizes 'currentColor' support, allowing icons to instantly adapt to your application's design system via standard text color utilities." },
+              { icon: Braces, title: "React Architecture", desc: "Generates production-ready TypeScript components with full prop forwarding and optimized path reconciliation for modern agentic workflows." },
             ].map((feature, i) => (
               <div key={i} className="glass-card p-10 rounded-[2.5rem] space-y-6 hover:translate-y-[-8px] transition-all">
                 <div className="w-14 h-14 rounded-2xl bg-foreground/5 flex items-center justify-center text-secondary">
@@ -299,21 +369,21 @@ export const ForgedIcon = (props: React.SVGProps<SVGSVGElement>) => (
         </section>
 
         <section id="faq" className="mt-32 pt-32 border-t border-foreground/5">
-           <h2 className="text-2xl md:text-3xl font-black text-center mb-16 tracking-tighter uppercase">Vector Architect — FAQ</h2>
+           <h2 className="text-2xl md:text-3xl font-black text-center mb-16 tracking-tighter uppercase">SVG Orchestrator — FAQ</h2>
            <div className="max-w-4xl mx-auto">
              <Accordion type="single" collapsible className="w-full space-y-4">
                 {[
                   {
-                    q: "What does 'Clean Synthesis' actually do?",
-                    a: "It performs an industrial-grade sweep of your SVG code, removing xmlns:xlink, xml:space, version tags, and comments. It also minifies whitespace and optionally strips IDs to prevent collision in modern component-based architectures."
+                    q: "What is 'CurrentColor' reconciliation?",
+                    a: "It's an industrial standard for professional icon systems. By replacing fixed HEX colors with 'currentColor', the icon inherits the text color of its parent container, allowing you to change its color using simple Tailwind classes like 'text-blue-500'."
                   },
                   {
-                    q: "Why should I convert SVG to a React component?",
-                    a: "Converting to a React component allows you to treat icons as dynamic UI elements. You can pass props like 'color', 'size', or 'strokeWidth' directly to the component, enabling better synchronization with your application's design system."
+                    q: "How does the 'Motion Synthesis' work?",
+                    a: "We inject Tailwind's native JIT animation classes directly into the SVG component's root className. This ensures high-performance, 60fps animations without the need for external libraries like Framer Motion or GSAP."
                   },
                   {
-                    q: "Is it safe to use Data URIs for complex vectors?",
-                    a: "Data URIs are excellent for small-to-medium decorative vectors as they eliminate HTTP requests. However, for extremely complex illustrations, we recommend using the generated React components to keep your HTML bitstreams manageable."
+                    q: "Is this tool compatible with 'Vibe Coding' agents?",
+                    a: "Yes. The generated components use a standardized React/TypeScript interface that is highly predictable and readable for agentic engineering tools like Cursor, Windsurf, and standard multi-agent swarms."
                   }
                 ].map((faq, idx) => (
                   <AccordionItem 
