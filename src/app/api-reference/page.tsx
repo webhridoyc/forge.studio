@@ -100,29 +100,31 @@ export default function ApiRefPage() {
           </aside>
 
           <div className="space-y-16 md:space-y-24 max-w-full">
-            <section className="space-y-4 md:space-y-6">
+            <section className="space-y-4 md:space-y-6 px-2 md:px-0">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-widest">
                 <Braces className="w-3.5 h-3.5" />
                 V1.0.0 Stable
               </div>
-              <h1 className="text-4xl md:text-7xl font-black tracking-tighter leading-tight uppercase break-words">Technical <br className="hidden md:block" /><span className="text-gradient">API Reference</span></h1>
+              <h1 className="text-3xl sm:text-4xl md:text-7xl font-black tracking-tighter leading-tight uppercase break-words">
+                Technical <br className="hidden md:block" /><span className="text-gradient">API Reference</span>
+              </h1>
               <p className="text-sm md:text-xl text-muted-foreground font-medium max-w-2xl leading-relaxed">
                 Seamlessly integrate the Forge synthesis engine into your developer workstation or server-side pipelines.
               </p>
             </section>
 
             <section id="auth" className="scroll-mt-32 space-y-6 md:space-y-8">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 px-2 md:px-0">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
                   <Lock className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-black tracking-tight uppercase">Authentication</h2>
               </div>
-              <div className="glass-card p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-6 overflow-hidden">
+              <div className="glass-card p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-6 overflow-hidden mx-2 md:mx-0">
                 <p className="text-xs md:text-sm text-muted-foreground font-medium leading-relaxed">
-                  All Forge API requests must include a secret key in the request header. You can manage your access tokens within the <Link href="/usage-specs" className="text-primary hover:underline">Usage Specs</Link> portal.
+                  All Forge API requests must include a secret key in the request header. Manage your tokens within the <Link href="/usage-specs" className="text-primary hover:underline">Usage Specs</Link> portal.
                 </p>
-                <div className="p-4 md:p-6 bg-zinc-950 rounded-2xl md:rounded-3xl border border-white/5 font-code text-[11px] md:text-sm overflow-x-auto whitespace-nowrap group relative custom-scrollbar max-w-full">
+                <div className="p-4 md:p-6 bg-zinc-950 rounded-2xl md:rounded-3xl border border-white/5 font-code text-[11px] md:text-sm overflow-x-auto whitespace-pre-wrap sm:whitespace-nowrap group relative custom-scrollbar max-w-full break-all">
                   <span className="text-zinc-500">Header:</span> <span className="text-accent font-bold">X-Forge-API-Key</span> <span className="text-zinc-500">:</span> <span className="text-zinc-300">your_secret_token_here</span>
                   <Button
                     size="icon"
@@ -136,13 +138,13 @@ export default function ApiRefPage() {
             </section>
 
             <section id="sandbox" className="scroll-mt-32 space-y-6 md:space-y-8">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 px-2 md:px-0">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-accent/10 flex items-center justify-center">
                   <Play className="w-5 h-5 md:w-6 md:h-6 text-accent" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-black tracking-tight uppercase">Live Sandbox</h2>
               </div>
-              <div className="glass-card p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-8">
+              <div className="glass-card p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-8 mx-2 md:mx-0">
                 <div className="space-y-2">
                   <h3 className="text-lg font-black uppercase tracking-tight">Test Pipeline</h3>
                   <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">Upload an asset to simulate a real-time API response from the Forge Studio engine.</p>
@@ -189,16 +191,16 @@ export default function ApiRefPage() {
             </section>
 
             <section id="encode" className="scroll-mt-32 space-y-6 md:space-y-8">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 px-2 md:px-0">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-secondary/10 flex items-center justify-center">
                   <Zap className="w-5 h-5 md:w-6 md:h-6 text-secondary" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-black tracking-tight uppercase">Encode Endpoint</h2>
               </div>
-              <div className="glass-card p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-8">
+              <div className="glass-card p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border-white/10 space-y-8 mx-2 md:mx-0">
                 <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
                   <span className="px-3 py-1 rounded-md bg-green-500/10 text-green-500 text-[10px] font-black uppercase tracking-widest border border-green-500/20 shrink-0">POST</span>
-                  <code className="text-xs md:text-sm font-bold text-muted-foreground whitespace-nowrap">/v1/encode</code>
+                  <code className="text-xs md:text-sm font-bold text-muted-foreground whitespace-nowrap">/api/v1/encode</code>
                 </div>
                 <p className="text-xs md:text-sm text-muted-foreground font-medium leading-relaxed">
                   Transforms binary image streams into optimized Base64 payloads. Supports PNG, JPG, WebP, and SVG formats.
@@ -215,7 +217,7 @@ export default function ApiRefPage() {
                   
                   <TabsContent value="js" className="mt-0 group relative">
                     <pre className="p-6 md:p-8 bg-zinc-950 text-zinc-300 rounded-[1.5rem] md:rounded-[2rem] font-code text-[10px] md:text-xs lg:text-sm overflow-x-auto leading-relaxed border border-white/5 custom-scrollbar max-w-full">
-                      <code>{`const response = await fetch('https://api.forge.studio/v1/encode', {
+                      <code>{`const response = await fetch('https://api.forge.studio/api/v1/encode', {
   method: 'POST',
   headers: {
     'X-Forge-API-Key': 'YOUR_KEY',
@@ -241,7 +243,7 @@ console.log(data.uri);`}</code>
 
                   <TabsContent value="curl" className="mt-0 group relative">
                     <pre className="p-6 md:p-8 bg-zinc-950 text-zinc-300 rounded-[1.5rem] md:rounded-[2rem] font-code text-[10px] md:text-xs lg:text-sm overflow-x-auto leading-relaxed border border-white/5 custom-scrollbar max-w-full">
-                      <code>{`curl -X POST https://api.forge.studio/v1/encode \\
+                      <code>{`curl -X POST https://api.forge.studio/api/v1/encode \\
   -H "X-Forge-API-Key: YOUR_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{"image": "...", "target": "png"}'`}</code>
@@ -252,13 +254,13 @@ console.log(data.uri);`}</code>
             </section>
 
             <section id="limits" className="scroll-mt-32 space-y-6 md:space-y-8 pb-12">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 px-2 md:px-0">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-secondary/10 flex items-center justify-center">
                   <ShieldCheck className="w-5 h-5 md:w-6 md:h-6 text-secondary" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-black tracking-tight uppercase">Rate Limits</h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 px-2 md:px-0">
                 <div className="glass-card p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-white/10 space-y-4">
                   <div className="flex items-center gap-2">
                     <Monitor className="w-4 h-4 text-muted-foreground" />
