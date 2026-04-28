@@ -11,7 +11,8 @@ import {
   CircleDot,
   Terminal,
   ChevronRight,
-  Cpu
+  Cpu,
+  Target
 } from "lucide-react"
 import { ForgeLogo } from "@/components/ForgeLogo"
 import { AuthUI } from "@/components/AuthModal"
@@ -56,6 +57,13 @@ export function NavigationHeader() {
       icon: Terminal,
       color: "text-accent",
       desc: "Logic Breakout"
+    },
+    {
+      name: "Prompts",
+      href: "/tools/prompt-architect",
+      icon: Target,
+      color: "text-primary",
+      desc: "Agentic Synth"
     }
   ]
 
@@ -93,7 +101,7 @@ export function NavigationHeader() {
                 key={tool.name}
                 href={tool.href}
                 className={cn(
-                  "relative flex flex-col items-center justify-center px-5 py-2.5 rounded-[1.4rem] transition-all duration-500 group/item",
+                  "relative flex flex-col items-center justify-center px-4 py-2.5 rounded-[1.4rem] transition-all duration-500 group/item",
                   isActive 
                     ? "bg-foreground text-background shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] scale-105" 
                     : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
@@ -101,10 +109,10 @@ export function NavigationHeader() {
               >
                 <div className="flex items-center gap-2">
                   <tool.icon className={cn(
-                    "w-4 h-4 transition-transform duration-500 group-hover/item:scale-110", 
+                    "w-3.5 h-3.5 transition-transform duration-500 group-hover/item:scale-110", 
                     isActive ? "text-inherit" : tool.color
                   )} />
-                  <span className="text-[10px] font-black uppercase tracking-widest">{tool.name}</span>
+                  <span className="text-[9px] font-black uppercase tracking-widest">{tool.name}</span>
                 </div>
                 {/* Module Tooltip/Description (Only for Desktop) */}
                 {!isActive && (
@@ -119,12 +127,12 @@ export function NavigationHeader() {
 
         {/* Mobile Suite Container */}
         <div className="lg:hidden flex items-center gap-1 max-w-[50%] overflow-x-auto no-scrollbar mask-fade-right">
-           {tools.slice(0, 3).map((tool) => (
+           {tools.slice(0, 4).map((tool) => (
               <Link 
                 key={tool.name}
                 href={tool.href}
                 className={cn(
-                  "p-3 rounded-2xl transition-all",
+                  "p-3 rounded-2xl transition-all shrink-0",
                   pathname === tool.href ? "bg-primary text-white" : "bg-foreground/5 text-muted-foreground"
                 )}
               >
