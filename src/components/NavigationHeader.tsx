@@ -12,7 +12,8 @@ import {
   Terminal,
   ChevronRight,
   Cpu,
-  Target
+  Target,
+  ShoppingBag
 } from "lucide-react"
 import { ForgeLogo } from "@/components/ForgeLogo"
 import { AuthUI } from "@/components/AuthModal"
@@ -64,6 +65,13 @@ export function NavigationHeader() {
       icon: Target,
       color: "text-primary",
       desc: "Agentic Synth"
+    },
+    {
+      name: "Products",
+      href: "/tools/product-forge",
+      icon: ShoppingBag,
+      color: "text-secondary",
+      desc: "Catalog Vision"
     }
   ]
 
@@ -93,7 +101,7 @@ export function NavigationHeader() {
         </div>
 
         {/* Center: Workstation Dock */}
-        <nav className="absolute left-1/2 -translate-x-1/2 hidden lg:flex items-center p-1.5 bg-foreground/[0.03] border border-foreground/5 rounded-[1.8rem] backdrop-blur-md relative z-10">
+        <nav className="absolute left-1/2 -translate-x-1/2 hidden lg:flex items-center p-1.5 bg-foreground/[0.03] border border-foreground/5 rounded-[1.8rem] backdrop-blur-md relative z-10 overflow-x-auto no-scrollbar max-w-[50vw]">
           {tools.map((tool) => {
             const isActive = pathname === tool.href
             return (
@@ -101,7 +109,7 @@ export function NavigationHeader() {
                 key={tool.name}
                 href={tool.href}
                 className={cn(
-                  "relative flex flex-col items-center justify-center px-4 py-2.5 rounded-[1.4rem] transition-all duration-500 group/item",
+                  "relative flex flex-col items-center justify-center px-4 py-2.5 rounded-[1.4rem] transition-all duration-500 group/item shrink-0",
                   isActive 
                     ? "bg-foreground text-background shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] scale-105" 
                     : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
@@ -126,8 +134,8 @@ export function NavigationHeader() {
         </nav>
 
         {/* Mobile Suite Container */}
-        <div className="lg:hidden flex items-center gap-1 max-w-[50%] overflow-x-auto no-scrollbar mask-fade-right">
-           {tools.slice(0, 4).map((tool) => (
+        <div className="lg:hidden flex items-center gap-1 max-w-[40%] overflow-x-auto no-scrollbar mask-fade-right">
+           {tools.slice(0, 5).map((tool) => (
               <Link 
                 key={tool.name}
                 href={tool.href}

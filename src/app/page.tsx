@@ -28,7 +28,8 @@ import {
   ImageIcon,
   FileCode,
   Braces,
-  Target
+  Target,
+  ShoppingBag
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -123,7 +124,7 @@ export default function Home() {
       <main className="container mx-auto px-4 md:px-6 pt-32 md:pt-48 pb-32 flex flex-col items-center relative z-10 max-w-full overflow-x-hidden">
         <section className="text-center max-w-6xl mb-24 md:mb-40 space-y-8 md:space-y-16 animate-in fade-in slide-in-from-top-12 duration-1000 px-4">
           <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl md:text-[8rem] lg:text-[10rem] font-black text-foreground tracking-tighter leading-none select-none text-center uppercase">
+            <h1 className="text-4xl sm:text-5xl md:text-[6rem] lg:text-[10rem] font-black text-foreground tracking-tighter leading-none select-none text-center uppercase">
               Base64 <br />
               <span className="text-gradient">Converter.</span>
             </h1>
@@ -231,13 +232,14 @@ export default function Home() {
             </TabsContent>
           </Tabs>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 w-full mt-24">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 w-full mt-24">
             {[
               { name: "Image Optimizer", icon: ImageIcon, href: "/tools/image-optimizer", color: "text-accent" },
               { name: "SVG Studio", icon: FileCode, href: "/tools/svg-forge", color: "text-secondary" },
               { name: "JSON Synth", icon: Braces, href: "/tools/json-synth", color: "text-primary" },
               { name: "Code Architect", icon: Terminal, href: "/tools/code-architect", color: "text-accent" },
-              { name: "Prompt Architect", icon: Target, href: "/tools/prompt-architect", color: "text-primary" }
+              { name: "Prompt Architect", icon: Target, href: "/tools/prompt-architect", color: "text-primary" },
+              { name: "Product Forge", icon: ShoppingBag, href: "/tools/product-forge", color: "text-secondary" }
             ].map((tool, i) => (
               <Link key={i} href={tool.href} className="glass-card p-6 md:p-8 rounded-[2rem] border-white/10 flex flex-col items-center gap-4 hover:translate-y-[-8px] transition-all group">
                 <div className={cn("w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-foreground/5 flex items-center justify-center transition-transform group-hover:scale-110", tool.color)}>
