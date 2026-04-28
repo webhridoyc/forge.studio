@@ -28,15 +28,65 @@ import { cn } from "@/lib/utils"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { explainCode, type ExplainCodeOutput } from "@/ai/flows/explain-code-flow"
 
-const DEFAULT_CODE = `<div class="p-8 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-[2rem] border border-primary/20 backdrop-blur-xl">
-  <h2 class="text-3xl font-black tracking-tighter mb-4 text-primary">FORGE COMPONENT</h2>
-  <p class="text-muted-foreground font-medium leading-relaxed">
-    This is a live synthesis preview. Edit the code on the left to see instant updates in this isolated monitor.
-  </p>
-  <div class="mt-6 flex gap-4">
-    <button class="px-6 py-3 bg-primary text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl">
-      Industrial Action
-    </button>
+const DEFAULT_CODE = `<div class="relative min-h-[400px] w-full flex flex-col items-center justify-center p-8 bg-zinc-950 rounded-[3rem] border border-white/5 overflow-hidden">
+  <!-- Background Glow -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/20 blur-[100px] rounded-full pointer-events-none"></div>
+
+  <!-- Trigger Button -->
+  <button 
+    id="menuToggle" 
+    class="relative z-50 px-8 py-4 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3 border border-white/20"
+    onclick="const menu = document.getElementById('forgeMenu'); menu.classList.toggle('hidden'); menu.classList.toggle('flex');"
+  >
+    <span class="text-lg">☰</span> WORKSTATION ACCESS
+  </button>
+
+  <!-- Side Navigation (Forged) -->
+  <aside 
+    id="forgeMenu" 
+    class="hidden absolute inset-0 z-40 flex-col items-center justify-center bg-zinc-950/80 backdrop-blur-2xl p-8 animate-in fade-in zoom-in-95 duration-300"
+  >
+    <nav class="w-full max-w-xs space-y-3">
+      <div class="text-center mb-8">
+        <p class="text-[9px] font-black text-primary uppercase tracking-[0.4em]">Synthesis Menu</p>
+        <h3 class="text-2xl font-black text-white tracking-tighter">FORGE STUDIOS</h3>
+      </div>
+      
+      <a href="#" class="flex items-center gap-4 px-6 py-4 rounded-2xl bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all group">
+        <span class="text-lg">🏠</span>
+        <span class="font-black text-[10px] uppercase tracking-widest">Workbench</span>
+      </a>
+      
+      <a href="#" class="flex items-center gap-4 px-6 py-4 rounded-2xl hover:bg-white/5 text-zinc-400 hover:text-white transition-all group border border-transparent hover:border-white/5">
+        <span class="text-lg">🌐</span>
+        <span class="font-black text-[10px] uppercase tracking-widest">Explore Ecosystem</span>
+      </a>
+      
+      <a href="#" class="flex items-center gap-4 px-6 py-4 rounded-2xl hover:bg-white/5 text-zinc-400 hover:text-white transition-all group border border-transparent hover:border-white/5">
+        <span class="text-lg">📈</span>
+        <span class="font-black text-[10px] uppercase tracking-widest">Performance Audit</span>
+      </a>
+      
+      <a href="#" class="flex items-center gap-4 px-6 py-4 rounded-2xl hover:bg-white/5 text-zinc-400 hover:text-white transition-all group border border-transparent hover:border-white/5">
+        <span class="text-lg">✉️</span>
+        <span class="font-black text-[10px] uppercase tracking-widest">Signal Center</span>
+      </a>
+
+      <div class="h-px bg-white/10 my-6"></div>
+
+      <button 
+        onclick="const menu = document.getElementById('forgeMenu'); menu.classList.add('hidden'); menu.classList.remove('flex');"
+        class="w-full py-4 rounded-2xl border border-white/10 text-white font-black text-[9px] uppercase tracking-widest hover:bg-white/5 transition-all"
+      >
+        Close Monitor
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Status Info -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 opacity-30">
+    <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+    <p class="text-[8px] font-black text-white uppercase tracking-widest">V8 Industrial Engine Active</p>
   </div>
 </div>`;
 
@@ -82,14 +132,15 @@ export default function CodeArchitectPage() {
     <html>
       <head>
         <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
         <script>
           tailwind.config = {
             theme: {
               extend: {
                 colors: {
-                  primary: '#9333ea',
-                  secondary: '#db2777',
-                  accent: '#0ea5e9',
+                  primary: '#BAB5EE',
+                  secondary: '#7095F5',
+                  accent: '#BAB5EE',
                 }
               }
             }
@@ -97,6 +148,9 @@ export default function CodeArchitectPage() {
         </script>
         <style>
           body { background: transparent; margin: 0; padding: 2rem; font-family: sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+          .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+          .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+          .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(186, 181, 238, 0.2); border-radius: 10px; }
         </style>
       </head>
       <body>
@@ -284,7 +338,7 @@ export default function CodeArchitectPage() {
 
         <section id="faq" className="mt-48 pt-32 border-t border-foreground/5">
            <div className="text-center mb-16 space-y-4">
-             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] font-black uppercase tracking-widest">
+             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] font-black uppercase tracking-widest mx-auto">
               <Settings2 className="w-3.5 h-3.5" />
               Module Capabilities
             </div>
