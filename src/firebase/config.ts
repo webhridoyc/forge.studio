@@ -1,8 +1,9 @@
 export const firebaseConfig = {
-  apiKey: "AIzaSyAPbaKyPL7kt0iiDfmmPVzetA0AXEWDBf8",
-  authDomain: "studio-3219014336-dd788.firebaseapp.com",
-  projectId: "studio-3219014336-dd788",
-  storageBucket: "studio-3219014336-dd788.firebasestorage.app",
-  messagingSenderId: "670691377119",
-  appId: "1:670691377119:web:5467cf4efa882cbd1e8e6a"
+  apiKey: "AIzaSyCnUCTypZV7-2TsLSiSW6YhJi3ib5ksV2s",
+  authDomain: "base64-forge-studio.firebaseapp.com",
+  projectId: "base64-forge-studio",
+  storageBucket: "base64-forge-studio.firebasestorage.app",
+  messagingSenderId: "1043020917839",
+  appId: "1:1043020917839:web:6d4489bb75ee428b7f8e3a",
+  measurementId: "G-N53GQ0NF18"
 };
