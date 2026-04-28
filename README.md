@@ -1,7 +1,7 @@
 
 # FORGE STUDIOS | Professional Workflow Orchestration
 
-Industrial-grade developer utility studio. Synthesize images to code, orchestrate vectors into components, and architect JSON structures instantly. Optimized for the high-performance 2026 "Vibe Coding" ecosystem.
+ pIndustrial-grade developer utility studio. Synthesize images to code, orchestrate vectors into components, and architect JSON structures instantly. Optimized for the high-performance 2026 "Vibe Coding" ecosystem.
 
 ## 🚀 Deployment Hub
 The studio is live and synchronized across the production pipeline.
