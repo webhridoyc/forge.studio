@@ -19,7 +19,9 @@ import {
   BookOpen,
   BarChart3,
   X,
-  Menu
+  Menu,
+  Sparkles,
+  ShieldCheck
 } from "lucide-react"
 import { ForgeLogo } from "@/components/ForgeLogo"
 import { AuthUI } from "@/components/AuthModal"
@@ -27,8 +29,8 @@ import { cn } from "@/lib/utils"
 import { 
   Sheet, 
   SheetContent, 
-  SheetTrigger,
-  SheetHeader,
+  SheetTrigger, 
+  SheetHeader, 
   SheetTitle,
   SheetClose
 } from "@/components/ui/sheet"
@@ -44,6 +46,7 @@ export function NavigationHeader() {
       href: "/", 
       icon: Zap, 
       color: "text-primary",
+      gradient: "from-primary/20 to-transparent",
       desc: "Industrial binary-to-text synthesis"
     },
     { 
@@ -51,6 +54,7 @@ export function NavigationHeader() {
       href: "/tools/image-optimizer", 
       icon: ImageIcon, 
       color: "text-accent",
+      gradient: "from-accent/20 to-transparent",
       desc: "High-performance bitstream scaling"
     },
     { 
@@ -58,6 +62,7 @@ export function NavigationHeader() {
       href: "/tools/svg-forge", 
       icon: FileCode, 
       color: "text-secondary",
+      gradient: "from-secondary/20 to-transparent",
       desc: "Vector-to-component orchestration"
     },
     { 
@@ -65,6 +70,7 @@ export function NavigationHeader() {
       href: "/tools/json-synth", 
       icon: Braces, 
       color: "text-primary",
+      gradient: "from-primary/20 to-transparent",
       desc: "Industrial data architecture tools"
     },
     {
@@ -72,6 +78,7 @@ export function NavigationHeader() {
       href: "/tools/code-architect",
       icon: Terminal,
       color: "text-accent",
+      gradient: "from-accent/20 to-transparent",
       desc: "AI-powered logic breakout & sandbox"
     },
     {
@@ -79,6 +86,7 @@ export function NavigationHeader() {
       href: "/tools/prompt-architect",
       icon: Target,
       color: "text-primary",
+      gradient: "from-primary/20 to-transparent",
       desc: "Agentic system prompt engineering"
     },
     {
@@ -86,15 +94,16 @@ export function NavigationHeader() {
       href: "/tools/product-forge",
       icon: ShoppingBag,
       color: "text-secondary",
+      gradient: "from-secondary/20 to-transparent",
       desc: "AI Vision catalog synthesis"
     }
   ]
 
-  const systemLinks = [
-    { name: "Documentation", href: "/docs", icon: BookOpen, color: "text-muted-foreground" },
-    { name: "Performance Audit", href: "/performance", icon: BarChart3, color: "text-muted-foreground" },
-    { name: "API Reference", href: "/api-reference", icon: Braces, color: "text-muted-foreground" },
-    { name: "Studio Settings", href: "/preferences", icon: Settings, color: "text-muted-foreground" },
+  const systemNodes = [
+    { name: "Documentation", href: "/docs", icon: BookOpen },
+    { name: "Performance", href: "/performance", icon: BarChart3 },
+    { name: "API Reference", href: "/api-reference", icon: Braces },
+    { name: "Studio Settings", href: "/preferences", icon: Settings },
   ]
 
   return (
@@ -103,10 +112,8 @@ export function NavigationHeader() {
       isAuthOpen && "hidden"
     )}>
       <div className="w-full max-w-7xl flex items-center justify-between bg-background/40 backdrop-blur-3xl border border-white/10 rounded-[2rem] md:rounded-[3rem] px-4 md:px-8 h-20 md:h-24 shadow-2xl relative overflow-hidden group">
-        {/* Background Glow */}
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
         
-        {/* Left: Brand Identity */}
         <div className="flex items-center gap-4 shrink-0 relative z-10">
           <Link href="/" className="focus:outline-none group/logo">
             <ForgeLogo iconOnly className="md:hidden" />
@@ -122,7 +129,6 @@ export function NavigationHeader() {
           </div>
         </div>
 
-        {/* Center: Command Toggle */}
         <div className="absolute left-1/2 -translate-x-1/2 z-10">
           <Sheet>
             <SheetTrigger asChild>
@@ -136,27 +142,37 @@ export function NavigationHeader() {
             </SheetTrigger>
             <SheetContent 
               side="left" 
-              className="w-full sm:max-w-md bg-zinc-950/95 backdrop-blur-2xl border-white/10 p-0 text-white overflow-hidden flex flex-col"
+              className="w-full sm:max-w-md bg-zinc-950 border-white/10 p-0 text-white overflow-hidden flex flex-col"
             >
-              <SheetHeader className="p-8 border-b border-white/5 bg-foreground/[0.02]">
+              <div className="absolute inset-0 z-0 pointer-events-none opacity-30">
+                <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[80%] bg-primary/20 blur-[120px] rounded-full" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-secondary/20 blur-[120px] rounded-full" />
+              </div>
+
+              <SheetHeader className="p-8 border-b border-white/5 bg-white/[0.02] relative z-10">
                 <div className="flex items-center justify-between">
                   <SheetTitle className="text-white">
                     <ForgeLogo className="scale-90 origin-left" />
                   </SheetTitle>
-                  <SheetClose className="rounded-xl p-2 hover:bg-white/5 transition-colors">
-                    <X className="w-6 h-6 text-muted-foreground" />
+                  <SheetClose className="rounded-2xl p-2.5 bg-white/5 hover:bg-white/10 transition-all active:scale-95 border border-white/5">
+                    <X className="w-5 h-5 text-white" />
                   </SheetClose>
                 </div>
                 <div className="mt-6 flex items-center gap-3 px-1">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground">Command Center Active</span>
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-green-500">Command Active</span>
+                  </div>
                 </div>
               </SheetHeader>
 
-              <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-10 pb-20">
+              <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-12 relative z-10 pb-24">
                 <section className="space-y-4">
-                  <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-primary ml-2 mb-2">Synthesis Modules</h3>
-                  <div className="grid gap-2">
+                  <div className="flex items-center justify-between px-2 mb-4">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Synthesis Modules</h3>
+                    <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest bg-white/5 px-2 py-0.5 rounded-md">V7.0.0</span>
+                  </div>
+                  <div className="grid gap-3">
                     {tools.map((tool) => {
                       const isActive = pathname === tool.href
                       return (
@@ -164,23 +180,34 @@ export function NavigationHeader() {
                           key={tool.name} 
                           href={tool.href}
                           className={cn(
-                            "flex items-center gap-4 p-4 rounded-2xl transition-all group/item border",
+                            "flex items-center gap-4 p-4 rounded-3xl transition-all group/item border relative overflow-hidden",
                             isActive 
-                              ? "bg-primary/10 border-primary/20 text-white" 
-                              : "bg-white/5 border-transparent hover:border-white/10 text-muted-foreground hover:text-white"
+                              ? "bg-primary/20 border-primary/40 text-white shadow-[0_0_40px_-10px_rgba(var(--primary),0.3)]" 
+                              : "bg-white/[0.03] border-white/5 hover:border-white/20 text-muted-foreground hover:text-white"
                           )}
                         >
                           <div className={cn(
-                            "w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover/item:scale-110",
-                            isActive ? "bg-primary text-white shadow-lg shadow-primary/20" : "bg-white/5 " + tool.color
+                            "absolute inset-0 bg-gradient-to-r opacity-0 group-hover/item:opacity-100 transition-opacity duration-700",
+                            tool.gradient
+                          )} />
+                          
+                          <div className={cn(
+                            "w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 relative z-10 shrink-0",
+                            isActive 
+                              ? "bg-primary text-white shadow-xl rotate-0" 
+                              : "bg-white/5 group-hover/item:rotate-6 " + tool.color
                           )}>
-                            <tool.icon className="w-5 h-5" />
+                            <tool.icon className="w-6 h-6" />
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[11px] font-black uppercase tracking-widest leading-none mb-1">{tool.name}</p>
-                            <p className="text-[9px] font-medium opacity-60 truncate">{tool.desc}</p>
+                          
+                          <div className="flex-1 min-w-0 relative z-10">
+                            <p className="text-[12px] font-black uppercase tracking-widest leading-none mb-1.5">{tool.name}</p>
+                            <p className="text-[10px] font-medium opacity-50 truncate leading-none">{tool.desc}</p>
                           </div>
-                          <ChevronRight className="w-4 h-4 opacity-20 group-hover/item:opacity-100 transition-opacity" />
+                          
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 opacity-0 group-hover/item:opacity-100 transition-all relative z-10">
+                            <ChevronRight className="w-4 h-4" />
+                          </div>
                         </Link>
                       )
                     })}
@@ -188,31 +215,39 @@ export function NavigationHeader() {
                 </section>
 
                 <section className="space-y-4">
-                  <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-accent ml-2 mb-2">System Nodes</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    {systemLinks.map((link) => (
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-accent px-2 mb-4">System Nodes</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    {systemNodes.map((node) => (
                       <Link 
-                        key={link.name} 
-                        href={link.href}
-                        className="flex flex-col gap-3 p-4 rounded-2xl bg-white/[0.02] border border-transparent hover:border-white/5 transition-all group/node"
+                        key={node.name} 
+                        href={node.href}
+                        className="flex flex-col gap-3 p-5 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-white/20 transition-all group/node relative overflow-hidden"
                       >
-                        <link.icon className="w-4 h-4 text-muted-foreground group-hover/node:text-accent transition-colors" />
-                        <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground group-hover/node:text-white">{link.name}</span>
+                        <div className="absolute top-0 right-0 p-3 opacity-10 group-hover/node:opacity-30 transition-opacity">
+                          <node.icon className="w-8 h-8 text-white" />
+                        </div>
+                        <node.icon className="w-5 h-5 text-muted-foreground group-hover/node:text-accent transition-colors relative z-10" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover/node:text-white relative z-10">{node.name}</span>
                       </Link>
                     ))}
                   </div>
                 </section>
               </div>
 
-              <div className="p-8 border-t border-white/5 bg-foreground/[0.01] mt-auto">
+              <div className="p-8 border-t border-white/5 bg-white/[0.01] mt-auto relative z-20">
                 <div className="flex items-center justify-between gap-4">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-white">Vibe Coding Node</p>
-                    <p className="text-[8px] font-bold text-muted-foreground">VERSION 7.0.0 INDUSTRIAL</p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center border border-white/5">
+                      <Cpu className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-black uppercase tracking-widest text-white leading-none mb-1">Vibe Coding Node</p>
+                      <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Industrial Cluster 01</p>
+                    </div>
                   </div>
-                  <div className="px-3 py-1.5 rounded-xl bg-accent/10 border border-accent/20 flex items-center gap-2">
-                    <Cpu className="w-3 h-3 text-accent" />
-                    <span className="text-[8px] font-black text-accent uppercase tracking-widest">Node-01</span>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="text-[8px] font-black text-accent uppercase tracking-[0.2em] px-2 py-0.5 rounded bg-accent/10 border border-accent/20">READY</span>
+                    <span className="text-[7px] font-bold text-muted-foreground opacity-30">© 2026 FORGE</span>
                   </div>
                 </div>
               </div>
@@ -220,7 +255,6 @@ export function NavigationHeader() {
           </Sheet>
         </div>
 
-        {/* Right: User Monitor */}
         <div className="flex items-center gap-4 md:gap-6 shrink-0 relative z-10">
           <div className="hidden lg:flex flex-col items-end">
              <div className="flex items-center gap-2 mb-1">
