@@ -100,10 +100,10 @@ export function NavigationHeader() {
   ]
 
   const systemNodes = [
-    { name: "Docs", href: "/docs", icon: BookOpen },
-    { name: "Audit", href: "/performance", icon: BarChart3 },
-    { name: "API", href: "/api-reference", icon: Braces },
-    { name: "Config", href: "/preferences", icon: Settings },
+    { name: "Docs", href: "/docs", icon: BookOpen, color: "text-primary" },
+    { name: "Audit", href: "/performance", icon: BarChart3, color: "text-accent" },
+    { name: "API", href: "/api-reference", icon: Braces, color: "text-secondary" },
+    { name: "Config", href: "/preferences", icon: Settings, color: "text-primary" },
   ]
 
   return (
@@ -137,7 +137,7 @@ export function NavigationHeader() {
               className={cn(
                 "h-12 md:h-14 rounded-2xl md:rounded-[1.4rem] transition-all px-4 md:px-8 group/toggle shadow-xl border-foreground/10",
                 isWorkstationOpen 
-                  ? "bg-foreground text-background border-primary shadow-[0_0_40px_-10px_rgba(var(--primary),0.5)]" 
+                  ? "bg-primary text-white border-primary shadow-[0_0_40px_-10px_rgba(var(--primary),0.6)] animate-pulse" 
                   : "bg-foreground/5 hover:bg-foreground hover:text-background"
               )}
             >
@@ -185,24 +185,25 @@ export function NavigationHeader() {
           <div className="absolute inset-0 bg-background/60 backdrop-blur-2xl pointer-events-none" />
           
           <div className="container mx-auto px-4 md:px-8 max-w-7xl relative z-20">
-            <div className="w-full bg-zinc-950 border border-white/10 rounded-[2.5rem] md:rounded-[3.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-[calc(100vh-140px)] animate-in slide-in-from-top-12 duration-500 cubic-bezier(0.16, 1, 0.3, 1)">
+            <div className="w-full bg-zinc-950 border border-primary/20 rounded-[2.5rem] md:rounded-[3.5rem] shadow-[0_40px_80px_-20px_rgba(var(--primary),0.2)] overflow-hidden flex flex-col max-h-[calc(100vh-140px)] animate-in slide-in-from-top-12 duration-500 cubic-bezier(0.16, 1, 0.3, 1)">
               
-              {/* Internal Monitor Glow */}
-              <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
+              {/* Internal Monitor Glow - Using palette blurs */}
+              <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
                 <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[80%] bg-primary/20 blur-[120px] rounded-full" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-secondary/20 blur-[120px] rounded-full" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-accent/10 blur-[150px] rounded-full" />
               </div>
 
               {/* Monitor Header */}
-              <div className="p-6 md:p-10 border-b border-white/5 bg-white/[0.02] flex items-center justify-between relative z-10">
+              <div className="p-6 md:p-10 border-b border-white/10 bg-primary/5 flex items-center justify-between relative z-10">
                 <div className="space-y-1">
                    <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-1">Command Center</p>
                    <h3 className="text-xl md:text-3xl font-black text-white tracking-tighter uppercase">Synthesis Workspace</h3>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-green-500">Live Status: Active</span>
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 shadow-[0_0_20px_-5px_rgba(var(--primary),0.4)]">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary">Live Status: Active</span>
                   </div>
                 </div>
               </div>
@@ -211,8 +212,8 @@ export function NavigationHeader() {
               <div className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-10 space-y-10 relative z-10 pb-20">
                 <section className="space-y-6">
                   <div className="flex items-center justify-between px-2">
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/60">Industrial Modules</h3>
-                    <span className="text-[9px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-3 py-1 rounded-full border border-primary/10">Engine v7.0.0</span>
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/60">Industrial Modules</h3>
+                    <span className="text-[9px] font-bold text-primary uppercase tracking-widest bg-primary/10 px-3 py-1 rounded-full border border-primary/20">Engine v7.0.0</span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {tools.map((tool) => {
@@ -225,7 +226,7 @@ export function NavigationHeader() {
                             "flex items-center gap-5 p-5 rounded-[2rem] transition-all group/item border relative overflow-hidden h-24",
                             isActive 
                               ? "bg-primary/20 border-primary/40 text-white shadow-[0_0_40px_-10px_rgba(var(--primary),0.3)]" 
-                              : "bg-white/[0.03] border-white/5 hover:border-white/20 text-muted-foreground hover:text-white"
+                              : "bg-white/[0.04] border-white/10 hover:border-primary/30 text-muted-foreground hover:text-white"
                           )}
                         >
                           <div className={cn(
@@ -236,7 +237,7 @@ export function NavigationHeader() {
                           <div className={cn(
                             "w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 relative z-10 shrink-0 shadow-lg",
                             isActive 
-                              ? "bg-primary text-white scale-110" 
+                              ? "bg-primary text-white scale-110 shadow-primary/20" 
                               : "bg-zinc-900 border border-white/10 group-hover/item:rotate-6 " + tool.color
                           )}>
                             <tool.icon className="w-6 h-6" />
@@ -253,16 +254,17 @@ export function NavigationHeader() {
                 </section>
 
                 <section className="space-y-6">
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 px-2">System Infrastructure</h3>
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-accent/60 px-2">System Infrastructure</h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {systemNodes.map((node) => (
                       <Link 
                         key={node.name} 
                         href={node.href}
-                        className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/20 transition-all group/node relative overflow-hidden"
+                        className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-primary/20 transition-all group/node relative overflow-hidden"
                       >
-                        <node.icon className="w-4 h-4 text-muted-foreground group-hover/node:text-accent transition-colors relative z-10" />
+                        <node.icon className={cn("w-4 h-4 transition-colors relative z-10", node.color)} />
                         <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover/node:text-white relative z-10">{node.name}</span>
+                        <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover/node:opacity-100 transition-opacity" />
                       </Link>
                     ))}
                   </div>
@@ -270,21 +272,21 @@ export function NavigationHeader() {
               </div>
 
               {/* Monitor Footer / Exit Node */}
-              <div className="p-8 border-t border-white/5 bg-white/[0.01] mt-auto relative z-20 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="p-8 border-t border-white/10 bg-primary/[0.02] mt-auto relative z-20 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center border border-white/5">
-                    <Cpu className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center border border-white/10 shadow-lg">
+                    <Cpu className="w-6 h-6 text-primary animate-pulse" />
                   </div>
                   <div>
                     <p className="text-[11px] font-black uppercase tracking-widest text-white leading-none mb-1">Vibe Coding Node</p>
-                    <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Industrial Cluster 01</p>
+                    <p className="text-[9px] font-bold text-primary/60 uppercase tracking-widest">Industrial Cluster 01</p>
                   </div>
                 </div>
                 
                 <Button 
                   onClick={() => setIsWorkstationOpen(false)}
                   variant="ghost"
-                  className="w-full md:w-auto h-14 rounded-2xl border border-white/10 hover:bg-destructive hover:text-white transition-all font-black uppercase tracking-widest text-[11px] px-10 group"
+                  className="w-full md:w-auto h-14 rounded-2xl border border-primary/20 bg-primary/5 hover:bg-primary hover:text-white transition-all font-black uppercase tracking-widest text-[11px] px-10 group shadow-xl"
                 >
                   <X className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform" />
                   Close Workstation
