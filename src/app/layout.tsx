@@ -69,6 +69,9 @@ export const metadata: Metadata = {
     description: 'Instant PNG, JPEG, WebP and SVG to Base64 encoding. Professional-grade Data URI generator.',
     images: ['/og-image.png'],
   },
+  verification: {
+    google: 'googlef11e306c0ec883d4',
+  },
   robots: {
     index: true,
     follow: true,
