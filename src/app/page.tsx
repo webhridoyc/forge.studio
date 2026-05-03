@@ -29,7 +29,9 @@ import {
   FileCode,
   Braces,
   Target,
-  ShoppingBag
+  ShoppingBag,
+  Cpu,
+  BarChart3
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -128,10 +130,10 @@ export default function Home() {
               Base64 <br />
               <span className="text-gradient">Converter.</span>
             </h1>
-            <h2 className="text-lg sm:text-2xl md:text-5xl font-black tracking-tighter text-muted-foreground/40 uppercase">Image Encoder &amp; Data URI Generator.</h2>
+            <h2 className="text-lg sm:text-2xl md:text-5xl font-black tracking-tighter text-muted-foreground/40 uppercase">Industrial Image Encoder &amp; Data URI Generator.</h2>
           </div>
           <p className="text-sm sm:text-base md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium px-4">
-            Professional image-to-text synthesis. Part of the Forge Studios industrial suite. Convert PNG, JPEG, WebP and SVG to Base64 strings with zero-latency.
+            Professional image-to-text synthesis suite. Convert PNG, JPEG, WebP, and SVG to optimized Base64 bitstreams with zero-latency local processing.
           </p>
         </section>
 
@@ -234,18 +236,21 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 w-full mt-24">
             {[
-              { name: "Image Optimizer", icon: ImageIcon, href: "/tools/image-optimizer", color: "text-accent" },
-              { name: "SVG Studio", icon: FileCode, href: "/tools/svg-forge", color: "text-secondary" },
-              { name: "JSON Synth", icon: Braces, href: "/tools/json-synth", color: "text-primary" },
-              { name: "Code Architect", icon: Terminal, href: "/tools/code-architect", color: "text-accent" },
-              { name: "Prompt Architect", icon: Target, href: "/tools/prompt-architect", color: "text-primary" },
-              { name: "Product Forge", icon: ShoppingBag, href: "/tools/product-forge", color: "text-secondary" }
+              { name: "Image Optimizer", icon: ImageIcon, href: "/tools/image-optimizer", color: "text-accent", desc: "WebP Compression" },
+              { name: "SVG Studio", icon: FileCode, href: "/tools/svg-forge", color: "text-secondary", desc: "React Components" },
+              { name: "JSON Synth", icon: Braces, href: "/tools/json-synth", color: "text-primary", desc: "Data Architecture" },
+              { name: "Code Architect", icon: Terminal, href: "/tools/code-architect", color: "text-accent", desc: "AI Code Analysis" },
+              { name: "Prompt Architect", icon: Target, href: "/tools/prompt-architect", color: "text-primary", desc: "Agentic Logic" },
+              { name: "Product Forge", icon: ShoppingBag, href: "/tools/product-forge", color: "text-secondary", desc: "E-commerce Vision" }
             ].map((tool, i) => (
               <Link key={i} href={tool.href} className="glass-card p-6 md:p-8 rounded-[2rem] border-white/10 flex flex-col items-center gap-4 hover:translate-y-[-8px] transition-all group">
                 <div className={cn("w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-foreground/5 flex items-center justify-center transition-transform group-hover:scale-110", tool.color)}>
                   <tool.icon className="w-6 h-6 md:w-8 md:h-8" />
                 </div>
-                <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-center">{tool.name}</span>
+                <div className="text-center">
+                  <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest block">{tool.name}</span>
+                  <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-tighter mt-1 block opacity-0 group-hover:opacity-100 transition-opacity">{tool.desc}</span>
+                </div>
               </Link>
             ))}
           </div>
@@ -280,21 +285,47 @@ export default function Home() {
           )}
         </section>
 
-        <div id="security" className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 w-full max-w-6xl mt-48 md:mt-64 mb-24 md:mb-40 px-4 md:px-0">
-          {[
-            { icon: Zap, title: "Zero Latency", desc: "Forging happens entirely in-browser. No server round-trips.", color: "text-primary" },
-            { icon: ShieldCheck, title: "Member Vault", desc: "Logged-in users get cloud history sync across all devices.", color: "text-accent" },
-            { icon: History, title: "Unlimited Use", desc: "No caps. Forge as many assets as your pipeline requires.", color: "text-secondary" },
-          ].map((feature, i) => (
-            <div key={i} className="glass-card p-10 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] hover:translate-y-[-12px] transition-all duration-500 group">
-              <div className={cn("w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-foreground/5 flex items-center justify-center mb-8 md:mb-10", feature.color)}>
-                <feature.icon className="w-8 h-8 md:w-10 md:h-10" />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-black mb-4 tracking-tight">{feature.title}</h3>
-              <p className="text-muted-foreground leading-relaxed font-medium text-base md:text-lg">{feature.desc}</p>
+        <section id="features" className="w-full max-w-7xl mt-48 px-4">
+          <div className="text-center mb-24 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest mx-auto">
+              <Cpu className="w-3.5 h-3.5" />
+              Synthesis Specs
             </div>
-          ))}
-        </div>
+            <h2 className="text-4xl md:text-7xl font-black tracking-tighter uppercase">High-Performance <br /><span className="text-gradient">Asset Pipelines</span></h2>
+            <p className="text-lg text-muted-foreground font-medium max-w-2xl mx-auto">Designed for 2026 industrial standards, Forge Studios eliminates bottleneck latency in your developer ecosystem.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            {[
+              { 
+                icon: Zap, 
+                title: "Zero Latency Synthesis", 
+                desc: "100% client-side binary processing using the V8 engine. No server round-trips mean instant Base64 generation for high-volume batches.",
+                color: "text-primary"
+              },
+              { 
+                icon: ShieldCheck, 
+                title: "Encrypted Cloud Vaults", 
+                desc: "Establish your Member Vault to securely sync metadata across workstations. All sensitive bitstreams remain private to your identity.",
+                color: "text-accent"
+              },
+              { 
+                icon: BarChart3, 
+                title: "Core Web Vital Ready", 
+                desc: "Automatically optimizes PNG/JPG to next-gen WebP formats before encoding, ensuring your Data URIs contribute to a faster LCP.",
+                color: "text-secondary"
+              },
+            ].map((feature, i) => (
+              <div key={i} className="glass-card p-10 md:p-12 rounded-[3rem] space-y-6 hover:translate-y-[-12px] transition-all duration-500 group">
+                <div className={cn("w-16 h-16 md:w-20 md:h-20 rounded-[1.5rem] bg-foreground/5 flex items-center justify-center group-hover:scale-110 transition-transform", feature.color)}>
+                  <feature.icon className="w-8 h-8 md:w-10 md:h-10" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-black tracking-tight">{feature.title}</h3>
+                <p className="text-muted-foreground leading-relaxed font-medium text-base md:text-lg">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <div id="guide" className="w-full mt-32 md:mt-48 px-2 md:px-0">
           <SEOIntro />
@@ -308,7 +339,7 @@ export default function Home() {
             <ForgeLogo />
             <div className="space-y-6">
               <p className="text-muted-foreground max-w-md leading-relaxed text-lg md:text-xl font-medium">
-                Professional-grade developer utility studio. Industrial Base64 synthesis, image optimization, and SVG orchestration suite.
+                The industrial-grade developer utility studio. Synthesize bitstreams, optimize assets, and orchestrate components with zero friction.
               </p>
             </div>
             <div className="flex items-center gap-6">
@@ -332,22 +363,22 @@ export default function Home() {
           </div>
           
           <div className="space-y-6 md:space-y-8">
-            <h4 className="font-bold text-[11px] uppercase tracking-[0.3em] text-primary">System</h4>
+            <h4 className="font-bold text-[11px] uppercase tracking-[0.3em] text-primary">System Infrastructure</h4>
             <nav className="flex flex-col gap-4 md:gap-5 text-base font-semibold text-muted-foreground">
               <a href="/docs" className="hover:text-foreground transition-colors">Documentation</a>
               <a href="/performance" className="hover:text-foreground transition-colors">Performance Audit</a>
-              <a href="/api-reference" className="hover:text-foreground transition-colors">API Reference</a>
-              <a href="/preferences" className="hover:text-foreground transition-colors">Settings</a>
+              <a href="/api-reference" className="hover:text-foreground transition-colors">API Integration</a>
+              <a href="/preferences" className="hover:text-foreground transition-colors">Environment Config</a>
             </nav>
           </div>
 
           <div className="space-y-6 md:space-y-8">
-            <h4 className="font-bold text-[11px] uppercase tracking-[0.3em] text-secondary">History</h4>
+            <h4 className="font-bold text-[11px] uppercase tracking-[0.3em] text-secondary">Ecosystem History</h4>
             <nav className="flex flex-col gap-4 md:gap-5 text-base font-semibold text-muted-foreground">
-              <a href="/cloud-sync" className="hover:text-foreground transition-colors">Cloud Sync</a>
+              <a href="/cloud-sync" className="hover:text-foreground transition-colors">Member Vault</a>
               <a href="/usage-specs" className="hover:text-foreground transition-colors">Usage Specs</a>
-              <a href="/about" className="hover:text-foreground transition-colors">Forge Studios</a>
-              <a href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</a>
+              <a href="/about" className="hover:text-foreground transition-colors">Our Mission</a>
+              <a href="/privacy" className="hover:text-foreground transition-colors">Privacy Protocol</a>
             </nav>
           </div>
         </div>
@@ -356,9 +387,9 @@ export default function Home() {
           <div className="flex items-center gap-8">
             <span className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              MULTI-TOOL ECOSYSTEM READY
+              GLOBAL NODE ACTIVE
             </span>
-            <span className="opacity-50">V7.0.0</span>
+            <span className="opacity-50">STABLE V7.0.0</span>
           </div>
         </div>
       </footer>

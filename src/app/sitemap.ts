@@ -1,57 +1,42 @@
 import type { MetadataRoute } from 'next'
 
 const baseUrl = 'https://base64-forge.vercel.app'
-const LAST_MODIFIED = '2026-04-25'
+const LAST_MODIFIED = new Date().toISOString()
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: baseUrl,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'weekly',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/cloud-sync`,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/docs`,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/performance`,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/api-reference`,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/usage-specs`,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/privacy`,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
+  const tools = [
+    '/tools/image-optimizer',
+    '/tools/svg-forge',
+    '/tools/json-synth',
+    '/tools/code-architect',
+    '/tools/prompt-architect',
+    '/tools/product-forge'
   ]
+
+  const staticPages = [
+    '',
+    '/cloud-sync',
+    '/docs',
+    '/about',
+    '/performance',
+    '/api-reference',
+    '/usage-specs',
+    '/privacy'
+  ]
+
+  const toolEntries = tools.map(tool => ({
+    url: `${baseUrl}${tool}`,
+    lastModified: LAST_MODIFIED,
+    changeFrequency: 'weekly' as const,
+    priority: 0.9,
+  }))
+
+  const staticEntries = staticPages.map(page => ({
+    url: `${baseUrl}${page}`,
+    lastModified: LAST_MODIFIED,
+    changeFrequency: 'monthly' as const,
+    priority: page === '' ? 1 : 0.7,
+  }))
+
+  return [...staticEntries, ...toolEntries]
 }
