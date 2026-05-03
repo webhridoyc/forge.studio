@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -176,18 +175,21 @@ export function NavigationHeader() {
       {/* Workstation Drop-Down Monitor */}
       {isWorkstationOpen && (
         <div 
-          className="fixed inset-0 z-[105] pt-[104px] md:pt-[128px] animate-in fade-in duration-500"
+          className="fixed inset-0 z-[105] pt-[100px] md:pt-[120px] animate-in fade-in duration-500"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsWorkstationOpen(false)
           }}
         >
-          {/* Backdrop Blur */}
-          <div className="absolute inset-0 bg-background/60 backdrop-blur-2xl pointer-events-none" />
+          {/* Backdrop Blur - Now interactive (Click to close) */}
+          <div className="absolute inset-0 bg-background/60 backdrop-blur-2xl cursor-pointer" onClick={() => setIsWorkstationOpen(false)} />
           
           <div className="container mx-auto px-4 md:px-8 max-w-7xl relative z-20">
-            <div className="w-full bg-zinc-950 border border-primary/20 rounded-[2.5rem] md:rounded-[3.5rem] shadow-[0_40px_80px_-20px_rgba(var(--primary),0.2)] overflow-hidden flex flex-col max-h-[calc(100vh-140px)] animate-in slide-in-from-top-12 duration-500 cubic-bezier(0.16, 1, 0.3, 1)">
+            <div 
+              className="w-full bg-zinc-950 border border-primary/20 rounded-[2.5rem] md:rounded-[3.5rem] shadow-[0_40px_80px_-20px_rgba(var(--primary),0.2)] overflow-hidden flex flex-col max-h-[calc(100vh-140px)] animate-in slide-in-from-top-12 duration-500 cubic-bezier(0.16, 1, 0.3, 1)"
+              onClick={(e) => e.stopPropagation()}
+            >
               
-              {/* Internal Monitor Glow - Using palette blurs */}
+              {/* Internal Monitor Glow */}
               <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
                 <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[80%] bg-primary/20 blur-[120px] rounded-full" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-secondary/20 blur-[120px] rounded-full" />
